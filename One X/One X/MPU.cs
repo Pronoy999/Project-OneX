@@ -83,16 +83,19 @@ namespace One_X {
 
         private static byte regA, regB, regC, regD, regE, regH, regL,regM;
         //lxi methods
-        static void loadB(byte x) {
-            regB = x;
+        static void loadB(byte msb,byte lsb) {
+            regB = msb;
+            regC = lsb;
         }
-       static void loadD(byte x)
+       static void loadD(byte msb,byte lsb)
         {
-            regD = x;
+            regD = msb;
+            regE = lsb;
         }
-        public static void loadH(byte x)
+        public static void loadH(byte msb,byte lsb)
         {
-            regH = x;
+            regH = msb;
+            regL = lsb;
         }
         //add flags
 
@@ -505,7 +508,27 @@ namespace One_X {
             {  //carry flag
             }
         }
-
+        //mvi functions
+        public static void mviB(byte xx) { regB = xx; }
+        public static void mviC(byte xx) { regC = xx; }
+        public static void mviD(byte xx) { regD = xx; }
+        public static void mviE(byte xx) { regD = xx; }
+        public static void mviH(byte xx) { regH = xx; }
+        public static void mviL(byte xx) { regL = xx; }
+        public static void cpi(byte xx)
+        {
+            int a = xx.CompareTo(regA);
+            if (a == 0)
+            { //carry flag 
+            }
+            else if (a > 0)
+            { //carry flag
+            }
+            else
+            {  //carry flag
+            }
+        }
+        public static void adi(byte xx) { regA = (byte)(regA + xx); }
     }
 }
 
