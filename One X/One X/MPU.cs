@@ -103,147 +103,147 @@ namespace One_X {
         //ADD
          static void addB()
         {
-            regA = (byte)((int)regA + (int)regB);
+            regA = (byte)(regA + regB);
         }
          static void addC()
         {
-            regA = (byte)((int)regA + (int)regC);
+            regA = (byte)(regA + regC);
         }
          static void addD()
         {
-            regA = (byte)((int)regA + (int)regD);
+            regA = (byte)(regA + regD);
         }
          static void addE()
         {
-            regA = (byte)((int)regA + (int)regE);
+            regA = (byte)(regA + regE);
         }
         public static void addH()
         {
-            regA = (byte)((int)regA + (int)regH);
+            regA = (byte)(regA + regH);
         }
         public static void addL()
         {
-            regA = (byte)((int)regA + (int)regL);
+            regA = (byte)(regA + regL);
         }
         public static void addM()
         {
-            regA = (byte)((int)regA + (int)regM);
+            regA = (byte)(regA + regM);
         }
         public static void addA()
         {
-            regA = (byte)((int)regA + (int)regA);
+            regA = (byte)(regA + regA);
         }
         //DAD
         public static void dadB()
         {
-            regB = (byte)((int)regB + (int)regH);
-            regC = (byte)((int)regC + (int)regL);//WHAT ABOUT CARRY?
+            regB = (byte)(regB + regH);
+            regC = (byte)(regC + regL);//WHAT ABOUT CARRY?
         }
         public static void dadD()
         {
-            regD = (byte)((int)regD + (int)regH);
-            regE = (byte)((int)regE + (int)regL);//WHAT ABOUT CARRY?
+            regD = (byte)(regD + regH);
+            regE = (byte)(regE + regL);//WHAT ABOUT CARRY?
         }
         public static void dadH()
         {
-            regH = (byte)((int)regH + (int)regH);
-            regL = (byte)((int)regL + (int)regL);//WHAT ABOUT CARRY?
+            regH = (byte)(regH + regH);
+            regL = (byte)(regL + regL);//WHAT ABOUT CARRY?
         }
         //SUBTRACT
         public static void subB()
         {
-            regA = (byte)((int)regA - (int)regB);
+            regA = (byte)(regA - regB);
         }
         public static void subC()
         {
-            regA = (byte)((int)regA - (int)regC);
+            regA = (byte)(regA - regC);
         }
         public static void subD()
         {
-            regA = (byte)((int)regA - (int)regD);
+            regA = (byte)(regA - regD);
         }
         public static void subE()
         {
-            regA = (byte)((int)regA - (int)regE);
+            regA = (byte)(regA - regE);
         }
         public static void subH()
         {
-            regA = (byte)((int)regA - (int)regH);
+            regA = (byte)(regA - regH);
         }
         public static void subL()
         {
-            regA = (byte)((int)regA - (int)regL);
+            regA = (byte)(regA - regL);
         }
         public static void subM()
         {
-            regA = (byte)((int)regA - (int)regM);
+            regA = (byte)(regA - regM);
         }
         public static void subA()
         {
-            regA = (byte)((int)regA - (int)regA);
+            regA = (byte)(regA - regA);
         }
         //INCREMENT 
         public static void inrA()
         {
-            regA = (byte)((int)regA + 1);
+            regA = (byte)(regA + 1);
         }
         public static void inrB()
         {
-            regB = (byte)((int)regB + 1);
+            regB = (byte)(regB + 1);
         }
         public static void inrC()
         {
-            regC = (byte)((int)regC + 1);
+            regC = (byte)(regC + 1);
         }
         public static void inrD()
         {
-            regD = (byte)((int)regD + 1);
+            regD = (byte)(regD + 1);
         }
         public static void inrE()
         {
-            regE = (byte)((int)regE + 1);
+            regE = (byte)(regE + 1);
         }
         public static void inrH()
         {
-            regH = (byte)((int)regH + 1);
+            regH = (byte)(regH + 1);
         }
         public static void inrL()
         {
-            regL = (byte)((int)regL + 1);
+            regL = (byte)(regL + 1);
         }
         public static void inxB()
         {
-            regB = (byte)((int)regB + 1);//AS PER INSTRUCTIONS
-            regC = (byte)((int)regC + 1);
+            regB = (byte)(regB + 1);//AS PER INSTRUCTIONS
+            regC = (byte)(regC + 1);
         }
         //DECREMENT
         public static void dcrA()
         {
-            regA = (byte)((int)regA - 1);
+            regA = (byte)(regA - 1);
         }
         public static void dcrB()
         {
-            regB = (byte)((int)regB - 1);
+            regB = (byte)(regB - 1);
         }
         public static void dcrC()
         {
-            regC = (byte)((int)regC - 1);
+            regC = (byte)(regC - 1);
         }
         public static void dcrD()
         {
-            regD = (byte)((int)regD - 1);
+            regD = (byte)(regD - 1);
         }
         public static void dcrE()
         {
-            regE = (byte)((int)regE - 1);
+            regE = (byte)(regE - 1);
         }
         public static void dcrH()
         {
-            regH = (byte)((int)regH - 1);
+            regH = (byte)(regH - 1);
         }
         public static void dcrL()
         {
-            regL = (byte)((int)regL - 1);
+            regL = (byte)(regL - 1);
         }
         //Move functions for B
         public static void moveBB()
