@@ -8,7 +8,13 @@ namespace One_X {
             Zero = 6,
             AuxCarry = 4,
             Parity = 2,
-            Carry = 0
+            Carry = 0,
+            // common names
+            S = Sign,
+            Z = Zero,
+            AC = AuxCarry,
+            P = Parity,
+            CY = Carry
         }
 
         internal static byte regA, regB, regC, regD, regE, regH, regL;
@@ -103,14 +109,46 @@ namespace One_X {
         #endregion
 
         #region ADD
-        public static void AddB() => regA += regB;
-        public static void AddC() => regA += regC;
-        public static void AddD() => regA += regD;
-        public static void AddE() => regA += regE;
-        public static void AddH() => regA += regH;
-        public static void AddL() => regA += regL;
-        public static void AddM() => regA += regM;
-        public static void AddA() => regA += regA;
+        public static void AddB() {
+            int res = regA + regB;
+            Flag.Carry.Set(res > byte.MaxValue);
+            regA = (byte)res;
+        }
+        public static void AddC() {
+            int res = regA + regC;
+            Flag.Carry.Set(res > byte.MaxValue);
+            regA = (byte)res;
+        }
+        public static void AddD() {
+            int res = regA + regD;
+            Flag.Carry.Set(res > byte.MaxValue);
+            regA = (byte)res;
+        }
+        public static void AddE() {
+            int res = regA + regE;
+            Flag.Carry.Set(res > byte.MaxValue);
+            regA = (byte)res;
+        }
+        public static void AddH() {
+            int res = regA + regB;
+            Flag.Carry.Set(res > byte.MaxValue);
+            regA = (byte)res;
+        }
+        public static void AddL() {
+            int res = regA + regL;
+            Flag.Carry.Set(res > byte.MaxValue);
+            regA = (byte)res;
+        }
+        public static void AddM() {
+            int res = regA + regM;
+            Flag.Carry.Set(res > byte.MaxValue);
+            regA = (byte)res;
+        }
+        public static void AddA() {
+            int res = regA + regA;
+            Flag.Carry.Set(res > byte.MaxValue);
+            regA = (byte)res;
+        }
         #endregion
 
         #region DAD
@@ -250,7 +288,7 @@ namespace One_X {
         public static void MoveAA() => regA = regA;
         #endregion
 
-        public static void Halt() {} //TODO: HALT SIGNAL TO EXECUTOR
+        public static void Halt() { } //TODO: HALT SIGNAL TO EXECUTOR
 
         // TODO: TO BE EDITED
         public static void cmpB() {
