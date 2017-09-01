@@ -22,6 +22,21 @@ namespace One_X {
         internal static byte regM { get; set; } // TODO Direct to Memory
 
         internal static BitArray flags = new BitArray(8, false);
+
+        internal static void Set(this MPU.Flag flag) => flag.Set(true);
+        internal static void Reset(this MPU.Flag flag) => flag.Set(false);
+        internal static void Set(this MPU.Flag flag, bool set) => MPU.flags.Set((byte)flag, set);
+        internal static void Toggle(this MPU.Flag flag) => MPU.flags.Set((byte)flag, !flag.IsSet());
+        internal static bool IsSet(this MPU.Flag flag) => MPU.flags.Get((byte)flag);
+
+        internal static byte SetFlags(this int data) {
+            Flag.Carry.Set(data > byte.MaxValue);
+            byte ret = (byte)data;
+            Flag.Zero.Set(ret == 0);
+            Flag.Sign.Set(ret.IsNegative());
+            return ret;
+        }
+
         internal static ushort progCntr, stackPtr;
 
         #region Properties
@@ -109,46 +124,14 @@ namespace One_X {
         #endregion
 
         #region ADD
-        public static void AddB() {
-            int res = regA + regB;
-            Flag.Carry.Set(res > byte.MaxValue);
-            regA = (byte)res;
-        }
-        public static void AddC() {
-            int res = regA + regC;
-            Flag.Carry.Set(res > byte.MaxValue);
-            regA = (byte)res;
-        }
-        public static void AddD() {
-            int res = regA + regD;
-            Flag.Carry.Set(res > byte.MaxValue);
-            regA = (byte)res;
-        }
-        public static void AddE() {
-            int res = regA + regE;
-            Flag.Carry.Set(res > byte.MaxValue);
-            regA = (byte)res;
-        }
-        public static void AddH() {
-            int res = regA + regB;
-            Flag.Carry.Set(res > byte.MaxValue);
-            regA = (byte)res;
-        }
-        public static void AddL() {
-            int res = regA + regL;
-            Flag.Carry.Set(res > byte.MaxValue);
-            regA = (byte)res;
-        }
-        public static void AddM() {
-            int res = regA + regM;
-            Flag.Carry.Set(res > byte.MaxValue);
-            regA = (byte)res;
-        }
-        public static void AddA() {
-            int res = regA + regA;
-            Flag.Carry.Set(res > byte.MaxValue);
-            regA = (byte)res;
-        }
+        public static void AddB() => regA = (regA + regB).SetFlags();
+        public static void AddC() => regA = (regA + regB).SetFlags();
+        public static void AddD() => regA = (regA + regB).SetFlags();
+        public static void AddE() => regA = (regA + regB).SetFlags();
+        public static void AddH() => regA = (regA + regB).SetFlags();
+        public static void AddL() => regA = (regA + regB).SetFlags();
+        public static void AddM() => regA = (regA + regB).SetFlags();
+        public static void AddA() => regA = (regA + regB).SetFlags();
         #endregion
 
         #region DAD

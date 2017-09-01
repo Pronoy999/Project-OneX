@@ -6,9 +6,6 @@
         internal static int ToBitInt(this bool bit) => bit ? 1 : 0;
         internal static bool ToBitBool(this int bit) => bit == 1;
 
-        internal static void Set(this MPU.Flag flag) => flag.Set(true);
-        internal static void Reset(this MPU.Flag flag) => flag.Set(false);
-        internal static void Set(this MPU.Flag flag, bool set) => MPU.flags.Set((byte)flag, set);
-        internal static bool IsSet(this MPU.Flag flag) => MPU.flags.Get((byte) flag);
+        internal static bool IsNegative(this byte data) => data >> 7 == 1; // according to 8085 MCP
     }
 }
