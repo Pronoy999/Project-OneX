@@ -9,5 +9,13 @@
         internal static bool IsNegative(this byte data) => data >> 7 == 1; // according to 8085 MCP
 
         internal static byte TwosComplement(this byte data) => (byte)(~data + 1);
+
+        internal static bool Parity(this byte data) {
+            uint y = data;
+            y = y ^ (y >> 1);
+            y = y ^ (y >> 2);
+            y = y ^ (y >> 4);
+            return (y & 1) == 0;
+        }
     }
 }

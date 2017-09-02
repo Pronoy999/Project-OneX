@@ -30,7 +30,7 @@ namespace One_X {
                 acc = value;
                 Flag.Sign.Set(acc.IsNegative());
                 Flag.Zero.Set(acc == 0);
-                // Flag.Parity.Set(TODO Check parity of acc)
+                Flag.Parity.Set(acc.Parity());
             }
         }
 
@@ -44,10 +44,10 @@ namespace One_X {
 
         // Will be called before every Instruction
         internal static void ClearFlags() {
-            Flag.Sign.Set(regA.IsNegative());
-            Flag.Zero.Set(regA == 0);
+            Flag.Sign.Set(acc.IsNegative());
+            Flag.Zero.Set(acc == 0);
             Flag.AuxiliaryCarry.Reset();
-            // Flag.Parity.Set(TODO Check parity of regA)
+            Flag.Parity.Set(acc.Parity());
             Flag.Carry.Reset();
         }
 
