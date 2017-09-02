@@ -6,20 +6,33 @@ namespace One_X {
         internal enum Flag : byte {
             Sign = 7,
             Zero = 6,
-            AuxCarry = 4,
+            AuxiliaryCarry = 4,
             Parity = 2,
             Carry = 0,
             // common names
             S = Sign,
             Z = Zero,
-            AC = AuxCarry,
+            AC = AuxiliaryCarry,
             P = Parity,
             CY = Carry
         }
 
-        internal static byte regA, regB, regC, regD, regE, regH, regL;
+        internal static byte acc;
+
+        internal static byte regB, regC, regD, regE, regH, regL;
 
         internal static byte regM { get; set; } // TODO Direct to Memory
+        internal static byte regA {
+            get {
+                return acc;
+            }
+            set {
+                acc = value;
+                Flag.Sign.Set(acc.IsNegative());
+                Flag.Zero.Set(acc == 0);
+                // Flag.Parity.Set(TODO Check parity of acc)
+            }
+        }
 
         internal static BitArray flags = new BitArray(8, false);
 
@@ -29,12 +42,13 @@ namespace One_X {
         internal static void Toggle(this MPU.Flag flag) => MPU.flags.Set((byte)flag, !flag.IsSet());
         internal static bool IsSet(this MPU.Flag flag) => MPU.flags.Get((byte)flag);
 
-        internal static byte SetFlags(this int data) {
-            Flag.Carry.Set(data > byte.MaxValue);
-            byte ret = (byte)data;
-            Flag.Zero.Set(ret == 0);
-            Flag.Sign.Set(ret.IsNegative());
-            return ret;
+        // Will be called before every Instruction
+        internal static void ClearFlags() {
+            Flag.Sign.Set(regA.IsNegative());
+            Flag.Zero.Set(regA == 0);
+            Flag.AuxiliaryCarry.Reset();
+            // Flag.Parity.Set(TODO Check parity of regA)
+            Flag.Carry.Reset();
         }
 
         internal static ushort progCntr, stackPtr;
@@ -124,31 +138,50 @@ namespace One_X {
         #endregion
 
         #region ADD
-        public static void AddB() => regA = (regA + regB).SetFlags();
-        public static void AddC() => regA = (regA + regB).SetFlags();
-        public static void AddD() => regA = (regA + regB).SetFlags();
-        public static void AddE() => regA = (regA + regB).SetFlags();
-        public static void AddH() => regA = (regA + regB).SetFlags();
-        public static void AddL() => regA = (regA + regB).SetFlags();
-        public static void AddM() => regA = (regA + regB).SetFlags();
-        public static void AddA() => regA = (regA + regB).SetFlags();
+        public static void AddB() => Adi(regB);
+        public static void AddC() => Adi(regC);
+        public static void AddD() => Adi(regD);
+        public static void AddE() => Adi(regE);
+        public static void AddH() => Adi(regH);
+        public static void AddL() => Adi(regL);
+        public static void AddM() => Adi(regM);
+        public static void AddA() => Adi(regA);
+
+        public static void Adi(byte data) {
+            int res = regA + data;
+            Flag.Carry.Set(res > byte.MaxValue);
+            // TODO Set AuxiliaryCarry
+            regA = (byte)res;
+        }
         #endregion
 
         #region DAD
-        public static void DadB() => HRp += BRp;
-        public static void DadD() => HRp += DRp;
-        public static void DadH() => HRp += HRp;
+        public static void DadB() => DadI(BRp);
+        public static void DadD() => DadI(DRp);
+        public static void DadH() => DadI(HRp);
+
+        private static void DadI(ushort data) {
+            int res = HRp + data;
+            Flag.Carry.Set(res > ushort.MaxValue);
+            HRp = (ushort)res;
+        }
         #endregion
 
         #region SUB
-        public static void SubB() => regA -= regB;
-        public static void SubC() => regA -= regC;
-        public static void SubD() => regA -= regD;
-        public static void SubE() => regA -= regE;
-        public static void SubH() => regA -= regE;
-        public static void SubL() => regA -= regL;
-        public static void SubM() => regA -= regM;
-        public static void SubA() => regA -= regA;
+        public static void SubB() => Sbi(regB);
+        public static void SubC() => Sbi(regC);
+        public static void SubD() => Sbi(regD);
+        public static void SubE() => Sbi(regE);
+        public static void SubH() => Sbi(regH);
+        public static void SubL() => Sbi(regL);
+        public static void SubM() => Sbi(regM);
+        public static void SubA() => Sbi(regA);
+
+        public static void Sbi(byte data) {
+            int res = regA + regH.TwosComplement();
+            Flag.Carry.Set(res <= byte.MaxValue);
+            regA = (byte)res;
+        }
         #endregion
 
         #region INR
@@ -184,91 +217,91 @@ namespace One_X {
         #endregion
 
         #region MOV B
-        public static void MoveBB() => regB = regB;
-        public static void MoveBC() => regB = regC;
-        public static void MoveBD() => regB = regD;
-        public static void MoveBE() => regB = regE;
-        public static void MoveBH() => regB = regH;
-        public static void MoveBL() => regB = regL;
-        public static void MoveBM() => regB = regM;
-        public static void MoveBA() => regB = regA;
+        public static void MoveBB() => LoadB(regB);
+        public static void MoveBC() => LoadB(regC);
+        public static void MoveBD() => LoadB(regD);
+        public static void MoveBE() => LoadB(regE);
+        public static void MoveBH() => LoadB(regH);
+        public static void MoveBL() => LoadB(regL);
+        public static void MoveBM() => LoadB(regM);
+        public static void MoveBA() => LoadB(regA);
         #endregion
 
         #region MOV C
-        public static void MoveCB() => regC = regB;
-        public static void MoveCC() => regC = regC;
-        public static void MoveCD() => regC = regD;
-        public static void MoveCE() => regC = regE;
-        public static void MoveCH() => regC = regH;
-        public static void MoveCL() => regC = regL;
-        public static void MoveCM() => regC = regM;
-        public static void MoveCA() => regC = regA;
+        public static void MoveCB() => LoadC(regB);
+        public static void MoveCC() => LoadC(regC);
+        public static void MoveCD() => LoadC(regD);
+        public static void MoveCE() => LoadC(regE);
+        public static void MoveCH() => LoadC(regH);
+        public static void MoveCL() => LoadC(regL);
+        public static void MoveCM() => LoadC(regM);
+        public static void MoveCA() => LoadC(regA);
         #endregion
 
         #region MOV D
-        public static void MoveDB() => regD = regB;
-        public static void MoveDC() => regD = regC;
-        public static void MoveDD() => regD = regD;
-        public static void MoveDE() => regD = regE;
-        public static void MoveDH() => regD = regH;
-        public static void MoveDL() => regD = regL;
-        public static void MoveDM() => regD = regM;
-        public static void MoveDA() => regD = regA;
+        public static void MoveDB() => LoadD(regB);
+        public static void MoveDC() => LoadD(regC);
+        public static void MoveDD() => LoadD(regD);
+        public static void MoveDE() => LoadD(regE);
+        public static void MoveDH() => LoadD(regH);
+        public static void MoveDL() => LoadD(regL);
+        public static void MoveDM() => LoadD(regM);
+        public static void MoveDA() => LoadD(regA);
         #endregion
 
         #region MOV E
-        public static void MoveEB() => regE = regB;
-        public static void MoveEC() => regE = regC;
-        public static void MoveED() => regE = regD;
-        public static void MoveEE() => regE = regE;
-        public static void MoveEH() => regE = regH;
-        public static void MoveEL() => regE = regL;
-        public static void MoveEM() => regE = regM;
-        public static void MoveEA() => regE = regA;
+        public static void MoveEB() => LoadE(regB);
+        public static void MoveEC() => LoadE(regC);
+        public static void MoveED() => LoadE(regD);
+        public static void MoveEE() => LoadE(regE);
+        public static void MoveEH() => LoadE(regH);
+        public static void MoveEL() => LoadE(regL);
+        public static void MoveEM() => LoadE(regM);
+        public static void MoveEA() => LoadE(regA);
         #endregion
 
         #region MOV H
-        public static void MoveHB() => regH = regB;
-        public static void MoveHC() => regH = regC;
-        public static void MoveHD() => regH = regD;
-        public static void MoveHE() => regH = regE;
-        public static void MoveHH() => regH = regH;
-        public static void MoveHL() => regH = regL;
-        public static void MoveHM() => regH = regM;
-        public static void MoveHA() => regH = regA;
+        public static void MoveHB() => LoadH(regB);
+        public static void MoveHC() => LoadH(regC);
+        public static void MoveHD() => LoadH(regD);
+        public static void MoveHE() => LoadH(regE);
+        public static void MoveHH() => LoadH(regH);
+        public static void MoveHL() => LoadH(regL);
+        public static void MoveHM() => LoadH(regM);
+        public static void MoveHA() => LoadH(regA);
         #endregion
 
         #region MOV L
-        public static void MoveLB() => regL = regB;
-        public static void MoveLC() => regL = regC;
-        public static void MoveLD() => regL = regD;
-        public static void MoveLE() => regL = regE;
-        public static void MoveLH() => regL = regH;
-        public static void MoveLL() => regL = regL;
-        public static void MoveLM() => regL = regM;
-        public static void MoveLA() => regL = regA;
+        public static void MoveLB() => LoadL(regB);
+        public static void MoveLC() => LoadL(regC);
+        public static void MoveLD() => LoadL(regD);
+        public static void MoveLE() => LoadL(regE);
+        public static void MoveLH() => LoadL(regH);
+        public static void MoveLL() => LoadL(regL);
+        public static void MoveLM() => LoadL(regM);
+        public static void MoveLA() => LoadL(regA);
         #endregion
 
         #region MOV M
-        public static void MoveMB() => regM = regB;
-        public static void MoveMC() => regM = regC;
-        public static void MoveMD() => regM = regD;
-        public static void MoveME() => regM = regE;
-        public static void MoveMH() => regM = regH;
-        public static void MoveML() => regM = regL;
-        public static void MoveMM() => regM = regM;
-        public static void MoveMA() => regM = regA;
+        public static void MoveMB() => LoadM(regB);
+        public static void MoveMC() => LoadM(regC);
+        public static void MoveMD() => LoadM(regD);
+        public static void MoveME() => LoadM(regE);
+        public static void MoveMH() => LoadM(regH);
+        public static void MoveML() => LoadM(regL);
+        public static void MoveMM() => LoadM(regM);
+        public static void MoveMA() => LoadM(regA);
         #endregion
 
         #region MOV A
-        public static void MoveAB() => regA = regB;
-        public static void MoveAC() => regA = regC;
-        public static void MoveAD() => regA = regD;
-        public static void MoveAE() => regA = regE;
-        public static void MoveAH() => regA = regH;
-        public static void MoveAL() => regA = regL;
-        public static void MoveAM() => regA = regM;
-        public static void MoveAA() => regA = regA;
+        public static void MoveAB() => LoadA(regB);
+        public static void MoveAC() => LoadA(regC);
+        public static void MoveAD() => LoadA(regD);
+        public static void MoveAE() => LoadA(regE);
+        public static void MoveAH() => LoadA(regH);
+        public static void MoveAL() => LoadA(regL);
+        public static void MoveAM() => LoadA(regM);
+        public static void MoveAA() => LoadA(regA);
         #endregion
 
         public static void Halt() { } //TODO: HALT SIGNAL TO EXECUTOR

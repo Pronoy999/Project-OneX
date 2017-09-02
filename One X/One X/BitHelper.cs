@@ -7,5 +7,7 @@
         internal static bool ToBitBool(this int bit) => bit == 1;
 
         internal static bool IsNegative(this byte data) => data >> 7 == 1; // according to 8085 MCP
+
+        internal static byte TwosComplement(this byte data) => (byte)(~data + 1);
     }
 }
