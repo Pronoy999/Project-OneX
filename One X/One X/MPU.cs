@@ -296,9 +296,62 @@ namespace One_X {
         public static void MoveAA() => LoadA(regA);
         #endregion
 
-        public static void Halt() { } //TODO: HALT SIGNAL TO EXECUTOR
+        #region AND
+        public static void AndB() => Ani(regB);
+        public static void AndC() => Ani(regC);
+        public static void AndD() => Ani(regD);
+        public static void AndE() => Ani(regE);
+        public static void AndH() => Ani(regH);
+        public static void AndL() => Ani(regL);
+        public static void AndM() => Ani(regM);
+        public static void AndA() => Ani(regA);
 
-        // TODO: LOGIC INSTRUCTIONS (for Accumulator instructins, call ANI/ORI etc from any ANA/ORA like ADI and ADD above, for other registers write whole code in each block)
+        public static void Ani(byte data)
+        {
+            int temp = regA & data;
+            //TODO:reset CY and set AC
+            regA = (byte)temp;
+        }
+        #endregion
+
+        #region OR
+        public static void OrB() => Ori(regB);
+        public static void OrC() => Ori(regC);
+        public static void OrD() => Ori(regD);
+        public static void OrE() => Ori(regE);
+        public static void OrH() => Ori(regH);
+        public static void OrL() => Ori(regL);
+        public static void OrM() => Ori(regM);
+        public static void OrA() => Ori(regA);
+        public static void Ori(byte data)
+        {
+            int temp = regA | data;
+            //TODO:Z,S,P are modified and AC AND CY are reset
+        }
+        #endregion
+
+        #region XOR
+        public static void XorB() => Xri(regB);
+        public static void XorC() => Xri(regC);
+        public static void XorD() => Xri(regD);
+        public static void XorE() => Xri(regE);
+        public static void XorH() => Xri(regH);
+        public static void XorL() => Xri(regL);
+        public static void XorM() => Xri(regM);
+        public static void XorA() => Xri(regA);
+        public static void Xri(byte data)
+        {
+            int temp = regA ^ data;
+            //TODO:Z,S,P are modified and AC AND CY are reset
+            regA = (byte)temp;
+        }
+        #endregion
+
+        public static void compAcc() {
+            int temp= ~regA;
+            regA = (byte)temp;
+        }
+        public static void Halt() { } //TODO: HALT SIGNAL TO EXECUTOR
         // TODO: COMPARE INSTRUCTIONS (Call CPI from any CMP like ADI and ADD above, dont write body for CPI till we have clear idea about the flags)
     }
 }
