@@ -41,16 +41,7 @@ namespace One_X {
         internal static void Set(this MPU.Flag flag, bool set) => MPU.flags.Set((byte)flag, set);
         internal static void Toggle(this MPU.Flag flag) => MPU.flags.Set((byte)flag, !flag.IsSet());
         internal static bool IsSet(this MPU.Flag flag) => MPU.flags.Get((byte)flag);
-
-        // Will be called before every Instruction
-        internal static void ClearFlags() {
-            Flag.Sign.Set(acc.IsNegative());
-            Flag.Zero.Set(acc == 0);
-            Flag.AuxiliaryCarry.Reset();
-            Flag.Parity.Set(acc.Parity());
-            Flag.Carry.Reset();
-        }
-
+        
         internal static ushort progCntr, stackPtr;
 
         #region Properties
@@ -181,6 +172,7 @@ namespace One_X {
             int res = regA + regH.TwosComplement();
             Flag.Carry.Set(res <= byte.MaxValue);
             regA = (byte)res;
+            // TODO Auxiliary Carry
         }
         #endregion
 
@@ -306,22 +298,8 @@ namespace One_X {
 
         public static void Halt() { } //TODO: HALT SIGNAL TO EXECUTOR
 
-        // TODO: TO BE EDITED
-        public static void cmpB() {
-            int a = regB.CompareTo(regA);
-            if (a == 0) { //carry flag 
-            } else if (a > 0) { //carry flag
-            } else {  //carry flag
-            }
-        }
-        public static void cpi(byte xx) {
-            int a = xx.CompareTo(regA);
-            if (a == 0) { //carry flag 
-            } else if (a > 0) { //carry flag
-            } else {  //carry flag
-            }
-        }
-        public static void adi(byte xx) { regA = (byte)(regA + xx); }
+        // TODO: LOGIC INSTRUCTIONS (for Accumulator instructins, call ANI/ORI etc from any ANA/ORA like ADI and ADD above, for other registers write whole code in each block)
+        // TODO: COMPARE INSTRUCTIONS (Call CPI from any CMP like ADI and ADD above, dont write body for CPI till we have clear idea about the flags)
     }
 }
 

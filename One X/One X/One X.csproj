@@ -57,6 +57,7 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Instruction.cs" />
+    <Compile Include="InstructionHelper.cs" />
     <Compile Include="Memory.cs" />
     <Compile Include="MPU.cs" />
     <Compile Include="Program.cs" />

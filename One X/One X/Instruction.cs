@@ -1,19 +1,26 @@
 ﻿using System;
-using System.Linq.Expressions;
+using System.Linq;
 
 namespace One_X {
-    class InstructionAttribute : System.Attribute {
+    class Instruction : System.Attribute {
         public string Name;
         public int Bytes;
         public int MCycles;
         public int TStates;
-        public Action Operation;
 
-        public InstructionAttribute(string Name, int Bytes, int MCycles, int TStates, string method) {
+        public Action Operation;
+        public (byte HO, byte LO) Arguments;
+
+        public Instruction(string Name, int Bytes, int MCycles, int TStates, string method) {
             this.Name = Name;
             this.Bytes = Bytes;
             this.MCycles = MCycles;
             this.TStates = TStates;
+        }
+
+        public static Instruction parse(string instr) {
+            // TODO Parse Arguments
+            return ((OPCODE[])Enum.GetValues(typeof(OPCODE))).First(x => !string.IsNullOrWhiteSpace(x.GetAttributeOfType<Instruction>().Name) && instr.StartsWith(x.GetAttributeOfType<Instruction>().Name)).GetAttributeOfType<Instruction>();
         }
 
         public enum OPCODE : byte {
