@@ -60,6 +60,7 @@
     <Compile Include="InstructionHelper.cs" />
     <Compile Include="Memory.cs" />
     <Compile Include="MPU.cs" />
+    <Compile Include="Parser.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">

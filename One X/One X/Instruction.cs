@@ -20,7 +20,9 @@ namespace One_X {
 
         public static Instruction parse(string instr) {
             // TODO Parse Arguments
-            return ((OPCODE[])Enum.GetValues(typeof(OPCODE))).First(x => !string.IsNullOrWhiteSpace(x.GetAttributeOfType<Instruction>().Name) && instr.StartsWith(x.GetAttributeOfType<Instruction>().Name)).GetAttributeOfType<Instruction>();
+            return ((OPCODE[])Enum.GetValues(typeof(OPCODE))).
+                First(x => !string.IsNullOrWhiteSpace(x.GetAttributeOfType<Instruction>().Name) && 
+                instr.StartsWith(x.GetAttributeOfType<Instruction>().Name)).GetAttributeOfType<Instruction>();
         }
 
         public enum OPCODE : byte {
