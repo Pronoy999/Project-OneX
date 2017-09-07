@@ -8,6 +8,7 @@ namespace One_X
 {
     class Parser
     {
+        #region Parser
         public static void parse(String code)
         {
             List<Instruction> instructions=new List<Instruction>();
@@ -27,5 +28,6 @@ namespace One_X
                 }
             }
         }
+        #endregion
     }
 }
