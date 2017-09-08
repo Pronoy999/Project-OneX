@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 
 namespace One_X {
     static class Memory
-    {
+    {//TODO:define constructor initialise filestream,binary writer reader in it
+        //TODO:functn to change pos in file stream
         static private FileStream fileStream;
         static private String fileName = "Memory.dat";
         static private short stackTop, stackTail;
