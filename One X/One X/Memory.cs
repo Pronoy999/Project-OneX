@@ -6,34 +6,28 @@ using System.IO;
 using System.Threading.Tasks;
 
 namespace One_X {
-    static class Memory
-    {//TODO:define constructor initialise filestream,binary writer reader in it
-        //TODO:functn to change pos in file stream
-        static private FileStream fileStream;
-        static private String fileName = "Memory.dat";
-        static private short stackTop, stackTail;
-        static byte ReadByte(short offset)
-        {
-            fileStream=new FileStream(fileName,FileMode.Append);
-            fileStream.Seek(offset, SeekOrigin.Begin);
-            BinaryReader binaryReader=new BinaryReader(fileStream);
-            return binaryReader.ReadByte();
-        }
+    class Memory
+    {
+     //TODO:functn to change pos in file stream
 
-        static void WriteByte(byte data,short offset)
-        {
-            fileStream = new FileStream(fileName, FileMode.Append);
-            fileStream.Seek(offset,SeekOrigin.Begin);
-            BinaryWriter binaryWriter = new BinaryWriter(fileStream);
-            binaryWriter.Write(data);
+        private FileStream fileStream;
+        private short stackTop, stackTail;
+        private BinaryReader br;
+        private BinaryWriter bw;
+        Memory(string name) {
+            fileStream = new FileStream(name, FileMode.OpenOrCreate);
+            br = new BinaryReader(fileStream);
+            bw = new BinaryWriter(fileStream);
         }
-
-        static void PushStack(byte data)
+        public byte ReadByte(ushort loc)
         {
-            fileStream = new FileStream(fileName, FileMode.Append);
-            fileStream.Seek(stackTop, SeekOrigin.Begin);
-            BinaryWriter binaryWriter = new BinaryWriter(fileStream);
-            binaryWriter.Write(data);
+            fileStream.Seek(loc, SeekOrigin.Begin);
+            return br.ReadByte();
+        }
+       //TODO:read byte,read short,write byte ,write short
+         void PushStack(byte data)
+        {//check sp and update
+            
         }
 
         static byte PopStack()

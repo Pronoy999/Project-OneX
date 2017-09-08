@@ -9,9 +9,9 @@ namespace One_X
     class Parser
     {
         #region Parser
-        public static void parse(String code)
+        public static void parse(String code, out List<Instruction> instructions)
         {
-            List<Instruction> instructions=new List<Instruction>();
+            instructions = new List<Instruction>();
             char[] separator = { '\n' };
             char[] lineSeparator = { ':' };
             String[] lines = code.Split(separator);
