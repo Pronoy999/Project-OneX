@@ -24,7 +24,21 @@ namespace One_X {
             fileStream.Seek(loc, SeekOrigin.Begin);
             return br.ReadByte();
         }
-       //TODO:read byte,read short,write byte ,write short
+        public void WriteByte(byte data,ushort loc)
+        {
+            fileStream.Seek(loc, SeekOrigin.Begin);
+            bw.Write(data);
+        }
+        public ushort ReadUShort(ushort loc)
+        {
+            fileStream.Seek(loc, SeekOrigin.Begin);
+            return br.ReadUInt16();
+        }
+        public void WriteUShort(ushort data,ushort loc)
+        {
+            fileStream.Seek(loc, SeekOrigin.Begin);
+            bw.Write(data);
+        }
          void PushStack(byte data)
         {//check sp and update
             

@@ -3,6 +3,7 @@ using System.Collections;
 
 namespace One_X {
     public static class MPU {
+        
         internal enum Flag : byte {
             Sign = 7,
             Zero = 6,
@@ -18,9 +19,8 @@ namespace One_X {
         }
 
         internal static byte acc;
-
+        internal static Memory memory;
         internal static byte regB, regC, regD, regE, regH, regL;
-
         internal static byte regM { get; set; } // TODO Direct to Memory
         internal static byte regA {
             get {
@@ -347,7 +347,21 @@ namespace One_X {
         }
         #endregion
 
-        public static void compAcc() {
+        #region STORE
+        public static void StoreA(ushort address) => memory.WriteByte(regA, address);
+        public static void StoreRpB()=> memory.WriteByte(regA, BRp);
+        public static void StoreRpD() => memory.WriteByte(regA, DRp);
+        public static void StoreHRp(ushort address) => memory.WriteUShort(HRp,address);
+    #endregion
+
+        #region LOAD
+        public static void LoadA(ushort address) => regA = memory.ReadByte(address);
+        public static void LoadBRp()=>regA = memory.ReadByte(BRp);
+        public static void LoadDRp()=>regA = memory.ReadByte(DRp);
+        public static void loadHRp(ushort address) => HRp = memory.ReadUShort(address);
+        #endregion
+
+        public static void CompAcc() {
             int temp= ~regA;
             regA = (byte)temp;
         }
