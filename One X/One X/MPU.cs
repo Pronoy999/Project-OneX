@@ -377,10 +377,66 @@ namespace One_X {
         }
         #endregion
 
+        #region JUMP
+        public static void Jump(ushort address) => progCntr = address;
+        public static void JumpNZ(ushort address)
+        {
+            if (!Flag.Z.IsSet()) { Jump(address); }
+        }
+        public static void JumpZ(ushort address)
+        {
+            if (Flag.Z.IsSet()) { Jump(address); }
+        }
+        public static void JumpC(ushort address)
+        {
+            if (Flag.CY.IsSet()) { Jump(address); }
+        }
+        public static void JumpNC(ushort address)
+        {
+            if (!Flag.CY.IsSet()) { Jump(address); }
+        }
+        public static void JumpP(ushort address)
+        {
+            if (!Flag.S.IsSet()) { Jump(address); }
+        }
+        public static void JumpM(ushort address)
+        {
+            if (Flag.S.IsSet()) { Jump(address); }
+        }
+        public static void JumpPE(ushort address)
+        {
+            if (Flag.AC.IsSet()) { Jump(address); }
+        }
+        public static void JumpPO(ushort address)
+        {
+            if (!Flag.AC.IsSet()) { Jump(address); }
+        }
+        #endregion
+
+        #region OTHER
+        public static void SetCarry() => Flag.Carry.Set();
+
+        public static void CompCarry()
+        {
+            if (Flag.CY.IsSet()) { Flag.CY.Reset(); }
+            else { Flag.CY.Set(); }
+        }
+
+        public static void Exchange()
+        {
+            byte temp = regH;
+            regH = regD;
+            regD = temp;
+
+            temp = regL;
+            regL = regE;
+            regE = temp;
+        }
+
         public static void ComplA() => regA = (byte) ~regA;
 
         public static void Halt() { } //TODO: HALT SIGNAL TO EXECUTOR
-        // TODO: COMPARE INSTRUCTIONS (Call CPI from any CMP like ADI and ADD above, dont write body for CPI till we have clear idea about the flags)
+        #endregion
     }
 }
 
