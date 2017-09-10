@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace One_X {
     public static class MPU {
-        
+
         internal enum Flag : byte {
             Sign = 7,
             Zero = 6,
@@ -41,7 +41,7 @@ namespace One_X {
         internal static void Set(this MPU.Flag flag, bool set) => MPU.flags.Set((byte)flag, set);
         internal static void Toggle(this MPU.Flag flag) => MPU.flags.Set((byte)flag, !flag.IsSet());
         internal static bool IsSet(this MPU.Flag flag) => MPU.flags.Get((byte)flag);
-        
+
         internal static ushort progCntr, stackPtr;
 
         #region Properties
@@ -306,11 +306,9 @@ namespace One_X {
         public static void AndM() => Ani(regM);
         public static void AndA() => Ani(regA);
 
-        public static void Ani(byte data)
-        {
-            int temp = regA & data;
+        public static void Ani(byte data) {
             //TODO:reset CY and set AC
-            regA = (byte)temp;
+            regA &= data;
         }
         #endregion
 
@@ -323,10 +321,9 @@ namespace One_X {
         public static void OrL() => Ori(regL);
         public static void OrM() => Ori(regM);
         public static void OrA() => Ori(regA);
-        public static void Ori(byte data)
-        {
-            int temp = regA | data;
+        public static void Ori(byte data) {
             //TODO:Z,S,P are modified and AC AND CY are reset
+            regA |= data;
         }
         #endregion
 
@@ -339,32 +336,49 @@ namespace One_X {
         public static void XorL() => Xri(regL);
         public static void XorM() => Xri(regM);
         public static void XorA() => Xri(regA);
-        public static void Xri(byte data)
-        {
-            int temp = regA ^ data;
+        public static void Xri(byte data) {
             //TODO:Z,S,P are modified and AC AND CY are reset
-            regA = (byte)temp;
+            regA ^= data;
         }
+
         #endregion
 
         #region STORE
         public static void StoreA(ushort address) => memory.WriteByte(regA, address);
-        public static void StoreRpB()=> memory.WriteByte(regA, BRp);
-        public static void StoreRpD() => memory.WriteByte(regA, DRp);
-        public static void StoreHRp(ushort address) => memory.WriteUShort(HRp,address);
-    #endregion
+        public static void StoreAtBC() => memory.WriteByte(regA, BRp);
+        public static void StoreAtDE() => memory.WriteByte(regA, DRp);
+        public static void StoreHL(ushort address) => memory.WriteUShort(HRp, address);
+        #endregion
 
         #region LOAD
         public static void LoadA(ushort address) => regA = memory.ReadByte(address);
-        public static void LoadBRp()=>regA = memory.ReadByte(BRp);
-        public static void LoadDRp()=>regA = memory.ReadByte(DRp);
-        public static void loadHRp(ushort address) => HRp = memory.ReadUShort(address);
+        public static void LoadFromBC() => regA = memory.ReadByte(BRp);
+        public static void LoadFromDE() => regA = memory.ReadByte(DRp);
+        public static void LoadHL(ushort address) => HRp = memory.ReadUShort(address);
         #endregion
 
-        public static void CompAcc() {
-            int temp= ~regA;
-            regA = (byte)temp;
+        #region CMP
+        public static void CmpB() => Cpi(regB);
+        public static void CmpC() => Cpi(regC);
+        public static void CmpD() => Cpi(regD);
+        public static void CmpE() => Cpi(regE);
+        public static void CmpH() => Cpi(regH);
+        public static void CmpL() => Cpi(regL);
+        public static void CmpM() => Cpi(regM);
+        public static void CmpA() => Cpi(regA);
+        public static void Cpi(byte data) {
+            if (data > regA) {
+                // carry set, zero reset
+            } else if (data == regA) {
+                // carry reset, zero set
+            } else { // data < regA
+                // carry reset, zero reset
+            }
         }
+        #endregion
+
+        public static void ComplA() => regA = (byte) ~regA;
+
         public static void Halt() { } //TODO: HALT SIGNAL TO EXECUTOR
         // TODO: COMPARE INSTRUCTIONS (Call CPI from any CMP like ADI and ADD above, dont write body for CPI till we have clear idea about the flags)
     }
