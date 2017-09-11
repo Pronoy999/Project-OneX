@@ -11,7 +11,7 @@ namespace One_X
             this.startingAddress = startingAddress;
         }
         /**<summary>
-         * This is the method to call using the object of the parser class. 
+         * This is the method should be called using the object of the parser class. 
          * Create the object of the class and set the starting address. 
          * </summary>
          */
