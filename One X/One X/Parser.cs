@@ -17,7 +17,7 @@ namespace One_X
          */
         public void parse(String code) {
             int address = startingAddress;
-            char[] newLine = { '\n' };
+            char[] newLine = { '\n' }; 
             char[] lineSeparator = { ':' };
             String[] lines = code.Split(newLine);
             foreach (String line in lines) {
@@ -26,7 +26,7 @@ namespace One_X
                     Instruction inst = Instruction.parse(labelInst[1].Trim());
                     instructions.Add(inst);
                     labels.Add(address, labelInst[0].Trim());
-                    address += inst.Bytes;
+                    address += inst.Bytes; 
                 }
                 else {
                     Instruction inst = Instruction.parse(line.Trim());
