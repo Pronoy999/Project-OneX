@@ -239,7 +239,7 @@ namespace One_X {
             [Instruction("JNC", 3, 3, 10, "")] JNC = 0xD2,
             [Instruction("OUT", 2, 3, 10, "")] OUT = 0xD3,
             [Instruction("CNC", 3, 5, 18, "")] CNC = 0xD4,
-            [Instruction("PUSH", 1, 3, 12, "")] PUSH_D = 0xD5,
+            [Instruction("PUSH D", 1, 3, 12, "")] PUSH_D = 0xD5,
             [Instruction("SUI", 2, 2, 7, "")] SUI = 0xD6,
             [Instruction("RST 2", 1, 3, 12, "")] RST_2 = 0xD7,
             [Instruction("RC", 1, 3, 10, "")] RC = 0xD8,

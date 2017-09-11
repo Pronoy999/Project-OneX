@@ -3,7 +3,6 @@ using System.Collections;
 
 namespace One_X {
     public static class MPU {
-
         internal enum Flag : byte {
             Sign = 7,
             Zero = 6,
@@ -36,11 +35,11 @@ namespace One_X {
 
         internal static BitArray flags = new BitArray(8, false);
 
-        internal static void Set(this MPU.Flag flag) => flag.Set(true);
-        internal static void Reset(this MPU.Flag flag) => flag.Set(false);
-        internal static void Set(this MPU.Flag flag, bool set) => MPU.flags.Set((byte)flag, set);
-        internal static void Toggle(this MPU.Flag flag) => MPU.flags.Set((byte)flag, !flag.IsSet());
-        internal static bool IsSet(this MPU.Flag flag) => MPU.flags.Get((byte)flag);
+        internal static void Set(this Flag flag) => flag.Set(true);
+        internal static void Reset(this Flag flag) => flag.Set(false);
+        internal static void Set(this Flag flag, bool set) => flags.Set((byte)flag, set);
+        internal static void Toggle(this Flag flag) => flags.Set((byte)flag, !flag.IsSet());
+        internal static bool IsSet(this Flag flag) => flags.Get((byte)flag);
 
         internal static ushort progCntr, stackPtr;
 
@@ -78,15 +77,15 @@ namespace One_X {
             internal set => regM = value;
         }
         public static ushort HRp {
-            get => (H, L).ToShort();
+            get => (H, L).ToUShort();
             internal set => LoadHRp(value);
         }
         public static ushort BRp {
-            get => (B, C).ToShort();
+            get => (B, C).ToUShort();
             internal set => LoadBRp(value);
         }
         public static ushort DRp {
-            get => (D, E).ToShort();
+            get => (D, E).ToUShort();
             internal set => LoadDRp(value);
         }
         public static ushort PC {
@@ -126,6 +125,7 @@ namespace One_X {
             regH = d.HO;
             regL = d.LO;
         }
+        public static void LoadSP(ushort data) => stackPtr = data;
         #endregion
 
         #region ADD
@@ -150,6 +150,7 @@ namespace One_X {
         public static void DadB() => DadI(BRp);
         public static void DadD() => DadI(DRp);
         public static void DadH() => DadI(HRp);
+        public static void DadSP() => DadI(SP);
 
         private static void DadI(ushort data) {
             int res = HRp + data;
@@ -200,12 +201,14 @@ namespace One_X {
         public static void InxB() => BRp++;
         public static void InxD() => DRp++;
         public static void InxH() => HRp++;
+        public static void InxSP() => SP++;
         #endregion
 
         #region DCX
         public static void DcxB() => BRp--;
         public static void DcxD() => DRp--;
         public static void DcxH() => HRp--;
+        public static void DcxSP() => SP--;
         #endregion
 
         #region MOV B
@@ -379,61 +382,80 @@ namespace One_X {
 
         #region JUMP
         public static void Jump(ushort address) => progCntr = address;
-        public static void JumpNZ(ushort address)
-        {
-            if (!Flag.Z.IsSet()) { Jump(address); }
+        public static void JumpNZ(ushort address) {
+            if (!Flag.Z.IsSet()) Jump(address); 
         }
-        public static void JumpZ(ushort address)
-        {
-            if (Flag.Z.IsSet()) { Jump(address); }
+        public static void JumpZ(ushort address) {
+            if (Flag.Z.IsSet()) Jump(address); 
         }
-        public static void JumpC(ushort address)
-        {
-            if (Flag.CY.IsSet()) { Jump(address); }
+        public static void JumpC(ushort address) {
+            if (Flag.CY.IsSet()) Jump(address); 
         }
-        public static void JumpNC(ushort address)
-        {
-            if (!Flag.CY.IsSet()) { Jump(address); }
+        public static void JumpNC(ushort address) {
+            if (!Flag.CY.IsSet()) Jump(address); 
         }
-        public static void JumpP(ushort address)
-        {
-            if (!Flag.S.IsSet()) { Jump(address); }
+        public static void JumpP(ushort address) {
+            if (!Flag.S.IsSet()) Jump(address); 
         }
-        public static void JumpM(ushort address)
-        {
-            if (Flag.S.IsSet()) { Jump(address); }
+        public static void JumpM(ushort address) {
+            if (Flag.S.IsSet()) Jump(address); 
         }
-        public static void JumpPE(ushort address)
-        {
-            if (Flag.AC.IsSet()) { Jump(address); }
+        public static void JumpPE(ushort address) {
+            if (Flag.AC.IsSet()) Jump(address); 
         }
-        public static void JumpPO(ushort address)
-        {
-            if (!Flag.AC.IsSet()) { Jump(address); }
+        public static void JumpPO(ushort address) {
+            if (!Flag.AC.IsSet()) Jump(address); 
+        }
+        #endregion
+
+        #region [STACK] PUSH
+        public static void PushBRp() {
+            SP -= 2;
+            memory.WriteUShort(BRp, SP);
+        }
+        public static void PushDRp() {
+            SP -= 2;
+            memory.WriteUShort(DRp, SP);
+        }
+        public static void PushHRp() {
+            SP -= 2;
+            memory.WriteUShort(HRp, SP);
+        }
+        public static void PushPSW() {
+            SP -= 2;
+            memory.WriteUShort((regA, flags.ToByte()).ToUShort(), SP);
+        }
+        #endregion
+
+        #region [STACK] POP
+        public static void PopBRp() {
+            BRp = memory.ReadUShort(SP);
+            SP += 2;
+        }
+        public static void PopDRp() {
+            DRp = memory.ReadUShort(SP);
+            SP += 2;
+        }
+        public static void PopHRp() {
+            HRp = memory.ReadUShort(SP);
+            SP += 2;
+        }
+        public static void PopPSW() {
+            var data = memory.ReadUShort(SP).ToBytes();
+            regA = data.HO;
+            flags = data.LO.ToBitArray();
+            SP += 2;
         }
         #endregion
 
         #region OTHER
-        public static void SetCarry() => Flag.Carry.Set();
-
-        public static void CompCarry()
-        {
-            if (Flag.CY.IsSet()) { Flag.CY.Reset(); }
-            else { Flag.CY.Set(); }
+        public static void Exchange() {
+            HRp += BRp;
+            BRp = (ushort)(HRp - BRp);
+            HRp -= BRp;
         }
 
-        public static void Exchange()
-        {
-            byte temp = regH;
-            regH = regD;
-            regD = temp;
-
-            temp = regL;
-            regL = regE;
-            regE = temp;
-        }
-
-        public static void ComplA() => regA = (byte) ~regA;
+        public static void ComplA() => regA = (byte)~regA;
 
         public static void Halt() { } //TODO: HALT SIGNAL TO EXECUTOR
         #endregion
