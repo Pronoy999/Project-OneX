@@ -460,13 +460,13 @@ namespace One_X {
         }
 
         public static void RAL() {
-            bool d7 = (regA >> 7) == 1;
+            bool d7 = (regA >> 7).ToBitBool();
             regA = (byte)(Flag.Carry.IsSet().ToBitInt() + (regA << 1));
             Flag.Carry.Set(d7);
         }
 
         public static void RAR() {
-            bool d0 = (regA & 1) == 1;
+            bool d0 = (regA & 1).ToBitBool();
             regA = (byte)((Flag.Carry.IsSet().ToBitInt() << 7) + (regA >> 1));
             Flag.Carry.Set(d0);
         }
