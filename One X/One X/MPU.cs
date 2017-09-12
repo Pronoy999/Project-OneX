@@ -448,6 +448,30 @@ namespace One_X {
         }
         #endregion
 
+        #region ROTATE
+        public static void RRC() {
+            regA = (byte)((regA >> 1) + (regA << 7));
+            Flag.Carry.Set((regA >> 7).ToBitBool());
+        }
+
+        public static void RLC() {
+            Flag.Carry.Set((regA >> 7).ToBitBool());
+            regA = (byte)((regA << 1) + (regA >> 7));
+        }
+
+        public static void RAL() {
+            bool d7 = (regA >> 7) == 1;
+            regA = (byte)(Flag.Carry.IsSet().ToBitInt() + (regA << 1));
+            Flag.Carry.Set(d7);
+        }
+
+        public static void RAR() {
+            bool d0 = (regA & 1) == 1;
+            regA = (byte)((Flag.Carry.IsSet().ToBitInt() << 7) + (regA >> 1));
+            Flag.Carry.Set(d0);
+        }
+        #endregion
+
         #region OTHER
         public static void Exchange() {
             HRp += BRp;
