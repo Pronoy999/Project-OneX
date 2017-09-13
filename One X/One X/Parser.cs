@@ -50,7 +50,7 @@ namespace One_X
                             Match match = reg.Match(lit);
                             if (match.Success) {
                                 instructionList.Add(Tuple.Create<StringType, int, int, int,String>(StringType.Mneumonic, lineInd, labelInst[0].Length + 1, length,labelInst[1].Substring(labelInst[0].Length,length+1)));
-                                
+                                //TODO: Add the Literal Part. 
                             }
                             else {
                                 //Throw NoMatchException
