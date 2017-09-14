@@ -383,28 +383,28 @@ namespace One_X {
         #region JUMP
         public static void Jump(ushort address) => progCntr = address;
         public static void JumpNZ(ushort address) {
-            if (!Flag.Z.IsSet()) Jump(address); 
+            if (!Flag.Z.IsSet()) Jump(address);
         }
         public static void JumpZ(ushort address) {
-            if (Flag.Z.IsSet()) Jump(address); 
+            if (Flag.Z.IsSet()) Jump(address);
         }
         public static void JumpC(ushort address) {
-            if (Flag.CY.IsSet()) Jump(address); 
+            if (Flag.CY.IsSet()) Jump(address);
         }
         public static void JumpNC(ushort address) {
-            if (!Flag.CY.IsSet()) Jump(address); 
+            if (!Flag.CY.IsSet()) Jump(address);
         }
         public static void JumpP(ushort address) {
-            if (!Flag.S.IsSet()) Jump(address); 
+            if (!Flag.S.IsSet()) Jump(address);
         }
         public static void JumpM(ushort address) {
-            if (Flag.S.IsSet()) Jump(address); 
+            if (Flag.S.IsSet()) Jump(address);
         }
         public static void JumpPE(ushort address) {
-            if (Flag.AC.IsSet()) Jump(address); 
+            if (Flag.AC.IsSet()) Jump(address);
         }
         public static void JumpPO(ushort address) {
-            if (!Flag.AC.IsSet()) Jump(address); 
+            if (!Flag.AC.IsSet()) Jump(address);
         }
         #endregion
 
@@ -471,84 +471,7 @@ namespace One_X {
             Flag.Carry.Set(d0);
         }
         #endregion
-
-        #region CALL
-        public static void Call(ushort address)//as per appendix F
-        {
-            stackPtr -= 2;
-            stackPtr=progCntr;
-            progCntr = address;
-        }
-        public static void CallNZ(ushort address)
-        {
-            if (!Flag.Z.IsSet()) Call(address);
-        }
-        public static void CallZ(ushort address)
-        {
-            if (Flag.Z.IsSet()) Call(address);
-        }
-        public static void CallC(ushort address)
-        {
-            if (Flag.CY.IsSet()) Call(address);
-        }
-        public static void CallNC(ushort address)
-        {
-            if (!Flag.CY.IsSet()) Call(address);
-        }
-        public static void CallP(ushort address)
-        {
-            if (!Flag.S.IsSet()) Call(address);
-        }
-        public static void CallM(ushort address)
-        {
-            if (Flag.S.IsSet()) Call(address);
-        }
-        public static void CallPE(ushort address)
-        {
-            if (Flag.AC.IsSet()) Call(address);
-        }
-        public static void CallPO(ushort address)
-        {
-            if (!Flag.AC.IsSet()) Call(address);
-        }
-        #endregion
-
-        #region RETURN
-        public static void Return() => progCntr = stackPtr;//based on gaonkar
-        public static void ReturnNZ()
-        {
-            if (!Flag.Z.IsSet()) Return();
-        }
-        public static void ReturnZ()
-        {
-            if (Flag.Z.IsSet()) Return();
-        }
-        public static void ReturnPE()
-        {
-            if (!Flag.P.IsSet()) Return();
-        }
-        public static void ReturnPO()
-        {
-            if (Flag.P.IsSet()) Return();
-        }
-        public static void ReturnSN()
-        {
-            if (!Flag.Z.IsSet()) Return();
-        }
-        public static void ReturnSP()
-        {
-            if (Flag.Z.IsSet()) Return();
-        }
-        public static void ReturnNC()
-        {
-            if (!Flag.Z.IsSet()) Return();
-        }
-        public static void ReturnC()
-        {
-            if (Flag.Z.IsSet()) Return();
-        }
-        #endregion
-
+        
         #region OTHER
         public static void Exchange() {
             HRp += BRp;
@@ -556,13 +479,9 @@ namespace One_X {
             HRp -= BRp;
         }
 
-        public static void XTHL() => HRp = stackPtr;//exchange H and L with top of stack
-
         public static void ComplA() => regA = (byte)~regA;
 
         public static void Nop() { }//TODO: write no operation 
-
-        public static void ACI() { }//add immdiate to accumulator with carry
 
         public static void Halt() { } //TODO: HALT SIGNAL TO EXECUTOR
         #endregion
