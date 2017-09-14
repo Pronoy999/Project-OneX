@@ -18,7 +18,7 @@ namespace One_X
         internal int startingAddress; // This is the staring address of the code. 
         internal List<Instruction> instructions = new List<Instruction>();  // The list containing the instructins without the label.
         internal Dictionary<int, String> labels = new Dictionary<int, string>();// The dictionary with the key as the memory address and the label as the value.        
-        List<Tuple<StringType, int, int, int>> instructionList = new List<Tuple<StringType,int, int,  int>>();//StringType,lineIndex,ColIndex,
+        List<Tuple<StringType, int, int, int>> instructionList = new List<Tuple<StringType,int, int,  int>>();//StringType,lineIndex,ColIndex,Length.
         string regex14 = "^[0-9a-fA-F]{1,4}H?$";
         string regbex12 = "^[0-9a-fA-F]{1,2}H?$";
         public Parser(int startingAddress) {
@@ -58,7 +58,7 @@ namespace One_X
                                     Match match = reg.Match(lit);
                                     instructionList.Add(Tuple.Create<StringType, int, int, int>(StringType.Mnemonic, lineInd, labelInst[0].Length + 2, length));//Adding the Mneumonics
                                     if (match.Success) {                                        
-                                        instructionList.Add(Tuple.Create<StringType, int, int, int>(StringType.Literal, lineInd, length, lit.Length));//Adding the Literal
+                                        instructionList.Add(Tuple.Create<StringType, int, int, int>(StringType.Literal, lineInd, length, lit.Length));//Adding the Literal.
                                     }
                                     else {
                                         instructionList.Add(Tuple.Create<StringType, int, int, int>(StringType.Error, -1, -1, -1));
@@ -93,8 +93,38 @@ namespace One_X
                     }
                     else {
                         Instruction inst = Instruction.parse(line.Trim());
-                        instructions.Add(inst);
-                        address += inst.Bytes;
+                        if (!(inst.Name.Equals(String.Empty))) {
+                            instructions.Add(inst);
+                            address += inst.Bytes;
+                            if (inst.Bytes >= 2) {
+                                length = inst.Name.Length + 1;  //For 2 or 2 Byte Instructions. Length=length+1.
+                            }
+                            else length = inst.Name.Length;
+                            String mneumonics = line.Substring(0, length).Trim();
+                            String lit = line.Substring(length+1);
+                            if (inst.Bytes == 2) {
+                                Regex reg = new Regex(regbex12, RegexOptions.Singleline);
+                                instructionList.Add(Tuple.Create<StringType, int, int, int>(StringType.Mnemonic, lineInd, 0, length));//Adding the Mnemonics.
+                                Match match = reg.Match(lit);
+                                if (match.Success) {
+                                    instructionList.Add(Tuple.Create<StringType, int, int, int>(StringType.Literal, lineInd, length + 1, lit.Length)); //Adding the Literal. 
+                                }
+                                else {
+                                    instructionList.Add(Tuple.Create<StringType, int, int, int>(StringType.Error, lineInd, length+1, lit.Length)); //Putting ERROR. 
+                                }
+                            }
+                            else if (inst.Bytes == 3) {
+                                Regex reg = new Regex(regex14,RegexOptions.Singleline);
+                                instructionList.Add(Tuple.Create<StringType, int, int, int>(StringType.Mnemonic, lineInd, 0, length));
+                                Match match = reg.Match(lit);
+                                if (match.Success) {
+                                    instructionList.Add(Tuple.Create<StringType, int, int, int>(StringType.Literal, lineInd, length + 1, lit.Length)); //Adding the Literal. 
+                                }
+                                else {
+                                    instructionList.Add(Tuple.Create<StringType, int, int, int>(StringType.Error, lineInd, length + 1, lit.Length)); //Putting ERROR. 
+                                }
+                            }
+                        }
                     }
                  lineInd++;
                     
