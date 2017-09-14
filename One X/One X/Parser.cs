@@ -61,7 +61,7 @@ namespace One_X
                                         instructionList.Add(Tuple.Create<StringType, int, int, int>(StringType.Literal, lineInd, length, lit.Length));//Adding the Literal.
                                     }
                                     else {
-                                        instructionList.Add(Tuple.Create<StringType, int, int, int>(StringType.Error, -1, -1, -1));
+                                        instructionList.Add(Tuple.Create<StringType, int, int, int>(StringType.Error, lineInd, length, lit.Length));
                                         //TODO: Throw Exception.
                                     }
                                 }
@@ -79,7 +79,7 @@ namespace One_X
                                         instructionList.Add(Tuple.Create<StringType, int, int, int>(StringType.Literal, lineInd, length, lit.Length));//Adding the Literal.
                                     }
                                     else {
-                                        instructionList.Add(Tuple.Create<StringType, int, int, int>(StringType.Error, -1, -1, -1));
+                                        instructionList.Add(Tuple.Create<StringType, int, int, int>(StringType.Error, lineInd,length, lit.Length)); //NO Match ERROR. 
                                     }
                                 }
                                 catch (Exception e) {
@@ -88,7 +88,7 @@ namespace One_X
                             }
                         }
                         else {
-                            instructionList.Add(Tuple.Create<StringType, int, int, int>(StringType.Error, -1, -1, -1)); //ERROR for NoSuchInstruction. 
+                            instructionList.Add(Tuple.Create<StringType, int, int, int>(StringType.Error, lineInd,labelInst[0].Length+2 , -1)); //ERROR for NoSuchInstruction. 
                         }
                     }
                     else {
@@ -126,12 +126,11 @@ namespace One_X
                             }
                         }
                     }
-                 lineInd++;
-                    
+                 lineInd++;                    
                 }
             }
             else {
-                instructionList.Add(Tuple.Create<StringType, int, int, int>(StringType.Error, -1, -1, -1));  // Putting the Error with more than One Colons. 
+                instructionList.Add(Tuple.Create<StringType, int, int, int>(StringType.Error, lineInd, 0, -1));  // Putting the Error with more than One Colons. 
             }
         }
     }
