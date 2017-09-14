@@ -21,6 +21,11 @@ namespace One_X
         List<Tuple<StringType, int, int, int>> instructionList = new List<Tuple<StringType,int, int,  int>>();//StringType,lineIndex,ColIndex,Length.
         string regex14 = "^[0-9a-fA-F]{1,4}H?$";
         string regbex12 = "^[0-9a-fA-F]{1,2}H?$";
+        /**<summary>
+         * This is the Constructor of the Parser Class to
+         * initialize the Starting address from the UI. 
+         * </summary>
+         * */
         public Parser(int startingAddress) {
             this.startingAddress = startingAddress;
         }
@@ -30,13 +35,12 @@ namespace One_X
          * </summary>
          */
         public void parse(String code) {
-            StringType type;
             int lineInd=0;
             int length;           
             int address = startingAddress;
             char[] newLine = { '\n' }; 
             char[] lineSeparator = { ':' };
-            Boolean hasTwoColons = code.IndexOf(lineSeparator[0]) == code.LastIndexOf(lineSeparator[0]);
+            Boolean hasTwoColons = code.IndexOf(lineSeparator[0]) == code.LastIndexOf(lineSeparator[0]);  // Checking more than One Colons in the line.
             if (!hasTwoColons) {
                 String[] lines = code.Split(newLine);
                 foreach (String line in lines) {
