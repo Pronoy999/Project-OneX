@@ -7,8 +7,8 @@ namespace One_X {
      * This is the Enum for the different parts of the Instructions. 
      * </summary>
      */
-    class Parser {
-        enum StringType {
+    public class Parser {
+        public enum StringType {
             Label,
             Mnemonic,
             Literal,
@@ -16,8 +16,8 @@ namespace One_X {
         }
         internal int startingAddress; // This is the staring address of the code. 
         internal List<Instruction> instructions = new List<Instruction>();  // The list containing the instructins without the label.
-        internal Dictionary<int, String> labels = new Dictionary<int, string>();// The dictionary with the key as the memory address and the label as the value.        
-        List<(StringType SType, int LineIndex, int ColIndex, int Length)> instructionList = new List<(StringType SType, int LineIndex, int ColIndex, int Length)>();//StringType,lineIndex,ColIndex,Length.
+        internal Dictionary<int, string> labels = new Dictionary<int, string>();// The dictionary with the key as the memory address and the label as the value.        
+        
         string regex14 = "^[0-9a-fA-F]{1,4}H?$";
         string regbex12 = "^[0-9a-fA-F]{1,2}H?$";
         /**<summary>
@@ -28,25 +28,31 @@ namespace One_X {
         public Parser(int startingAddress) {
             this.startingAddress = startingAddress;
         }
+
+        public Parser() : this(0) { }
+
         /**<summary>
          * This is the method should be called using the object of the parser class. 
          * Create the object of the class and set the starting address. 
          * </summary>
          */
-        public void parse(String code) {
+        public List<(StringType SType, int LineIndex, int ColIndex, int Length)> parse(string code) {
             int lineInd = 0;
             int length;
             int address = startingAddress;
             char[] newLine = { '\n' };
             char[] lineSeparator = { ':' };
-            Boolean hasTwoColons = code.IndexOf(lineSeparator[0]) == code.LastIndexOf(lineSeparator[0]);  // Checking more than One Colons in the line.
+
+            var instructionList = new List<(StringType SType, int LineIndex, int ColIndex, int Length)>();
+
+            bool hasTwoColons = code.IndexOf(lineSeparator[0]) == code.LastIndexOf(lineSeparator[0]);  // Checking more than One Colons in the line.
             if (!hasTwoColons) {
-                String[] lines = code.Split(newLine);
-                foreach (String line in lines) {
+                string[] lines = code.Split(newLine);
+                foreach (string line in lines) {
                     if (line.Contains(":")) {
-                        String[] labelInst = line.Split(lineSeparator);
+                        string[] labelInst = line.Split(lineSeparator);
                         Instruction inst = Instruction.parse(labelInst[1].Trim());
-                        if (!(inst.Name.Equals(String.Empty))) {
+                        if (!string.IsNullOrWhiteSpace(inst.Name)) {
                             instructions.Add(inst);
                             labels.Add(address, labelInst[0].Trim());
                             address += inst.Bytes; //Increasing the Address Local Variable. 
@@ -57,7 +63,7 @@ namespace One_X {
                             if (inst.Bytes == 2) {
                                 Regex reg = new Regex(regbex12, RegexOptions.Singleline);
                                 try {
-                                    String lit = labelInst[1].Substring(length).Trim();
+                                    string lit = labelInst[1].Substring(length).Trim();
                                     Match match = reg.Match(lit);
                                     instructionList.Add((StringType.Mnemonic, lineInd, labelInst[0].Length + 2, length));//Adding the Mneumonics
                                     if (match.Success) {
@@ -72,7 +78,7 @@ namespace One_X {
                             } else if (inst.Bytes == 3) {
                                 Regex reg = new Regex(regex14, RegexOptions.Singleline);
                                 try {
-                                    String lit = labelInst[1].Substring(length).Trim();
+                                    string lit = labelInst[1].Substring(length).Trim();
                                     Match match = reg.Match(lit);
                                     instructionList.Add((StringType.Mnemonic, lineInd, labelInst[0].Length + 2, length));//Adding the Mneumonics
                                     if (match.Success) {
@@ -89,14 +95,14 @@ namespace One_X {
                         }
                     } else {
                         Instruction inst = Instruction.parse(line.Trim());
-                        if (!(inst.Name.Equals(String.Empty))) {
+                        if (!string.IsNullOrWhiteSpace(inst.Name)) {
                             instructions.Add(inst);
                             address += inst.Bytes;
                             if (inst.Bytes >= 2) {
                                 length = inst.Name.Length + 1;  //For 2 or 2 Byte Instructions. Length=length+1.
                             } else length = inst.Name.Length;
-                            String mneumonics = line.Substring(0, length).Trim();
-                            String lit = line.Substring(length + 1);
+                            string mneumonics = line.Substring(0, length).Trim();
+                            string lit = line.Substring(length + 1);
                             if (inst.Bytes == 2) {
                                 Regex reg = new Regex(regbex12, RegexOptions.Singleline);
                                 instructionList.Add((StringType.Mnemonic, lineInd, 0, length));//Adding the Mnemonics.
@@ -123,6 +129,7 @@ namespace One_X {
             } else {
                 instructionList.Add((StringType.Error, lineInd, 0, -1));  // Putting the Error with more than One Colons. 
             }
+            return instructionList;
         }
     }
 }
