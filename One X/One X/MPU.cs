@@ -3,6 +3,7 @@ using System.Collections;
 
 namespace One_X {
     public static class MPU {
+        private static bool running = false;
         internal enum Flag : byte {
             Sign = 7,
             Zero = 6,
@@ -160,16 +161,16 @@ namespace One_X {
         #endregion
 
         #region SUB
-        public static void SubB() => Sbi(regB);
-        public static void SubC() => Sbi(regC);
-        public static void SubD() => Sbi(regD);
-        public static void SubE() => Sbi(regE);
-        public static void SubH() => Sbi(regH);
-        public static void SubL() => Sbi(regL);
-        public static void SubM() => Sbi(regM);
-        public static void SubA() => Sbi(regA);
+        public static void SubB() => Sui(regB);
+        public static void SubC() => Sui(regC);
+        public static void SubD() => Sui(regD);
+        public static void SubE() => Sui(regE);
+        public static void SubH() => Sui(regH);
+        public static void SubL() => Sui(regL);
+        public static void SubM() => Sui(regM);
+        public static void SubA() => Sui(regA);
 
-        public static void Sbi(byte data) {
+        public static void Sui(byte data) {
             int res = regA + regH.TwosComplement();
             Flag.Carry.Set(res <= byte.MaxValue);
             regA = (byte)res;
@@ -371,11 +372,14 @@ namespace One_X {
         public static void CmpA() => Cpi(regA);
         public static void Cpi(byte data) {
             if (data > regA) {
-                // carry set, zero reset
+                Flag.Carry.Set();
+                Flag.Zero.Reset();
             } else if (data == regA) {
-                // carry reset, zero set
+                Flag.Carry.Reset();
+                Flag.Zero.Set();
             } else { // data < regA
-                // carry reset, zero reset
+                Flag.Carry.Reset();
+                Flag.Zero.Reset();
             }
         }
         #endregion
@@ -472,7 +476,7 @@ namespace One_X {
         }
         #endregion
         
-        #region OTHER
+        #region MISC
         public static void Exchange() {
             HRp += BRp;
             BRp = (ushort)(HRp - BRp);
@@ -481,11 +485,23 @@ namespace One_X {
 
         public static void ComplA() => regA = (byte)~regA;
 
-        public static void Nop() { }//TODO: write no operation 
+        public static void Nop() { /*sleep for 1000 ms */ }
 
-        public static void Halt() { } //TODO: HALT SIGNAL TO EXECUTOR
+        public static void Halt() { running = false; } //TODO: HALT SIGNAL TO EXECUTOR
         #endregion
-        //TODO:RIM,SIM,ADC,SBB,HLT,RST 
+
+        //TODO:RIM,SIM,RST,CALL,RETURN
+
+        // define ADCs => Aci(regX)
+        public static void Aci(byte data) {
+            Adi(data);
+            Adi((byte)Flag.Carry.IsSet().ToBitInt());
+        }
+
+        // define SBBs => Sbi(regX)
+        public static void Sbi(byte data) {
+            Sui((byte)(data + Flag.Carry.IsSet().ToBitInt()));
+        }
     }
 }
 
