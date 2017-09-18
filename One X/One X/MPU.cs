@@ -179,34 +179,123 @@ namespace One_X {
         #endregion
 
         #region INR
-        public static void InrA() => regA++;
-        public static void InrB() => regB++;
-        public static void InrC() => regC++;
-        public static void InrD() => regD++;
-        public static void InrE() => regE++;
-        public static void InrH() => regH++;
-        public static void InrL() => regL++;
+        public static void InrA()=>regA++;
+        public static void InrB()
+        {
+            regB++;
+            Flag.Sign.Set(regB.IsNegative());
+            Flag.Zero.Set(regB == 0);
+            Flag.Parity.Set(regB.Parity());
+        }
+        public static void InrC()
+        {
+            regC++;
+            Flag.Sign.Set(regC.IsNegative());
+            Flag.Zero.Set(regC == 0);
+            Flag.Parity.Set(regC.Parity());
+        }
+        public static void InrD()
+        {
+            regD++;
+            Flag.Sign.Set(regD.IsNegative());
+            Flag.Zero.Set(regD == 0);
+            Flag.Parity.Set(regD.Parity());
+        }
+        public static void InrE()
+        {
+            regE++;
+            Flag.Sign.Set(regE.IsNegative());
+            Flag.Zero.Set(regE == 0);
+            Flag.Parity.Set(regE.Parity());
+        }
+        public static void InrH()
+        {
+            regH++; 
+            Flag.Sign.Set(regH.IsNegative());
+            Flag.Zero.Set(regH == 0);
+            Flag.Parity.Set(regH.Parity());
+
+        }
+        public static void InrL()
+        {
+            regL++;
+            Flag.Sign.Set(regL.IsNegative());
+            Flag.Zero.Set(regL == 0);
+            Flag.Parity.Set(regL.Parity());
+        }
         #endregion
 
         #region DCR
         public static void DcrA() => regA--;
-        public static void DcrB() => regB--;
-        public static void DcrC() => regC--;
-        public static void DcrD() => regD--;
-        public static void DcrE() => regE--;
-        public static void DcrH() => regH--;
-        public static void DcrL() => regL--;
+        public static void DcrB()
+        {
+            regB--;
+            Flag.Sign.Set(regB.IsNegative());
+            Flag.Zero.Set(regB == 0);
+            Flag.Parity.Set(regB.Parity());
+        }
+        public static void DcrC()
+        {
+            regC--;
+            Flag.Sign.Set(regC.IsNegative());
+            Flag.Zero.Set(regC == 0);
+            Flag.Parity.Set(regC.Parity());
+        }
+        public static void DcrD()
+        {
+            regD--;
+            Flag.Sign.Set(regD.IsNegative());
+            Flag.Zero.Set(regD == 0);
+            Flag.Parity.Set(regD.Parity());
+        }
+        public static void DcrE()
+        {
+            regE--;
+            Flag.Sign.Set(regE.IsNegative());
+            Flag.Zero.Set(regE == 0);
+            Flag.Parity.Set(regE.Parity());
+        }
+        public static void DcrH()
+        {
+            regH--;
+            Flag.Sign.Set(regH.IsNegative());
+            Flag.Zero.Set(regH == 0);
+            Flag.Parity.Set(regH.Parity());
+        }
+        public static void DcrL()
+        {
+            regL--;
+            Flag.Sign.Set(regL.IsNegative());
+            Flag.Zero.Set(regL == 0);
+            Flag.Parity.Set(regL.Parity());
+        }
         #endregion
 
         #region INX
-        public static void InxB() => BRp++;
-        public static void InxD() => DRp++;
-        public static void InxH() => HRp++;
+        //TODO:write the flags change 
+        public static void InxB()
+        {
+            BRp++;
+         
+        }
+        public static void InxD()
+        {
+            DRp++;
+           
+        }
+        public static void InxH()
+        {
+            HRp++;
+          
+        }
         public static void InxSP() => SP++;
         #endregion
 
         #region DCX
-        public static void DcxB() => BRp--;
+        public static void DcxB()
+        {
+            BRp--;
+        }
         public static void DcxD() => DRp--;
         public static void DcxH() => HRp--;
         public static void DcxSP() => SP--;
@@ -490,18 +579,35 @@ namespace One_X {
         public static void Halt() { running = false; } //TODO: HALT SIGNAL TO EXECUTOR
         #endregion
 
-        //TODO:RIM,SIM,RST,CALL,RETURN
-
-        // define ADCs => Aci(regX)
+        #region ADC
+        public static void AdcB() => Aci(regB);
+        public static void AdcC() => Aci(regC);
+        public static void AdcD() => Aci(regD);
+        public static void AdcE() => Aci(regE);
+        public static void AdcH() => Aci(regH);
+        public static void AdcL() => Aci(regL);
+        public static void AdcM() => Aci(regM);
+        public static void AdcA() => Aci(regA);
         public static void Aci(byte data) {
             Adi(data);
             Adi((byte)Flag.Carry.IsSet().ToBitInt());
         }
+        #endregion
 
-        // define SBBs => Sbi(regX)
+        #region SBB
+        public static void SbbB() => Sbi(regB);
+        public static void SbbC() => Sbi(regC);
+        public static void SbbD() => Sbi(regD);
+        public static void SbbE() => Sbi(regE);
+        public static void SbbH() => Sbi(regH);
+        public static void SbbL() => Sbi(regL);
+        public static void SbbM() => Sbi(regM);
+        public static void SbbA() => Sbi(regA);
         public static void Sbi(byte data) {
             Sui((byte)(data + Flag.Carry.IsSet().ToBitInt()));
         }
+        #endregion
+        //TODO:RIM,SIM,RST,CALL,RETURN
     }
 }
 
