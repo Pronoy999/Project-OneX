@@ -24,11 +24,12 @@ namespace One_X {
                 instr.StartsWith(x.GetAttributeOfType<Instruction>().Name)).GetAttributeOfType<Instruction>();
 
             // TODO PARSE LABEL
-            inst.Arguments = Convert.ToUInt16( // convert to int
-                instr.Substring(inst.Name.Count() + (inst.Bytes > 1 ? 1 : 0)) // get parameter part
-                .Trim().ToUpper().Replace("H", "") // strip ending "H"
-                , 16).ToBytes(); // convert to bytes
-
+            if (inst.Bytes > 1) {
+                inst.Arguments = Convert.ToUInt16( // convert to int
+                    instr.Substring(inst.Name.Count() + (inst.Bytes > 1 ? 1 : 0)) // get parameter part
+                    .Trim().ToUpper().Replace("H", "") // strip ending "H"
+                    , 16).ToBytes(); // convert to bytes
+            }
             return inst;
         }
 

@@ -30,13 +30,13 @@ namespace One_X {
         }
 
         public Parser() : this(0) { }
-
+        
         /**<summary>
          * This is the method should be called using the object of the parser class. 
          * Create the object of the class and set the starting address. 
          * </summary>
          */
-        public List<(StringType SType, int LineIndex, int ColIndex, int Length)> parse(string code) {
+        public List<(StringType SType, int LineIndex, int ColIndex, int Length)> Parse(string code) {
             int lineInd = 0;
             int length;
             int address = startingAddress;
@@ -45,11 +45,12 @@ namespace One_X {
 
             var instructionList = new List<(StringType SType, int LineIndex, int ColIndex, int Length)>();
 
-            bool hasTwoColons = code.IndexOf(lineSeparator[0]) == code.LastIndexOf(lineSeparator[0]);  // Checking more than One Colons in the line.
-            if (!hasTwoColons) {
-                string[] lines = code.Split(newLine);
-                foreach (string line in lines) {
-                    if (line.Contains(":")) {
+            // Checking more than One Colons in the line.
+            string[] lines = code.Split(newLine);
+            foreach (string line in lines) {
+                if (line.Contains(":")) {
+                    bool hasOneColon = code.IndexOf(lineSeparator[0]) == code.LastIndexOf(lineSeparator[0]);
+                    if (hasOneColon) {
                         string[] labelInst = line.Split(lineSeparator);
                         Instruction inst = Instruction.parse(labelInst[1].Trim());
                         if (!string.IsNullOrWhiteSpace(inst.Name)) {
@@ -60,7 +61,10 @@ namespace One_X {
                             if (inst.Bytes >= 2)   // For 2 or 3 Byte Instructions Length = length+1;
                                 length = inst.Name.Length + 1;
                             else length = inst.Name.Length;
-                            if (inst.Bytes == 2) {
+                            if (inst.Bytes == 1) {
+                                instructionList.Add((StringType.Mnemonic, lineInd, labelInst[0].Length + 1, length));//Adding the Mneumonics.                                
+                            }
+                            else if (inst.Bytes == 2) {
                                 Regex reg = new Regex(regbex12, RegexOptions.Singleline);
                                 try {
                                     string lit = labelInst[1].Substring(length).Trim();
@@ -68,14 +72,17 @@ namespace One_X {
                                     instructionList.Add((StringType.Mnemonic, lineInd, labelInst[0].Length + 2, length));//Adding the Mneumonics
                                     if (match.Success) {
                                         instructionList.Add((StringType.Literal, lineInd, length, lit.Length));//Adding the Literal.
-                                    } else {
+                                    }
+                                    else {
                                         instructionList.Add((StringType.Error, lineInd, length, lit.Length));
                                         //TODO: Throw Exception.
                                     }
-                                } catch (Exception e) {
+                                }
+                                catch (Exception e) {
                                     //TODO:Catch the Exception.
                                 }
-                            } else if (inst.Bytes == 3) {
+                            }
+                            else if (inst.Bytes == 3) {
                                 Regex reg = new Regex(regex14, RegexOptions.Singleline);
                                 try {
                                     string lit = labelInst[1].Substring(length).Trim();
@@ -83,51 +90,65 @@ namespace One_X {
                                     instructionList.Add((StringType.Mnemonic, lineInd, labelInst[0].Length + 2, length));//Adding the Mneumonics
                                     if (match.Success) {
                                         instructionList.Add((StringType.Literal, lineInd, length, lit.Length));//Adding the Literal.
-                                    } else {
+                                    }
+                                    else {
                                         instructionList.Add((StringType.Error, lineInd, length, lit.Length)); //NO Match ERROR. 
                                     }
-                                } catch (Exception e) {
+                                }
+                                catch (Exception e) {
                                     //Handle the Regex No match Exception.
                                 }
                             }
-                        } else {
+                        }
+                        else {
                             instructionList.Add((StringType.Error, lineInd, labelInst[0].Length + 2, -1)); //ERROR for NoSuchInstruction. 
                         }
-                    } else {
-                        Instruction inst = Instruction.parse(line.Trim());
-                        if (!string.IsNullOrWhiteSpace(inst.Name)) {
-                            instructions.Add(inst);
-                            address += inst.Bytes;
-                            if (inst.Bytes >= 2) {
-                                length = inst.Name.Length + 1;  //For 2 or 2 Byte Instructions. Length=length+1.
-                            } else length = inst.Name.Length;
+                    }
+                    else {
+                        instructionList.Add((StringType.Error, lineInd, 0, -1));  // Putting the Error with more than One Colons. 
+                    }
+                }
+                else if (line.Length > 0) {
+                    Instruction inst = Instruction.parse(line.Trim());
+                    if (!string.IsNullOrWhiteSpace(inst.Name)) {
+                        instructions.Add(inst);
+                        address += inst.Bytes;
+                        if (inst.Bytes >= 2) {
+                            length = inst.Name.Length + 1;  //For 2 or 2 Byte Instructions. Length=length+1.
+                        }
+                        else length = inst.Name.Length;
+                        if (inst.Bytes == 1) {
+                            instructionList.Add((StringType.Mnemonic, lineInd, 0, length));//Adding the Mneumonics.    
+                        }
+                        else if (inst.Bytes == 2) {
                             string mneumonics = line.Substring(0, length).Trim();
-                            string lit = line.Substring(length + 1);
-                            if (inst.Bytes == 2) {
-                                Regex reg = new Regex(regbex12, RegexOptions.Singleline);
-                                instructionList.Add((StringType.Mnemonic, lineInd, 0, length));//Adding the Mnemonics.
-                                Match match = reg.Match(lit);
-                                if (match.Success) {
-                                    instructionList.Add((StringType.Literal, lineInd, length + 1, lit.Length)); //Adding the Literal. 
-                                } else {
-                                    instructionList.Add((StringType.Error, lineInd, length + 1, lit.Length)); //Putting ERROR. 
-                                }
-                            } else if (inst.Bytes == 3) {
-                                Regex reg = new Regex(regex14, RegexOptions.Singleline);
-                                instructionList.Add((StringType.Mnemonic, lineInd, 0, length));
-                                Match match = reg.Match(lit);
-                                if (match.Success) {
-                                    instructionList.Add((StringType.Literal, lineInd, length + 1, lit.Length)); //Adding the Literal. 
-                                } else {
-                                    instructionList.Add((StringType.Error, lineInd, length + 1, lit.Length)); //Putting ERROR. 
-                                }
+                            string lit = line.Substring(length);
+                            Regex reg = new Regex(regbex12, RegexOptions.Singleline);
+                            instructionList.Add((StringType.Mnemonic, lineInd, 0, length));//Adding the Mnemonics.
+                            Match match = reg.Match(lit);
+                            if (match.Success) {
+                                instructionList.Add((StringType.Literal, lineInd, length + 1, lit.Length)); //Adding the Literal. 
+                            }
+                            else {
+                                instructionList.Add((StringType.Error, lineInd, length + 1, lit.Length)); //Putting ERROR. 
+                            }
+                        }
+                        else if (inst.Bytes == 3) {
+                            string mneumonics = line.Substring(0, length).Trim();
+                            string lit = line.Substring(length);
+                            Regex reg = new Regex(regex14, RegexOptions.Singleline);
+                            instructionList.Add((StringType.Mnemonic, lineInd, 0, length));
+                            Match match = reg.Match(lit);
+                            if (match.Success) {
+                                instructionList.Add((StringType.Literal, lineInd, length + 1, lit.Length)); //Adding the Literal. 
+                            }
+                            else {
+                                instructionList.Add((StringType.Error, lineInd, length + 1, lit.Length)); //Putting ERROR. 
                             }
                         }
                     }
-                    lineInd++;
                 }
-            } else {
-                instructionList.Add((StringType.Error, lineInd, 0, -1));  // Putting the Error with more than One Colons. 
+                lineInd++;
             }
             return instructionList;
         }
