@@ -603,9 +603,7 @@ namespace One_X {
         public static void SbbL() => Sbi(regL);
         public static void SbbM() => Sbi(regM);
         public static void SbbA() => Sbi(regA);
-        public static void Sbi(byte data) {
-            Sui((byte)(data + Flag.Carry.IsSet().ToBitInt()));
-        }
+        public static void Sbi(byte data) => Sui((byte)(data + Flag.Carry.IsSet().ToBitInt()));
         #endregion
         //TODO:RIM,SIM,RST,CALL,RETURN
     }
