@@ -4,6 +4,7 @@ using System.Collections;
 namespace One_X {
     public static class MPU {
         private static bool running = false;
+
         internal enum Flag : byte {
             Sign = 7,
             Zero = 6,
@@ -576,7 +577,10 @@ namespace One_X {
 
         public static void Nop() { /*sleep for 1000 ms */ }
 
-        public static void Halt() { running = false; } //TODO: HALT SIGNAL TO EXECUTOR
+        public static void Halt() {
+            running = false;
+            PC = 0x0000;
+        } //TODO: HALT SIGNAL TO EXECUTOR
         #endregion
 
         #region ADC
@@ -603,11 +607,53 @@ namespace One_X {
         public static void SbbL() => Sbi(regL);
         public static void SbbM() => Sbi(regM);
         public static void SbbA() => Sbi(regA);
-        public static void Sbi(byte data) {
-            Sui((byte)(data + Flag.Carry.IsSet().ToBitInt()));
-        }
+        public static void Sbi(byte data) => Sui((byte)(data + Flag.Carry.IsSet().ToBitInt()));
         #endregion
-        //TODO:RIM,SIM,RST,CALL,RETURN
+
+        public static void Call(ushort data) {
+            SP -= 2;
+            memory.WriteUShort(PC, SP);
+            Jump(data);
+        }
+
+        public static void Return() {
+            ushort data = memory.ReadUShort(SP);
+            SP += 2;
+            Jump(data);
+        }
+        public static void Reset0() {
+            Halt();
+            PC = 0 * 0x0008;
+        }
+        public static void Reset1() {
+            Halt();
+            PC = 1 * 0x0008;
+        }
+        public static void Reset2() {
+            Halt();
+            PC = 2 * 0x0008;
+        }
+        public static void Reset3() {
+            Halt();
+            PC = 3 * 0x0008;
+        }
+        public static void Reset4() {
+            Halt();
+            PC = 4 * 0x0008;
+        }
+        public static void Reset5() {
+            Halt();
+            PC = 5 * 0x0008;
+        }
+        public static void Reset6() {
+            Halt();
+            PC = 6 * 0x0008;
+        }
+        public static void Reset7() {
+            Halt();
+            PC = 7 * 0x0008;
+        }
+        //TODO:RIM,SIM
     }
 }
 
