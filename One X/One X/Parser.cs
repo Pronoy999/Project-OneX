@@ -17,7 +17,7 @@ namespace One_X {
         internal int startingAddress; // This is the staring address of the code. 
         internal List<Instruction> instructions = new List<Instruction>();  // The list containing the instructins without the label.
         internal Dictionary<int, string> labels = new Dictionary<int, string>();// The dictionary with the key as the memory address and the label as the value.        
-        
+
         string regex14 = "^[0-9a-fA-F]{1,4}H?$";
         string regbex12 = "^[0-9a-fA-F]{1,2}H?$";
         /**<summary>
@@ -30,7 +30,7 @@ namespace One_X {
         }
 
         public Parser() : this(0) { }
-        
+
         /**<summary>
          * This is the method should be called using the object of the parser class. 
          * Create the object of the class and set the starting address. 
@@ -63,8 +63,7 @@ namespace One_X {
                             else length = inst.Name.Length;
                             if (inst.Bytes == 1) {
                                 instructionList.Add((StringType.Mnemonic, lineInd, labelInst[0].Length + 1, length));//Adding the Mneumonics.                                
-                            }
-                            else if (inst.Bytes == 2) {
+                            } else if (inst.Bytes == 2) {
                                 Regex reg = new Regex(regbex12, RegexOptions.Singleline);
                                 try {
                                     string lit = labelInst[1].Substring(length).Trim();
@@ -72,17 +71,14 @@ namespace One_X {
                                     instructionList.Add((StringType.Mnemonic, lineInd, labelInst[0].Length + 2, length));//Adding the Mneumonics
                                     if (match.Success) {
                                         instructionList.Add((StringType.Literal, lineInd, length, lit.Length));//Adding the Literal.
-                                    }
-                                    else {
+                                    } else {
                                         instructionList.Add((StringType.Error, lineInd, length, lit.Length));
                                         //TODO: Throw Exception.
                                     }
-                                }
-                                catch (Exception e) {
+                                } catch (Exception e) {
                                     //TODO:Catch the Exception.
                                 }
-                            }
-                            else if (inst.Bytes == 3) {
+                            } else if (inst.Bytes == 3) {
                                 Regex reg = new Regex(regex14, RegexOptions.Singleline);
                                 try {
                                     string lit = labelInst[1].Substring(length).Trim();
@@ -90,37 +86,30 @@ namespace One_X {
                                     instructionList.Add((StringType.Mnemonic, lineInd, labelInst[0].Length + 2, length));//Adding the Mneumonics
                                     if (match.Success) {
                                         instructionList.Add((StringType.Literal, lineInd, length, lit.Length));//Adding the Literal.
-                                    }
-                                    else {
+                                    } else {
                                         instructionList.Add((StringType.Error, lineInd, length, lit.Length)); //NO Match ERROR. 
                                     }
-                                }
-                                catch (Exception e) {
+                                } catch (Exception e) {
                                     //Handle the Regex No match Exception.
                                 }
                             }
-                        }
-                        else {
+                        } else {
                             instructionList.Add((StringType.Error, lineInd, labelInst[0].Length + 2, -1)); //ERROR for NoSuchInstruction. 
                         }
-                    }
-                    else {
+                    } else {
                         instructionList.Add((StringType.Error, lineInd, 0, -1));  // Putting the Error with more than One Colons. 
                     }
-                }
-                else if (line.Length > 0) {
+                } else if (line.Length > 0) {
                     Instruction inst = Instruction.parse(line.Trim());
                     if (!string.IsNullOrWhiteSpace(inst.Name)) {
                         instructions.Add(inst);
                         address += inst.Bytes;
                         if (inst.Bytes >= 2) {
                             length = inst.Name.Length + 1;  //For 2 or 2 Byte Instructions. Length=length+1.
-                        }
-                        else length = inst.Name.Length;
+                        } else length = inst.Name.Length;
                         if (inst.Bytes == 1) {
                             instructionList.Add((StringType.Mnemonic, lineInd, 0, length));//Adding the Mneumonics.    
-                        }
-                        else if (inst.Bytes == 2) {
+                        } else if (inst.Bytes == 2) {
                             string mneumonics = line.Substring(0, length).Trim();
                             string lit = line.Substring(length);
                             Regex reg = new Regex(regbex12, RegexOptions.Singleline);
@@ -128,12 +117,10 @@ namespace One_X {
                             Match match = reg.Match(lit);
                             if (match.Success) {
                                 instructionList.Add((StringType.Literal, lineInd, length + 1, lit.Length)); //Adding the Literal. 
-                            }
-                            else {
+                            } else {
                                 instructionList.Add((StringType.Error, lineInd, length + 1, lit.Length)); //Putting ERROR. 
                             }
-                        }
-                        else if (inst.Bytes == 3) {
+                        } else if (inst.Bytes == 3) {
                             string mneumonics = line.Substring(0, length).Trim();
                             string lit = line.Substring(length);
                             Regex reg = new Regex(regex14, RegexOptions.Singleline);
@@ -141,8 +128,7 @@ namespace One_X {
                             Match match = reg.Match(lit);
                             if (match.Success) {
                                 instructionList.Add((StringType.Literal, lineInd, length + 1, lit.Length)); //Adding the Literal. 
-                            }
-                            else {
+                            } else {
                                 instructionList.Add((StringType.Error, lineInd, length + 1, lit.Length)); //Putting ERROR. 
                             }
                         }

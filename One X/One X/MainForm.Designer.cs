@@ -31,6 +31,11 @@
             this.codeBox = new System.Windows.Forms.RichTextBox();
             this.codePanel = new System.Windows.Forms.Panel();
             this.registerPanel = new System.Windows.Forms.Panel();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
             this.flagIcon = new System.Windows.Forms.PictureBox();
             this.SFlag = new System.Windows.Forms.Label();
             this.NU1Flag = new System.Windows.Forms.Label();
@@ -40,22 +45,28 @@
             this.NU5Flag = new System.Windows.Forms.Label();
             this.ZFlag = new System.Windows.Forms.Label();
             this.CFlag = new System.Windows.Forms.Label();
-            this.D0Label = new System.Windows.Forms.Label();
-            this.D1Label = new System.Windows.Forms.Label();
-            this.D2Label = new System.Windows.Forms.Label();
-            this.D3Label = new System.Windows.Forms.Label();
-            this.D4Label = new System.Windows.Forms.Label();
-            this.D5Label = new System.Windows.Forms.Label();
-            this.D6Label = new System.Windows.Forms.Label();
             this.D7Label = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
+            this.D6Label = new System.Windows.Forms.Label();
+            this.D5Label = new System.Windows.Forms.Label();
+            this.D4Label = new System.Windows.Forms.Label();
+            this.D3Label = new System.Windows.Forms.Label();
+            this.D2Label = new System.Windows.Forms.Label();
+            this.D1Label = new System.Windows.Forms.Label();
+            this.D0Label = new System.Windows.Forms.Label();
+            this.listView1 = new System.Windows.Forms.ListView();
+            this.addressLC = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.mnemonicLC = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.mcycleLC = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.tstateLC = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.bytesLC = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.hexcodeLC = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.startAddressGB = new System.Windows.Forms.GroupBox();
+            this.setAddressButton = new System.Windows.Forms.Button();
+            this.startAddressBox = new System.Windows.Forms.TextBox();
             this.codePanel.SuspendLayout();
             this.registerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.flagIcon)).BeginInit();
+            this.startAddressGB.SuspendLayout();
             this.SuspendLayout();
             // 
             // codeBox
@@ -66,9 +77,10 @@
             this.codeBox.Font = new System.Drawing.Font("Hack", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.codeBox.Location = new System.Drawing.Point(0, 0);
             this.codeBox.Name = "codeBox";
-            this.codeBox.Size = new System.Drawing.Size(736, 703);
+            this.codeBox.Size = new System.Drawing.Size(471, 703);
             this.codeBox.TabIndex = 0;
             this.codeBox.Text = "";
+            this.codeBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.codeBox_KeyUp);
             // 
             // codePanel
             // 
@@ -79,7 +91,7 @@
             this.codePanel.Controls.Add(this.codeBox);
             this.codePanel.Location = new System.Drawing.Point(12, 12);
             this.codePanel.Name = "codePanel";
-            this.codePanel.Size = new System.Drawing.Size(738, 705);
+            this.codePanel.Size = new System.Drawing.Size(473, 705);
             this.codePanel.TabIndex = 1;
             // 
             // registerPanel
@@ -108,10 +120,60 @@
             this.registerPanel.Controls.Add(this.D1Label);
             this.registerPanel.Controls.Add(this.D0Label);
             this.registerPanel.Font = new System.Drawing.Font("Trebuchet MS", 8.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.registerPanel.Location = new System.Drawing.Point(756, 13);
+            this.registerPanel.Location = new System.Drawing.Point(756, 12);
             this.registerPanel.Name = "registerPanel";
             this.registerPanel.Size = new System.Drawing.Size(240, 303);
             this.registerPanel.TabIndex = 2;
+            // 
+            // label1
+            // 
+            this.label1.Font = new System.Drawing.Font("Trebuchet MS", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(51, 1);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(23, 12);
+            this.label1.TabIndex = 46;
+            this.label1.Text = "S";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // label2
+            // 
+            this.label2.Font = new System.Drawing.Font("Trebuchet MS", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(73, 1);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(24, 12);
+            this.label2.TabIndex = 45;
+            this.label2.Text = "Z";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // label3
+            // 
+            this.label3.Font = new System.Drawing.Font("Trebuchet MS", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(119, 1);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(24, 12);
+            this.label3.TabIndex = 44;
+            this.label3.Text = "AC";
+            this.label3.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // label4
+            // 
+            this.label4.Font = new System.Drawing.Font("Trebuchet MS", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Location = new System.Drawing.Point(165, 1);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(24, 12);
+            this.label4.TabIndex = 43;
+            this.label4.Text = "P";
+            this.label4.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // label5
+            // 
+            this.label5.Font = new System.Drawing.Font("Trebuchet MS", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.Location = new System.Drawing.Point(211, 1);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(24, 12);
+            this.label5.TabIndex = 42;
+            this.label5.Text = "CY";
+            this.label5.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // flagIcon
             // 
@@ -230,65 +292,15 @@
             this.CFlag.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.CFlag.UseCompatibleTextRendering = true;
             // 
-            // D0Label
+            // D7Label
             // 
-            this.D0Label.Font = new System.Drawing.Font("Trebuchet MS", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.D0Label.Location = new System.Drawing.Point(211, 37);
-            this.D0Label.Name = "D0Label";
-            this.D0Label.Size = new System.Drawing.Size(24, 12);
-            this.D0Label.TabIndex = 34;
-            this.D0Label.Text = "D₀";
-            this.D0Label.TextAlign = System.Drawing.ContentAlignment.BottomRight;
-            // 
-            // D1Label
-            // 
-            this.D1Label.Font = new System.Drawing.Font("Trebuchet MS", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.D1Label.Location = new System.Drawing.Point(188, 37);
-            this.D1Label.Name = "D1Label";
-            this.D1Label.Size = new System.Drawing.Size(24, 12);
-            this.D1Label.TabIndex = 35;
-            this.D1Label.Text = "D₁";
-            this.D1Label.TextAlign = System.Drawing.ContentAlignment.BottomRight;
-            // 
-            // D2Label
-            // 
-            this.D2Label.Font = new System.Drawing.Font("Trebuchet MS", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.D2Label.Location = new System.Drawing.Point(165, 37);
-            this.D2Label.Name = "D2Label";
-            this.D2Label.Size = new System.Drawing.Size(24, 12);
-            this.D2Label.TabIndex = 36;
-            this.D2Label.Text = "D₂";
-            this.D2Label.TextAlign = System.Drawing.ContentAlignment.BottomRight;
-            // 
-            // D3Label
-            // 
-            this.D3Label.Font = new System.Drawing.Font("Trebuchet MS", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.D3Label.Location = new System.Drawing.Point(142, 37);
-            this.D3Label.Name = "D3Label";
-            this.D3Label.Size = new System.Drawing.Size(24, 12);
-            this.D3Label.TabIndex = 37;
-            this.D3Label.Text = "D₃";
-            this.D3Label.TextAlign = System.Drawing.ContentAlignment.BottomRight;
-            // 
-            // D4Label
-            // 
-            this.D4Label.Font = new System.Drawing.Font("Trebuchet MS", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.D4Label.Location = new System.Drawing.Point(119, 37);
-            this.D4Label.Name = "D4Label";
-            this.D4Label.Size = new System.Drawing.Size(24, 12);
-            this.D4Label.TabIndex = 38;
-            this.D4Label.Text = "D₄";
-            this.D4Label.TextAlign = System.Drawing.ContentAlignment.BottomRight;
-            // 
-            // D5Label
-            // 
-            this.D5Label.Font = new System.Drawing.Font("Trebuchet MS", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.D5Label.Location = new System.Drawing.Point(96, 37);
-            this.D5Label.Name = "D5Label";
-            this.D5Label.Size = new System.Drawing.Size(24, 12);
-            this.D5Label.TabIndex = 39;
-            this.D5Label.Text = "D₅";
-            this.D5Label.TextAlign = System.Drawing.ContentAlignment.BottomRight;
+            this.D7Label.Font = new System.Drawing.Font("Trebuchet MS", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.D7Label.Location = new System.Drawing.Point(51, 37);
+            this.D7Label.Name = "D7Label";
+            this.D7Label.Size = new System.Drawing.Size(23, 12);
+            this.D7Label.TabIndex = 41;
+            this.D7Label.Text = "D₇";
+            this.D7Label.TextAlign = System.Drawing.ContentAlignment.BottomRight;
             // 
             // D6Label
             // 
@@ -300,65 +312,143 @@
             this.D6Label.Text = "D₆";
             this.D6Label.TextAlign = System.Drawing.ContentAlignment.BottomRight;
             // 
-            // D7Label
+            // D5Label
             // 
-            this.D7Label.Font = new System.Drawing.Font("Trebuchet MS", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.D7Label.Location = new System.Drawing.Point(51, 37);
-            this.D7Label.Name = "D7Label";
-            this.D7Label.Size = new System.Drawing.Size(23, 12);
-            this.D7Label.TabIndex = 41;
-            this.D7Label.Text = "D₇";
-            this.D7Label.TextAlign = System.Drawing.ContentAlignment.BottomRight;
+            this.D5Label.Font = new System.Drawing.Font("Trebuchet MS", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.D5Label.Location = new System.Drawing.Point(96, 37);
+            this.D5Label.Name = "D5Label";
+            this.D5Label.Size = new System.Drawing.Size(24, 12);
+            this.D5Label.TabIndex = 39;
+            this.D5Label.Text = "D₅";
+            this.D5Label.TextAlign = System.Drawing.ContentAlignment.BottomRight;
             // 
-            // label1
+            // D4Label
             // 
-            this.label1.Font = new System.Drawing.Font("Trebuchet MS", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(51, 1);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(23, 12);
-            this.label1.TabIndex = 46;
-            this.label1.Text = "S";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.D4Label.Font = new System.Drawing.Font("Trebuchet MS", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.D4Label.Location = new System.Drawing.Point(119, 37);
+            this.D4Label.Name = "D4Label";
+            this.D4Label.Size = new System.Drawing.Size(24, 12);
+            this.D4Label.TabIndex = 38;
+            this.D4Label.Text = "D₄";
+            this.D4Label.TextAlign = System.Drawing.ContentAlignment.BottomRight;
             // 
-            // label2
+            // D3Label
             // 
-            this.label2.Font = new System.Drawing.Font("Trebuchet MS", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(73, 1);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(24, 12);
-            this.label2.TabIndex = 45;
-            this.label2.Text = "Z";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.D3Label.Font = new System.Drawing.Font("Trebuchet MS", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.D3Label.Location = new System.Drawing.Point(142, 37);
+            this.D3Label.Name = "D3Label";
+            this.D3Label.Size = new System.Drawing.Size(24, 12);
+            this.D3Label.TabIndex = 37;
+            this.D3Label.Text = "D₃";
+            this.D3Label.TextAlign = System.Drawing.ContentAlignment.BottomRight;
             // 
-            // label3
+            // D2Label
             // 
-            this.label3.Font = new System.Drawing.Font("Trebuchet MS", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(119, 1);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(24, 12);
-            this.label3.TabIndex = 44;
-            this.label3.Text = "AC";
-            this.label3.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.D2Label.Font = new System.Drawing.Font("Trebuchet MS", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.D2Label.Location = new System.Drawing.Point(165, 37);
+            this.D2Label.Name = "D2Label";
+            this.D2Label.Size = new System.Drawing.Size(24, 12);
+            this.D2Label.TabIndex = 36;
+            this.D2Label.Text = "D₂";
+            this.D2Label.TextAlign = System.Drawing.ContentAlignment.BottomRight;
             // 
-            // label4
+            // D1Label
             // 
-            this.label4.Font = new System.Drawing.Font("Trebuchet MS", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(165, 1);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(24, 12);
-            this.label4.TabIndex = 43;
-            this.label4.Text = "P";
-            this.label4.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.D1Label.Font = new System.Drawing.Font("Trebuchet MS", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.D1Label.Location = new System.Drawing.Point(188, 37);
+            this.D1Label.Name = "D1Label";
+            this.D1Label.Size = new System.Drawing.Size(24, 12);
+            this.D1Label.TabIndex = 35;
+            this.D1Label.Text = "D₁";
+            this.D1Label.TextAlign = System.Drawing.ContentAlignment.BottomRight;
             // 
-            // label5
+            // D0Label
             // 
-            this.label5.Font = new System.Drawing.Font("Trebuchet MS", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(211, 1);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(24, 12);
-            this.label5.TabIndex = 42;
-            this.label5.Text = "CY";
-            this.label5.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.D0Label.Font = new System.Drawing.Font("Trebuchet MS", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.D0Label.Location = new System.Drawing.Point(211, 37);
+            this.D0Label.Name = "D0Label";
+            this.D0Label.Size = new System.Drawing.Size(24, 12);
+            this.D0Label.TabIndex = 34;
+            this.D0Label.Text = "D₀";
+            this.D0Label.TextAlign = System.Drawing.ContentAlignment.BottomRight;
+            // 
+            // listView1
+            // 
+            this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.addressLC,
+            this.mnemonicLC,
+            this.hexcodeLC,
+            this.bytesLC,
+            this.mcycleLC,
+            this.tstateLC});
+            this.listView1.FullRowSelect = true;
+            this.listView1.Location = new System.Drawing.Point(491, 321);
+            this.listView1.Name = "listView1";
+            this.listView1.Size = new System.Drawing.Size(505, 396);
+            this.listView1.TabIndex = 3;
+            this.listView1.UseCompatibleStateImageBehavior = false;
+            this.listView1.View = System.Windows.Forms.View.Details;
+            // 
+            // addressLC
+            // 
+            this.addressLC.Text = "Address";
+            this.addressLC.Width = 113;
+            // 
+            // mnemonicLC
+            // 
+            this.mnemonicLC.Text = "Mnemonic";
+            this.mnemonicLC.Width = 95;
+            // 
+            // mcycleLC
+            // 
+            this.mcycleLC.Text = "M-Cycles";
+            this.mcycleLC.Width = 77;
+            // 
+            // tstateLC
+            // 
+            this.tstateLC.Text = "T-States";
+            this.tstateLC.Width = 73;
+            // 
+            // bytesLC
+            // 
+            this.bytesLC.Text = "Bytes";
+            this.bytesLC.Width = 51;
+            // 
+            // hexcodeLC
+            // 
+            this.hexcodeLC.Text = "Hex Code";
+            this.hexcodeLC.Width = 90;
+            // 
+            // startAddressGB
+            // 
+            this.startAddressGB.Controls.Add(this.startAddressBox);
+            this.startAddressGB.Controls.Add(this.setAddressButton);
+            this.startAddressGB.Location = new System.Drawing.Point(555, 12);
+            this.startAddressGB.Name = "startAddressGB";
+            this.startAddressGB.Size = new System.Drawing.Size(146, 66);
+            this.startAddressGB.TabIndex = 4;
+            this.startAddressGB.TabStop = false;
+            this.startAddressGB.Text = "Set Start Address";
+            // 
+            // setAddressButton
+            // 
+            this.setAddressButton.Location = new System.Drawing.Point(78, 25);
+            this.setAddressButton.Name = "setAddressButton";
+            this.setAddressButton.Size = new System.Drawing.Size(62, 34);
+            this.setAddressButton.TabIndex = 0;
+            this.setAddressButton.Text = "SET";
+            this.setAddressButton.UseVisualStyleBackColor = true;
+            this.setAddressButton.Click += new System.EventHandler(this.setAddressButton_Click);
+            // 
+            // startAddressBox
+            // 
+            this.startAddressBox.Font = new System.Drawing.Font("Hack", 17F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.startAddressBox.Location = new System.Drawing.Point(6, 25);
+            this.startAddressBox.Name = "startAddressBox";
+            this.startAddressBox.Size = new System.Drawing.Size(62, 34);
+            this.startAddressBox.TabIndex = 1;
+            this.startAddressBox.Text = "0000";
+            this.startAddressBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.startAddressBox_KeyPress);
             // 
             // MainForm
             // 
@@ -366,6 +456,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.ClientSize = new System.Drawing.Size(1008, 729);
+            this.Controls.Add(this.startAddressGB);
+            this.Controls.Add(this.listView1);
             this.Controls.Add(this.registerPanel);
             this.Controls.Add(this.codePanel);
             this.Font = new System.Drawing.Font("Trebuchet MS", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -376,6 +468,8 @@
             this.codePanel.ResumeLayout(false);
             this.registerPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.flagIcon)).EndInit();
+            this.startAddressGB.ResumeLayout(false);
+            this.startAddressGB.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -407,6 +501,16 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.ListView listView1;
+        private System.Windows.Forms.ColumnHeader addressLC;
+        private System.Windows.Forms.ColumnHeader mnemonicLC;
+        private System.Windows.Forms.ColumnHeader hexcodeLC;
+        private System.Windows.Forms.ColumnHeader bytesLC;
+        private System.Windows.Forms.ColumnHeader mcycleLC;
+        private System.Windows.Forms.ColumnHeader tstateLC;
+        private System.Windows.Forms.GroupBox startAddressGB;
+        private System.Windows.Forms.TextBox startAddressBox;
+        private System.Windows.Forms.Button setAddressButton;
     }
 }
 

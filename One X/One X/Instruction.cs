@@ -19,18 +19,22 @@ namespace One_X {
         }
 
         public static Instruction parse(string instr) {
-            var inst = ((OPCODE[])Enum.GetValues(typeof(OPCODE))).
-                First(x => !string.IsNullOrWhiteSpace(x.GetAttributeOfType<Instruction>().Name) &&
-                instr.StartsWith(x.GetAttributeOfType<Instruction>().Name)).GetAttributeOfType<Instruction>();
+            try {
+                var inst = ((OPCODE[])Enum.GetValues(typeof(OPCODE))).
+                    First(x => !string.IsNullOrWhiteSpace(x.GetAttributeOfType<Instruction>().Name) &&
+                    instr.StartsWith(x.GetAttributeOfType<Instruction>().Name)).GetAttributeOfType<Instruction>();
 
-            // TODO PARSE LABEL
-            if (inst.Bytes > 1) {
-                inst.Arguments = Convert.ToUInt16( // convert to int
-                    instr.Substring(inst.Name.Count() + (inst.Bytes > 1 ? 1 : 0)) // get parameter part
-                    .Trim().ToUpper().Replace("H", "") // strip ending "H"
-                    , 16).ToBytes(); // convert to bytes
+                // TODO PARSE LABEL
+                if (inst.Bytes > 1) {
+                    inst.Arguments = Convert.ToUInt16( // convert to int
+                        instr.Substring(inst.Name.Count() + (inst.Bytes > 1 ? 1 : 0)) // get parameter part
+                        .Trim().ToUpper().Replace("H", "") // strip ending "H"
+                        , 16).ToBytes(); // convert to bytes
+                }
+                return inst;
+            } catch {
+                return OPCODE.UNKN_08.GetAttributeOfType<Instruction>();
             }
-            return inst;
         }
 
         public enum OPCODE : byte {
