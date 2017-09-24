@@ -94,7 +94,7 @@ namespace One_X {
                                 }
                             }
                         } else {
-                            instructionList.Add((StringType.Error, lineInd, labelInst[0].Length + 2, -1)); //ERROR for NoSuchInstruction. 
+                            instructionList.Add((StringType.Error, lineInd, labelInst[0].Length + 2, labelInst[1].Length)); //ERROR for NoSuchInstruction. 
                         }
                     } else {
                         instructionList.Add((StringType.Error, lineInd, 0, -1));  // Putting the Error with more than One Colons. 
@@ -132,6 +132,9 @@ namespace One_X {
                                 instructionList.Add((StringType.Error, lineInd, length + 1, lit.Length)); //Putting ERROR. 
                             }
                         }
+                    }
+                    else {
+                        instructionList.Add((StringType.Error, lineInd, 0, line.Length)); //ERROR for NoSuchInstruction. 
                     }
                 }
                 lineInd++;
