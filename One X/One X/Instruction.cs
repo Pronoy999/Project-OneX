@@ -18,8 +18,7 @@ namespace One_X {
             this.TStates = TStates;
         }
 
-        public static Instruction parse(string instr, out bool hasLabel) {
-            hasLabel = false;
+        public static Instruction parse(string instr) {
             try {
                 var inst = ((OPCODE[])Enum.GetValues(typeof(OPCODE))).
                     First(x => !string.IsNullOrWhiteSpace(x.GetAttributeOfType<Instruction>().Name) &&

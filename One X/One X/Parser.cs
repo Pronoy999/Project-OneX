@@ -57,7 +57,7 @@ namespace One_X {
                     bool hasOneColon = code.IndexOf(lineSeparator[0]) == code.LastIndexOf(lineSeparator[0]);
                     if (hasOneColon) {
                         string[] labelInst = line.Split(lineSeparator);
-                        Instruction inst = Instruction.parse(labelInst[1].Trim(), out haslabel);
+                        Instruction inst = Instruction.parse(labelInst[1].Trim());
                         // TODO Check haslabel variable and then check for the corresponding label
                         // add error tag to label if does not exists else fill up the instruction argument
                         // from label address and then add instruction to list
@@ -108,7 +108,7 @@ namespace One_X {
                         instructionList.Add((StringType.Error, lineInd, 0, -1));  // Putting the Error with more than One Colons. 
                     }
                 } else if (line.Length > 0) {
-                    Instruction inst = Instruction.parse(line.Trim(), out haslabel);
+                    Instruction inst = Instruction.parse(line.Trim());
                     // TODO Check haslabel variable and then check for the corresponding label
                     // add error tag to label if does not exists else fill up the instruction argument
                     // from label address and then add instruction to list
