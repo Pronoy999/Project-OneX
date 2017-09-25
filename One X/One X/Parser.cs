@@ -40,8 +40,13 @@ namespace One_X {
             int lineInd = 0;
             int length;
             int address = startingAddress;
+            bool haslabel = false;
+
             char[] newLine = { '\n' };
             char[] lineSeparator = { ':' };
+
+            instructions.Clear();
+            labels.Clear();
 
             var instructionList = new List<(StringType SType, int LineIndex, int ColIndex, int Length)>();
 
@@ -52,7 +57,10 @@ namespace One_X {
                     bool hasOneColon = code.IndexOf(lineSeparator[0]) == code.LastIndexOf(lineSeparator[0]);
                     if (hasOneColon) {
                         string[] labelInst = line.Split(lineSeparator);
-                        Instruction inst = Instruction.parse(labelInst[1].Trim());
+                        Instruction inst = Instruction.parse(labelInst[1].Trim(), out haslabel);
+                        // TODO Check haslabel variable and then check for the corresponding label
+                        // add error tag to label if does not exists else fill up the instruction argument
+                        // from label address and then add instruction to list
                         if (!string.IsNullOrWhiteSpace(inst.Name)) {
                             instructions.Add(inst);
                             labels.Add(address, labelInst[0].Trim());
@@ -100,7 +108,10 @@ namespace One_X {
                         instructionList.Add((StringType.Error, lineInd, 0, -1));  // Putting the Error with more than One Colons. 
                     }
                 } else if (line.Length > 0) {
-                    Instruction inst = Instruction.parse(line.Trim());
+                    Instruction inst = Instruction.parse(line.Trim(), out haslabel);
+                    // TODO Check haslabel variable and then check for the corresponding label
+                    // add error tag to label if does not exists else fill up the instruction argument
+                    // from label address and then add instruction to list
                     if (!string.IsNullOrWhiteSpace(inst.Name)) {
                         instructions.Add(inst);
                         address += inst.Bytes;
