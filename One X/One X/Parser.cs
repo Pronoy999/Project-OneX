@@ -50,7 +50,7 @@ namespace One_X {
             string[] lines = code.Split(newLine);
             foreach (string line in lines) {
                 if (line.Contains(":")) {
-                    bool hasOneColon = code.IndexOf(lineSeparator[0]) == code.LastIndexOf(lineSeparator[0]);
+                    bool hasOneColon = line.IndexOf(lineSeparator[0]) == line.LastIndexOf(lineSeparator[0]);
                     if (hasOneColon) {
                         string[] labelInst = line.Split(lineSeparator);
                         Instruction inst = Instruction.parse(labelInst[1].Trim());
@@ -70,12 +70,12 @@ namespace One_X {
                                 try {
                                     string lit = labelInst[1].Substring(instructionLength).Trim();
                                     Match match = reg.Match(lit);
-                                    instructionList.Add((StringType.Mnemonic, lineInd, labelInst[0].Length + 2, instructionLength));//Adding the Mneumonics
+                                    instructionList.Add((StringType.Mnemonic, lineInd, labelInst[0].Length + 1, instructionLength));//Adding the Mneumonics
                                     if (match.Success) {
-                                        instructionList.Add((StringType.Literal, lineInd, instructionLength, lit.Length));//Adding the Literal.
+                                        instructionList.Add((StringType.Literal, lineInd, instructionLength + labelInst[0].Length + 1, lit.Length));//Adding the Literal.
                                     }
                                     else {
-                                        instructionList.Add((StringType.Error, lineInd, instructionLength, lit.Length));
+                                        instructionList.Add((StringType.Error, lineInd, instructionLength + labelInst[0].Length + 1, lit.Length));
                                     }
                                 }
                                 catch (Exception e) {
@@ -87,9 +87,9 @@ namespace One_X {
                                 try {
                                     string lit = labelInst[1].Substring(instructionLength).Trim();
                                     Match match = reg.Match(lit);
-                                    instructionList.Add((StringType.Mnemonic, lineInd, labelInst[0].Length + 2, instructionLength));//Adding the Mneumonics
+                                    instructionList.Add((StringType.Mnemonic, lineInd, labelInst[0].Length + 1, instructionLength));//Adding the Mneumonics
                                     if (match.Success) {
-                                        instructionList.Add((StringType.Literal, lineInd, instructionLength, lit.Length));//Adding the Literal.
+                                        instructionList.Add((StringType.Literal, lineInd, instructionLength + labelInst[0].Length + 1, lit.Length));//Adding the Literal.
                                     }
                                     else {
                                         //instructionList.Add((StringType.Error, lineInd, length, lit.Length)); //NO Match ERROR. 
@@ -97,14 +97,14 @@ namespace One_X {
                                         Match m = rightLabel.Match(lit);
                                         if (m.Success) {
                                             if (isPresent(lit)) {
-                                                instructionList.Add((StringType.Label, lineInd, instructionLength, lit.Length));
+                                                instructionList.Add((StringType.Label, lineInd, instructionLength + labelInst[0].Length + 1, lit.Length));
                                             }
                                             else {
-                                                instructionList.Add((StringType.Error, lineInd, instructionLength, lit.Length));  // Label not defined previously. 
+                                                instructionList.Add((StringType.Error, lineInd, labelInst[0].Length + 1 + instructionLength, lit.Length));  // Label not defined previously. 
                                             }
                                         }
                                         else {
-                                            instructionList.Add((StringType.Error, lineInd, instructionLength, lit.Length));  //Regex not match EXCEPTION. 
+                                            instructionList.Add((StringType.Error, lineInd, instructionLength + labelInst[0].Length + 1, lit.Length));  //Regex not match EXCEPTION. 
                                         }
                                     }
                                 }
