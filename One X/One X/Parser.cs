@@ -63,7 +63,7 @@ namespace One_X {
                             address += inst.Bytes; //Increasing the Address Local Variable. 
                             instructionList.Add((StringType.Label, lineInd, 0, labelInst[0].Length));// Inserting the label. 
                             if (inst.Bytes >= 2)   // For 2 or 3 Byte Instructions Length = length+1;
-                                instructionLength = inst.Name.Length + 1;
+                                instructionLength = inst.Name.Length + 1; 
                             else instructionLength = inst.Name.Length;
                             if (inst.Bytes == 1) {
                                 instructionList.Add((StringType.Mnemonic, lineInd, labelInst[0].Length + 1, instructionLength));//Adding the Mneumonics.                                
