@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.codeBox = new System.Windows.Forms.RichTextBox();
             this.codePanel = new System.Windows.Forms.Panel();
             this.registerPanel = new System.Windows.Forms.Panel();
@@ -56,13 +57,14 @@
             this.listView1 = new System.Windows.Forms.ListView();
             this.addressLC = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.mnemonicLC = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.hexcodeLC = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.bytesLC = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.mcycleLC = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tstateLC = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.bytesLC = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.hexcodeLC = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.startAddressGB = new System.Windows.Forms.GroupBox();
-            this.setAddressButton = new System.Windows.Forms.Button();
             this.startAddressBox = new System.Windows.Forms.TextBox();
+            this.setAddressButton = new System.Windows.Forms.Button();
+            this.highTimer = new System.Windows.Forms.Timer(this.components);
             this.codePanel.SuspendLayout();
             this.registerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.flagIcon)).BeginInit();
@@ -399,6 +401,16 @@
             this.mnemonicLC.Text = "Mnemonic";
             this.mnemonicLC.Width = 95;
             // 
+            // hexcodeLC
+            // 
+            this.hexcodeLC.Text = "Hex Code";
+            this.hexcodeLC.Width = 90;
+            // 
+            // bytesLC
+            // 
+            this.bytesLC.Text = "Bytes";
+            this.bytesLC.Width = 51;
+            // 
             // mcycleLC
             // 
             this.mcycleLC.Text = "M-Cycles";
@@ -408,16 +420,6 @@
             // 
             this.tstateLC.Text = "T-States";
             this.tstateLC.Width = 73;
-            // 
-            // bytesLC
-            // 
-            this.bytesLC.Text = "Bytes";
-            this.bytesLC.Width = 51;
-            // 
-            // hexcodeLC
-            // 
-            this.hexcodeLC.Text = "Hex Code";
-            this.hexcodeLC.Width = 90;
             // 
             // startAddressGB
             // 
@@ -430,6 +432,16 @@
             this.startAddressGB.TabStop = false;
             this.startAddressGB.Text = "Set Start Address";
             // 
+            // startAddressBox
+            // 
+            this.startAddressBox.Font = new System.Drawing.Font("Hack", 17F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.startAddressBox.Location = new System.Drawing.Point(6, 25);
+            this.startAddressBox.Name = "startAddressBox";
+            this.startAddressBox.Size = new System.Drawing.Size(62, 34);
+            this.startAddressBox.TabIndex = 1;
+            this.startAddressBox.Text = "0000";
+            this.startAddressBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.startAddressBox_KeyPress);
+            // 
             // setAddressButton
             // 
             this.setAddressButton.Location = new System.Drawing.Point(78, 25);
@@ -440,15 +452,10 @@
             this.setAddressButton.UseVisualStyleBackColor = true;
             this.setAddressButton.Click += new System.EventHandler(this.setAddressButton_Click);
             // 
-            // startAddressBox
+            // highTimer
             // 
-            this.startAddressBox.Font = new System.Drawing.Font("Hack", 17F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.startAddressBox.Location = new System.Drawing.Point(6, 25);
-            this.startAddressBox.Name = "startAddressBox";
-            this.startAddressBox.Size = new System.Drawing.Size(62, 34);
-            this.startAddressBox.TabIndex = 1;
-            this.startAddressBox.Text = "0000";
-            this.startAddressBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.startAddressBox_KeyPress);
+            this.highTimer.Interval = 1000;
+            this.highTimer.Tick += new System.EventHandler(this.highTimer_Tick);
             // 
             // MainForm
             // 
@@ -511,6 +518,7 @@
         private System.Windows.Forms.GroupBox startAddressGB;
         private System.Windows.Forms.TextBox startAddressBox;
         private System.Windows.Forms.Button setAddressButton;
+        private System.Windows.Forms.Timer highTimer;
     }
 }
 
