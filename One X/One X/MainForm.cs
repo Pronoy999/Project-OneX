@@ -1,29 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace One_X {
     public partial class MainForm : Form {
         Parser p = new Parser();
+        bool doHigh = true;
+
         public MainForm() {
             InitializeComponent();
         }
 
         private void MainForm_Load(object sender, EventArgs e) {
-
+            highTimer.Start();
         }
 
         private void codeBox_KeyUp(object sender, KeyEventArgs e) {
             if(e.KeyCode == Keys.Enter) {
-                var x = p.Parse(codeBox.Text);
-                string s = string.Join("\n", x);
-                MessageBox.Show(s);
+                doHigh = false;
+                highlight();
             }
         }
 
@@ -44,6 +39,18 @@ namespace One_X {
             p = new Parser(int.Parse(startAddressBox.Text, System.Globalization.NumberStyles.HexNumber));
             MessageBox.Show(int.Parse(startAddressBox.Text, System.Globalization.NumberStyles.HexNumber) + "");
             p.Parse(codeBox.Text);
+        }
+
+        private void highlight() {
+            var highs = p.Parse(codeBox.Text);
+            int i = highs.First().ColIndex;
+            foreach (var h in highs) {
+                
+            }
+        }
+
+        private void highTimer_Tick(object sender, EventArgs e) {
+            if (doHigh) highlight(); else doHigh = true;
         }
     }
 }
