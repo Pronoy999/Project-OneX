@@ -26,6 +26,11 @@ namespace One_X {
 
                 // TODO PARSE LABEL
                 if (inst.Bytes > 1) {
+                    if (inst.Name.Contains(" ")) {
+                        if (instr.ElementAt(inst.Name.Length) != ',') throw new Exception();
+                    } else {
+                        if (instr.ElementAt(inst.Name.Length) != ' ') throw new Exception();
+                    }
                     try {
                         inst.Arguments = Convert.ToUInt16( // convert to int
                             instr.Substring(inst.Name.Count() + (inst.Bytes > 1 ? 1 : 0)) // get parameter part
@@ -43,12 +48,12 @@ namespace One_X {
 
         public enum OPCODE : byte {
             [Instruction("NOP", 1, 1, 4, "Nop")] NOP = 0x00,
-            [Instruction("LXI B", 3, 3, 10, "LoadBRp")] LXI_B = 0x01,
+            [Instruction("LXI B", 3, 3, 10, "LoadBRp")] LXI_B = 0x01, // comma
             [Instruction("STAX B", 1, 2, 7, "StoreAtBC")] STAX_B = 0x02,
             [Instruction("INX B", 1, 1, 6, "InxB")] INX_B = 0x03,
-            [Instruction("INX B", 1, 1, 4, "InrB")] INR_B = 0x04,
+            [Instruction("INR B", 1, 1, 4, "InrB")] INR_B = 0x04,
             [Instruction("DCR B", 1, 1, 4, "")] DCR_B = 0x05,
-            [Instruction("MVI B", 2, 2, 7, "")] MVI_B = 0x06,
+            [Instruction("MVI B", 2, 2, 7, "")] MVI_B = 0x06, // comma
             [Instruction("RLC", 1, 1, 4, "")] RLC = 0x07,
             [Instruction("", 0, 0, 0, "")] UNKN_08 = 0x08,
             [Instruction("DAD B", 1, 3, 10, "")] DAD_B = 0x09,
@@ -56,15 +61,15 @@ namespace One_X {
             [Instruction("DCX B", 1, 1, 6, "")] DCX_B = 0x0B,
             [Instruction("INR C", 1, 1, 4, "InrC")] INR_C = 0x0C,
             [Instruction("DCR C", 1, 1, 4, "")] DCR_C = 0x0D,
-            [Instruction("MVI C", 2, 2, 7, "")] MVI_C = 0x0E,
+            [Instruction("MVI C", 2, 2, 7, "")] MVI_C = 0x0E, // comma
             [Instruction("RRC", 1, 1, 4, "")] RRC = 0x0F,
             [Instruction("", 0, 0, 0, "")] UNKN_10 = 0x10,
-            [Instruction("LXI D", 3, 3, 10, "LoadDRp")] LXI_D = 0x11,
+            [Instruction("LXI D", 3, 3, 10, "LoadDRp")] LXI_D = 0x11, // comma
             [Instruction("STAX D", 1, 2, 7, "StoreAtDE")] STAX_D = 0x12,
             [Instruction("INX D", 1, 1, 6, "InxD")] INX_D = 0x13,
             [Instruction("INR D", 1, 1, 4, "InrD")] INR_D = 0x14,
             [Instruction("DCR D", 1, 1, 4, "")] DCR_D = 0x15,
-            [Instruction("MVI D", 2, 2, 7, "")] MVI_D = 0x16,
+            [Instruction("MVI D", 2, 2, 7, "")] MVI_D = 0x16, // comma
             [Instruction("RAL", 1, 1, 4, "")] RAL = 0x17,
             [Instruction("", 0, 0, 0, "")] UNKN_24 = 0x18,
             [Instruction("DAD D", 1, 3, 10, "")] DAD_D = 0x19,
@@ -72,15 +77,15 @@ namespace One_X {
             [Instruction("DCX D", 1, 1, 6, "")] DCX_D = 0x1B,
             [Instruction("INR E", 1, 1, 4, "InrE")] INR_E = 0x1C,
             [Instruction("DCR E", 1, 1, 4, "")] DCR_E = 0x1D,
-            [Instruction("MVI E", 2, 2, 7, "")] MVI_E = 0x1E,
+            [Instruction("MVI E", 2, 2, 7, "")] MVI_E = 0x1E, // comma
             [Instruction("RAR", 1, 1, 4, "")] RAR = 0x1F,
             [Instruction("RIM", 1, 1, 4, "")] RIM = 0x20,
-            [Instruction("LXI H", 3, 3, 10, "LoadHRp")] LXI_H = 0x21,
+            [Instruction("LXI H", 3, 3, 10, "LoadHRp")] LXI_H = 0x21, // comma
             [Instruction("SHLD", 3, 5, 16, "")] SHLD = 0x22,
             [Instruction("INX H", 1, 1, 6, "InxH")] INX_H = 0x23,
             [Instruction("INR H", 1, 1, 4, "InrH")] INR_H = 0x24,
             [Instruction("DCR H", 1, 1, 4, "")] DCR_H = 0x25,
-            [Instruction("MVI H", 2, 2, 7, "")] MVI_H = 0x26,
+            [Instruction("MVI H", 2, 2, 7, "")] MVI_H = 0x26, // comma
             [Instruction("DAA", 1, 1, 4, "")] DAA = 0x27,
             [Instruction("", 0, 0, 0, "")] UNKN_28 = 0x28,
             [Instruction("DAD H", 1, 3, 10, "")] DAD_H = 0x29,
@@ -88,15 +93,15 @@ namespace One_X {
             [Instruction("DCX H", 1, 1, 6, "")] DCX_H = 0x2B,
             [Instruction("INR L", 1, 1, 4, "InrL")] INR_L = 0x2C,
             [Instruction("DCR L", 1, 1, 4, "")] DCR_L = 0x2D,
-            [Instruction("MVI L", 2, 2, 7, "")] MVI_L = 0x2E,
+            [Instruction("MVI L", 2, 2, 7, "")] MVI_L = 0x2E, // comma
             [Instruction("CMA", 1, 1, 4, "")] CMA = 0x2F,
             [Instruction("SIM", 1, 1, 4, "")] SIM = 0x30,
-            [Instruction("LXI SP", 3, 3, 10, "")] LXI_SP = 0x31,
+            [Instruction("LXI SP", 3, 3, 10, "")] LXI_SP = 0x31, // comma
             [Instruction("STA", 3, 4, 13, "")] STA = 0x32,
             [Instruction("INX SP", 1, 1, 6, "")] INX_SP = 0x33,
             [Instruction("INR M", 1, 3, 10, "InrM")] INR_M = 0x34,
             [Instruction("DCR M", 1, 3, 10, "")] DCR_M = 0x35,
-            [Instruction("MVI M", 2, 3, 10, "")] MVI_M = 0x36,
+            [Instruction("MVI M", 2, 3, 10, "")] MVI_M = 0x36, // comma
             [Instruction("STC", 1, 1, 4, "")] STC = 0x37,
             [Instruction("", 0, 0, 0, "")] UNKN_38 = 0x38,
             [Instruction("DAD SP", 1, 3, 10, "")] DAD_SP = 0x39,
@@ -104,7 +109,7 @@ namespace One_X {
             [Instruction("DCX SP", 1, 1, 6, "")] DCX_SP = 0x3B,
             [Instruction("INR A", 1, 1, 4, "InrA")] INR_A = 0x3C,
             [Instruction("DCR A", 1, 1, 4, "")] DCR_A = 0x3D,
-            [Instruction("MVI A", 2, 2, 7, "")] MVI_A = 0x3E,
+            [Instruction("MVI A", 2, 2, 7, "")] MVI_A = 0x3E, // comma
             [Instruction("CMC", 1, 1, 4, "")] CMC = 0x3F,
             [Instruction("MOV B,B", 1, 1, 4, "")] MOV_BB = 0x40,
             [Instruction("MOV B,C", 1, 1, 4, "")] MOV_BC = 0x41,
@@ -240,7 +245,7 @@ namespace One_X {
             [Instruction("JMP", 3, 3, 10, "")] JMP = 0xC3,
             [Instruction("CNZ", 3, 5, 18, "")] CNZ = 0xC4,
             [Instruction("PUSH B", 1, 3, 12, "")] PUSH_B = 0xC5,
-            [Instruction("ADI", 2, 2, 7, "")] ADI = 0xC6,
+            [Instruction("ADI", 2, 2, 7, "")] ADI = 0xC6, // space
             [Instruction("RST 0", 1, 3, 12, "")] RST_0 = 0xC7,
             [Instruction("RZ", 1, 3, 10, "")] RZ = 0xC8,
             [Instruction("RET", 1, 3, 10, "")] RET = 0xC9,
@@ -248,23 +253,23 @@ namespace One_X {
             [Instruction("", 0, 0, 0, "")] UNKN_CB = 0xCB,
             [Instruction("CZ", 3, 5, 18, "")] CZ = 0xCC,
             [Instruction("CALL", 3, 5, 18, "")] CALL = 0xCD,
-            [Instruction("ACI", 2, 2, 7, "")] ACI = 0xCE,
+            [Instruction("ACI", 2, 2, 7, "")] ACI = 0xCE, // space
             [Instruction("RST 1", 1, 3, 12, "")] RST_1 = 0xCF,
             [Instruction("RNC", 1, 3, 10, "")] RNC = 0xD0,
             [Instruction("POP D", 1, 3, 10, "")] POP_D = 0xD1,
             [Instruction("JNC", 3, 3, 10, "")] JNC = 0xD2,
-            [Instruction("OUT", 2, 3, 10, "")] OUT = 0xD3,
+            [Instruction("OUT", 2, 3, 10, "")] OUT = 0xD3, // space
             [Instruction("CNC", 3, 5, 18, "")] CNC = 0xD4,
             [Instruction("PUSH D", 1, 3, 12, "")] PUSH_D = 0xD5,
-            [Instruction("SUI", 2, 2, 7, "")] SUI = 0xD6,
+            [Instruction("SUI", 2, 2, 7, "")] SUI = 0xD6, // space
             [Instruction("RST 2", 1, 3, 12, "")] RST_2 = 0xD7,
             [Instruction("RC", 1, 3, 10, "")] RC = 0xD8,
             [Instruction("", 0, 0, 0, "")] UNKN_D9 = 0xD9,
             [Instruction("JC", 3, 3, 10, "")] JC = 0xDA,
-            [Instruction("IN", 2, 3, 10, "")] IN = 0xDB,
+            [Instruction("IN", 2, 3, 10, "")] IN = 0xDB, // space
             [Instruction("CC", 3, 5, 18, "")] CC = 0xDC,
             [Instruction("", 0, 0, 0, "")] UNKN_0D = 0xDD,
-            [Instruction("SBI", 2, 2, 7, "")] SBI = 0xDE,
+            [Instruction("SBI", 2, 2, 7, "")] SBI = 0xDE, // space
             [Instruction("RST 3", 1, 3, 12, "")] RST_3 = 0xDF,
             [Instruction("RPO", 1, 3, 10, "")] RPO = 0xE0,
             [Instruction("POP H", 1, 3, 10, "")] POP_H = 0xE1,
@@ -272,31 +277,31 @@ namespace One_X {
             [Instruction("XTHL", 1, 5, 16, "")] XTHL = 0xE3,
             [Instruction("CPO", 3, 5, 18, "")] CPO = 0xE4,
             [Instruction("PUSH H", 1, 3, 12, "")] PUSH_H = 0xE5,
-            [Instruction("ANI", 2, 2, 7, "")] ANI = 0xE6,
+            [Instruction("ANI", 2, 2, 7, "")] ANI = 0xE6, // space
             [Instruction("RST 4", 1, 3, 12, "")] RST_4 = 0xE7,
             [Instruction("RPE", 1, 3, 10, "")] RPE = 0xE8,
             [Instruction("PCHL", 1, 1, 6, "")] PCHL = 0xE9,
-            [Instruction("JPE", 3, 3, 10, "")] JPE = 0xEA,
+            [Instruction("JPE", 3, 3, 10, "")] JPE = 0xEA, // space
             [Instruction("XCHG", 1, 1, 4, "")] XCHG = 0xEB,
-            [Instruction("CPE", 3, 5, 18, "")] CPE = 0xEC,
+            [Instruction("CPE", 3, 5, 18, "")] CPE = 0xEC, // space
             [Instruction("", 0, 0, 0, "")] UNKN_ED = 0xED,
-            [Instruction("XRI", 2, 2, 7, "")] XRI = 0xEE,
+            [Instruction("XRI", 2, 2, 7, "")] XRI = 0xEE, // space
             [Instruction("RST 5", 1, 3, 12, "")] RST_5 = 0xEF,
             [Instruction("RP", 1, 3, 10, "")] RP = 0xF0,
             [Instruction("POP PSW", 1, 3, 10, "")] POP_PSW = 0xF1,
-            [Instruction("JP", 3, 3, 10, "")] JP = 0xF2,
+            [Instruction("JP", 3, 3, 10, "")] JP = 0xF2, // space
             [Instruction("DI", 1, 1, 4, "")] DI = 0xF3,
-            [Instruction("CP", 3, 5, 18, "")] CP = 0xF4,
+            [Instruction("CP", 3, 5, 18, "")] CP = 0xF4, // space
             [Instruction("PUSH PSW", 1, 3, 12, "")] PUSH_PSW = 0xF5,
-            [Instruction("ORI", 2, 2, 7, "")] ORI = 0xF6,
+            [Instruction("ORI", 2, 2, 7, "")] ORI = 0xF6, // space
             [Instruction("RST 6", 1, 3, 12, "")] RST_6 = 0xF7,
             [Instruction("RM", 1, 3, 10, "")] RM = 0xF8,
             [Instruction("SPHL", 1, 1, 6, "")] SPHL = 0xF9,
-            [Instruction("JM", 3, 3, 10, "")] JM = 0xFA,
+            [Instruction("JM", 3, 3, 10, "")] JM = 0xFA, // space
             [Instruction("EI", 1, 1, 4, "")] EI = 0xFB,
-            [Instruction("CM", 3, 5, 18, "")] CM = 0xFC,
+            [Instruction("CM", 3, 5, 18, "")] CM = 0xFC, // space
             [Instruction("", 0, 0, 0, "")] UNKN_FD = 0xFD,
-            [Instruction("CPI", 2, 2, 7, "")] CPI = 0xFE,
+            [Instruction("CPI", 2, 2, 7, "")] CPI = 0xFE, // space
             [Instruction("RST 7", 1, 3, 12, "")] RST_7 = 0xFF
         }
     }
