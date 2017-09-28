@@ -58,65 +58,76 @@ namespace One_X {
                     bool hasOneColon = line.IndexOf(lineSeparator[0]) == line.LastIndexOf(lineSeparator[0]);
                     if (hasOneColon) {
                         string[] labelInst = line.Split(lineSeparator);
-                        Instruction inst = Instruction.parse(labelInst[1].Trim());
+
                         labelInst[0] = labelInst[0].Trim();
                         labelInst[1] = labelInst[1].Trim();
-                        if (!string.IsNullOrWhiteSpace(inst.Name)) {
-                            instructions.Add(inst);
+
+                        if (isValid(labelInst[0], rxLabel)) {
                             labels.Add(address, labelInst[0]);
-                            address += inst.Bytes; //Increasing the Address Local Variable. 
-                            // TODO check label with regex here as well.
                             instructionList.Add((StringType.Label, i, labelInst[0].Trim()));// Inserting the label. 
+                        }
+                        else {
+                            instructionList.Add((StringType.Error, i, labelInst[0].Trim()));// Inserting the label ERROR. 
+                        }
+
+                        Instruction inst = Instruction.parse(labelInst[1].Trim());
+                        if (!string.IsNullOrWhiteSpace(inst.Name)) {
+                            address += inst.Bytes; //Increasing the Address Local Variable.      
 
                             if (inst.Bytes == 1) {
                                 instructionList.Add((StringType.Mnemonic, i, inst.Name));//Adding the Mneumonics. The column index will also include that of the Label.
-                            } else if (inst.Bytes == 2) {
-                                Regex reg = new Regex(rxLitByte, RegexOptions.Singleline);
+                            }
+                            else if (inst.Bytes == 2) {
                                 try {
                                     string lit = labelInst[1].Substring(inst.Name.Length + 1).Trim();
-                                    Match match = reg.Match(lit);
                                     instructionList.Add((StringType.Mnemonic, i, inst.Name + labelInst[1].ElementAt(inst.Name.Length)));//Adding the Mneumonics
-                                    if (match.Success) {
+                                    if (isValid(lit, rxLitByte)) {
                                         instructionList.Add((StringType.Literal, i, lit));//Adding the Literal.
-                                    } else {
+                                    }
+                                    else {
                                         instructionList.Add((StringType.Error, i, lit));
                                     }
-                                } catch (Exception e) {
+                                }
+                                catch (Exception e) {
                                     //TODO:Catch the Exception.
                                 }
-                            } else if (inst.Bytes == 3) {
-                                Regex reg = new Regex(rxLitShort, RegexOptions.Singleline);
+                            }
+                            else if (inst.Bytes == 3) {
                                 try {
                                     string lit = labelInst[1].Substring(inst.Name.Length + 1).Trim();
-                                    Match match = reg.Match(lit);
                                     instructionList.Add((StringType.Mnemonic, i, inst.Name + labelInst[1].ElementAt(inst.Name.Length)));//Adding the Mneumonics
-                                    if (match.Success) {
+                                    if (isValid(lit, rxLitShort)) {
                                         instructionList.Add((StringType.Literal, i, lit));//Adding the Literal.
-                                    } else {
+                                    }
+                                    else {
                                         //instructionList.Add((StringType.Error, lineInd, length, lit.Length)); //NO Match ERROR. 
-                                        Regex rightLabel = new Regex(rxLabel);
-                                        Match m = rightLabel.Match(lit);
-                                        if (m.Success) {
+                                        if (isValid(lit, rxLabel)) {
                                             if (labels.Values.Contains(lit)) {
                                                 instructionList.Add((StringType.Label, i, lit));
-                                            } else {
+                                            }
+                                            else {
                                                 instructionList.Add((StringType.Error, i, lit));  // Label not defined previously. 
                                             }
-                                        } else {
+                                        }
+                                        else {
                                             instructionList.Add((StringType.Error, i, lit));  //Regex not match EXCEPTION. 
                                         }
                                     }
-                                } catch (Exception e) {
+                                }
+                                catch (Exception e) {
                                     //Handle the Regex No match Exception.
                                 }
                             }
-                        } else {
+                        }
+                        else {
                             instructionList.Add((StringType.Error, i, labelInst[1])); //ERROR for NoSuchInstruction. 
                         }
-                    } else {
+                    }
+                    else {
                         instructionList.Add((StringType.Error, i, line));  // Putting the Error with more than One Colons. 
                     }
-                } else if (line.Length > 0) {
+                }
+                else if (line.Length > 0) {
                     Instruction inst = Instruction.parse(line.Trim());
                     if (!string.IsNullOrWhiteSpace(inst.Name)) {
                         instructions.Add(inst);
@@ -124,44 +135,52 @@ namespace One_X {
 
                         if (inst.Bytes == 1) {
                             instructionList.Add((StringType.Mnemonic, i, inst.Name));//Adding the Mneumonics.    
-                        } else if (inst.Bytes == 2) {
+                        }
+                        else if (inst.Bytes == 2) {
                             string lit = line.Substring(inst.Name.Length + 1);
-                            Regex reg = new Regex(rxLitByte, RegexOptions.Singleline);
                             instructionList.Add((StringType.Mnemonic, i, inst.Name + line.ElementAt(inst.Name.Length)));//Adding the Mnemonics.
-                            Match match = reg.Match(lit);
-                            if (match.Success) {
+                            if (isValid(lit, rxLitByte)) {
                                 instructionList.Add((StringType.Literal, i, lit)); //Adding the Literal. 
-                            } else {
+                            }
+                            else {
                                 instructionList.Add((StringType.Error, i, lit)); //Putting ERROR. 
                             }
-                        } else if (inst.Bytes == 3) {
+                        }
+                        else if (inst.Bytes == 3) {
                             string lit = line.Substring(inst.Name.Length + 1);
-                            Regex reg = new Regex(rxLitShort, RegexOptions.Singleline);
                             instructionList.Add((StringType.Mnemonic, i, inst.Name + line.ElementAt(inst.Name.Length)));
-                            Match match = reg.Match(lit);
-                            if (match.Success) {
+                            if (isValid(lit, rxLitShort)) {
                                 instructionList.Add((StringType.Literal, i, lit)); //Adding the Literal. 
-                            } else {
+                            }
+                            else {
                                 //instructionList.Add((StringType.Error, lineInd, length + 1, lit.Length)); //Putting ERROR. 
-                                Regex rightLabel = new Regex(rxLabel);
-                                Match m = rightLabel.Match(lit);
-                                if (m.Success) {
+                                if (isValid(lit, rxLabel)) {
                                     if (labels.Values.Contains(lit)) {
                                         instructionList.Add((StringType.Label, i, lit));
-                                    } else {
+                                    }
+                                    else {
                                         instructionList.Add((StringType.Error, i, lit));  // Label not defined previously. 
                                     }
-                                } else {
+                                }
+                                else {
                                     instructionList.Add((StringType.Error, i, lit));  //Regex not match EXCEPTION. 
                                 }
                             }
                         }
-                    } else {
+                    }
+                    else {
                         instructionList.Add((StringType.Error, i, line)); //ERROR for NoSuchInstruction. 
                     }
                 }
             }
             return instructionList;
+        }
+        private bool isValid(String text, String reg) {
+            Regex regex = new Regex(reg, RegexOptions.Singleline);
+            Match match = regex.Match(text);
+            if (match.Success)
+                return true;
+            return false;
         }
     }
 }
