@@ -77,11 +77,13 @@
             this.codeBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.codeBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.codeBox.Font = new System.Drawing.Font("Hack", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.codeBox.HideSelection = false;
             this.codeBox.Location = new System.Drawing.Point(0, 0);
             this.codeBox.Name = "codeBox";
             this.codeBox.Size = new System.Drawing.Size(471, 703);
             this.codeBox.TabIndex = 0;
             this.codeBox.Text = "";
+            this.codeBox.WordWrap = false;
             this.codeBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.codeBox_KeyUp);
             // 
             // codePanel

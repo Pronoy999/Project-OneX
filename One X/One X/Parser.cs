@@ -39,7 +39,7 @@ namespace One_X {
          * Create the object of the class and set the starting address. 
          * </summary>
          */
-        public List<(StringType SType, int LineIndex, string word)> Parse(string code) {
+        public List<(StringType SType, int LineIndex, string Word)> Parse(string code) {
             int address = startingAddress;
             char[] newLine = { '\n' };
             char[] lineSeparator = { ':' };
@@ -47,7 +47,7 @@ namespace One_X {
             instructions.Clear();  //Clearing the Lists. 
             labels.Clear();
 
-            var instructionList = new List<(StringType SType, int LineIndex, string word)>();
+            var instructionList = new List<(StringType, int, string)>();
 
             // Checking more than One Colons in the line.
             string[] lines = code.Split(newLine);
@@ -59,12 +59,14 @@ namespace One_X {
                     if (hasOneColon) {
                         string[] labelInst = line.Split(lineSeparator);
                         Instruction inst = Instruction.parse(labelInst[1].Trim());
+                        labelInst[0] = labelInst[0].Trim();
+                        labelInst[1] = labelInst[1].Trim();
                         if (!string.IsNullOrWhiteSpace(inst.Name)) {
                             instructions.Add(inst);
-                            labels.Add(address, labelInst[0].Trim());
+                            labels.Add(address, labelInst[0]);
                             address += inst.Bytes; //Increasing the Address Local Variable. 
                             // TODO check label with regex here as well.
-                            instructionList.Add((StringType.Label, i, labelInst[0]));// Inserting the label. 
+                            instructionList.Add((StringType.Label, i, labelInst[0].Trim()));// Inserting the label. 
 
                             if (inst.Bytes == 1) {
                                 instructionList.Add((StringType.Mnemonic, i, inst.Name));//Adding the Mneumonics. The column index will also include that of the Label.
