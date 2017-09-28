@@ -46,6 +46,10 @@ namespace One_X {
             }
         }
 
+        public override string ToString() {
+            return "[" + Name + ", " + Bytes + ", " + MCycles + ", " + TStates + "]"; // include arguments
+        }
+
         public enum OPCODE : byte {
             [Instruction("NOP", 1, 1, 4, "Nop")] NOP = 0x00,
             [Instruction("LXI B", 3, 3, 10, "LoadBRp")] LXI_B = 0x01, // comma
