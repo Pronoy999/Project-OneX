@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace One_X {
     public static class BitHelper {
-        internal static ushort ToUShort(this (byte HO, byte LO) data) => (ushort) (data.HO << 8 + data.LO);
+        internal static ushort ToUShort(this (byte HO, byte LO) data) => (ushort)((data.HO << 8) + data.LO);
         internal static (byte HO, byte LO) ToBytes(this ushort data) => ((byte)((data & 0xFF00) >> 8), (byte)(data & 0x00FF));
 
         internal static int ToBitInt(this bool bit) => bit ? 1 : 0;
