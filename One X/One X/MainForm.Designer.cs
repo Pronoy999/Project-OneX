@@ -28,15 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.codeBox = new System.Windows.Forms.RichTextBox();
             this.codePanel = new System.Windows.Forms.Panel();
             this.registerPanel = new System.Windows.Forms.Panel();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
+            this.SFLabel = new System.Windows.Forms.Label();
+            this.ZFLabel = new System.Windows.Forms.Label();
+            this.ACFLabel = new System.Windows.Forms.Label();
+            this.PFLabel = new System.Windows.Forms.Label();
+            this.CYFLabel = new System.Windows.Forms.Label();
             this.flagIcon = new System.Windows.Forms.PictureBox();
             this.SFlag = new System.Windows.Forms.Label();
             this.NU1Flag = new System.Windows.Forms.Label();
@@ -54,7 +53,7 @@
             this.D2Label = new System.Windows.Forms.Label();
             this.D1Label = new System.Windows.Forms.Label();
             this.D0Label = new System.Windows.Forms.Label();
-            this.listView1 = new System.Windows.Forms.ListView();
+            this.insts = new System.Windows.Forms.ListView();
             this.addressLC = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.mnemonicLC = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.hexcodeLC = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -64,7 +63,7 @@
             this.startAddressGB = new System.Windows.Forms.GroupBox();
             this.startAddressBox = new System.Windows.Forms.TextBox();
             this.setAddressButton = new System.Windows.Forms.Button();
-            this.highTimer = new System.Windows.Forms.Timer(this.components);
+            this.stubColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.codePanel.SuspendLayout();
             this.registerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.flagIcon)).BeginInit();
@@ -101,11 +100,11 @@
             // registerPanel
             // 
             this.registerPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.registerPanel.Controls.Add(this.label1);
-            this.registerPanel.Controls.Add(this.label2);
-            this.registerPanel.Controls.Add(this.label3);
-            this.registerPanel.Controls.Add(this.label4);
-            this.registerPanel.Controls.Add(this.label5);
+            this.registerPanel.Controls.Add(this.SFLabel);
+            this.registerPanel.Controls.Add(this.ZFLabel);
+            this.registerPanel.Controls.Add(this.ACFLabel);
+            this.registerPanel.Controls.Add(this.PFLabel);
+            this.registerPanel.Controls.Add(this.CYFLabel);
             this.registerPanel.Controls.Add(this.flagIcon);
             this.registerPanel.Controls.Add(this.SFlag);
             this.registerPanel.Controls.Add(this.NU1Flag);
@@ -129,55 +128,55 @@
             this.registerPanel.Size = new System.Drawing.Size(240, 303);
             this.registerPanel.TabIndex = 2;
             // 
-            // label1
+            // SFLabel
             // 
-            this.label1.Font = new System.Drawing.Font("Trebuchet MS", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(51, 1);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(23, 12);
-            this.label1.TabIndex = 46;
-            this.label1.Text = "S";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.SFLabel.Font = new System.Drawing.Font("Trebuchet MS", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SFLabel.Location = new System.Drawing.Point(51, 1);
+            this.SFLabel.Name = "SFLabel";
+            this.SFLabel.Size = new System.Drawing.Size(23, 12);
+            this.SFLabel.TabIndex = 46;
+            this.SFLabel.Text = "S";
+            this.SFLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
-            // label2
+            // ZFLabel
             // 
-            this.label2.Font = new System.Drawing.Font("Trebuchet MS", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(73, 1);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(24, 12);
-            this.label2.TabIndex = 45;
-            this.label2.Text = "Z";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.ZFLabel.Font = new System.Drawing.Font("Trebuchet MS", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ZFLabel.Location = new System.Drawing.Point(73, 1);
+            this.ZFLabel.Name = "ZFLabel";
+            this.ZFLabel.Size = new System.Drawing.Size(24, 12);
+            this.ZFLabel.TabIndex = 45;
+            this.ZFLabel.Text = "Z";
+            this.ZFLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
-            // label3
+            // ACFLabel
             // 
-            this.label3.Font = new System.Drawing.Font("Trebuchet MS", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(119, 1);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(24, 12);
-            this.label3.TabIndex = 44;
-            this.label3.Text = "AC";
-            this.label3.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.ACFLabel.Font = new System.Drawing.Font("Trebuchet MS", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ACFLabel.Location = new System.Drawing.Point(119, 1);
+            this.ACFLabel.Name = "ACFLabel";
+            this.ACFLabel.Size = new System.Drawing.Size(24, 12);
+            this.ACFLabel.TabIndex = 44;
+            this.ACFLabel.Text = "AC";
+            this.ACFLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
-            // label4
+            // PFLabel
             // 
-            this.label4.Font = new System.Drawing.Font("Trebuchet MS", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(165, 1);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(24, 12);
-            this.label4.TabIndex = 43;
-            this.label4.Text = "P";
-            this.label4.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.PFLabel.Font = new System.Drawing.Font("Trebuchet MS", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.PFLabel.Location = new System.Drawing.Point(165, 1);
+            this.PFLabel.Name = "PFLabel";
+            this.PFLabel.Size = new System.Drawing.Size(24, 12);
+            this.PFLabel.TabIndex = 43;
+            this.PFLabel.Text = "P";
+            this.PFLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
-            // label5
+            // CYFLabel
             // 
-            this.label5.Font = new System.Drawing.Font("Trebuchet MS", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(211, 1);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(24, 12);
-            this.label5.TabIndex = 42;
-            this.label5.Text = "CY";
-            this.label5.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.CYFLabel.Font = new System.Drawing.Font("Trebuchet MS", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.CYFLabel.Location = new System.Drawing.Point(211, 1);
+            this.CYFLabel.Name = "CYFLabel";
+            this.CYFLabel.Size = new System.Drawing.Size(24, 12);
+            this.CYFLabel.TabIndex = 42;
+            this.CYFLabel.Text = "CY";
+            this.CYFLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // flagIcon
             // 
@@ -376,52 +375,59 @@
             this.D0Label.Text = "D₀";
             this.D0Label.TextAlign = System.Drawing.ContentAlignment.BottomRight;
             // 
-            // listView1
+            // insts
             // 
-            this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.insts.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.stubColumn,
             this.addressLC,
             this.mnemonicLC,
             this.hexcodeLC,
             this.bytesLC,
             this.mcycleLC,
             this.tstateLC});
-            this.listView1.FullRowSelect = true;
-            this.listView1.Location = new System.Drawing.Point(491, 321);
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(505, 396);
-            this.listView1.TabIndex = 3;
-            this.listView1.UseCompatibleStateImageBehavior = false;
-            this.listView1.View = System.Windows.Forms.View.Details;
+            this.insts.FullRowSelect = true;
+            this.insts.Location = new System.Drawing.Point(491, 321);
+            this.insts.MultiSelect = false;
+            this.insts.Name = "insts";
+            this.insts.Size = new System.Drawing.Size(505, 396);
+            this.insts.TabIndex = 3;
+            this.insts.UseCompatibleStateImageBehavior = false;
+            this.insts.View = System.Windows.Forms.View.Details;
             // 
             // addressLC
             // 
             this.addressLC.Text = "Address";
-            this.addressLC.Width = 113;
+            this.addressLC.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.addressLC.Width = 70;
             // 
             // mnemonicLC
             // 
             this.mnemonicLC.Text = "Mnemonic";
-            this.mnemonicLC.Width = 95;
+            this.mnemonicLC.Width = 100;
             // 
             // hexcodeLC
             // 
             this.hexcodeLC.Text = "Hex Code";
+            this.hexcodeLC.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.hexcodeLC.Width = 90;
             // 
             // bytesLC
             // 
             this.bytesLC.Text = "Bytes";
-            this.bytesLC.Width = 51;
+            this.bytesLC.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.bytesLC.Width = 50;
             // 
             // mcycleLC
             // 
             this.mcycleLC.Text = "M-Cycles";
-            this.mcycleLC.Width = 77;
+            this.mcycleLC.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.mcycleLC.Width = 75;
             // 
             // tstateLC
             // 
             this.tstateLC.Text = "T-States";
-            this.tstateLC.Width = 73;
+            this.tstateLC.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.tstateLC.Width = 75;
             // 
             // startAddressGB
             // 
@@ -436,12 +442,15 @@
             // 
             // startAddressBox
             // 
+            this.startAddressBox.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
             this.startAddressBox.Font = new System.Drawing.Font("Hack", 17F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.startAddressBox.Location = new System.Drawing.Point(6, 25);
             this.startAddressBox.Name = "startAddressBox";
             this.startAddressBox.Size = new System.Drawing.Size(62, 34);
             this.startAddressBox.TabIndex = 1;
+            this.startAddressBox.TabStop = false;
             this.startAddressBox.Text = "0000";
+            this.startAddressBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.startAddressBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.startAddressBox_KeyPress);
             // 
             // setAddressButton
@@ -454,10 +463,10 @@
             this.setAddressButton.UseVisualStyleBackColor = true;
             this.setAddressButton.Click += new System.EventHandler(this.setAddressButton_Click);
             // 
-            // highTimer
+            // stubColumn
             // 
-            this.highTimer.Interval = 1000;
-            this.highTimer.Tick += new System.EventHandler(this.highTimer_Tick);
+            this.stubColumn.Text = "";
+            this.stubColumn.Width = 0;
             // 
             // MainForm
             // 
@@ -466,7 +475,7 @@
             this.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.ClientSize = new System.Drawing.Size(1008, 729);
             this.Controls.Add(this.startAddressGB);
-            this.Controls.Add(this.listView1);
+            this.Controls.Add(this.insts);
             this.Controls.Add(this.registerPanel);
             this.Controls.Add(this.codePanel);
             this.Font = new System.Drawing.Font("Trebuchet MS", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -505,12 +514,12 @@
         private System.Windows.Forms.Label D3Label;
         private System.Windows.Forms.Label D2Label;
         private System.Windows.Forms.Label D1Label;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.ListView listView1;
+        private System.Windows.Forms.Label SFLabel;
+        private System.Windows.Forms.Label ZFLabel;
+        private System.Windows.Forms.Label ACFLabel;
+        private System.Windows.Forms.Label PFLabel;
+        private System.Windows.Forms.Label CYFLabel;
+        private System.Windows.Forms.ListView insts;
         private System.Windows.Forms.ColumnHeader addressLC;
         private System.Windows.Forms.ColumnHeader mnemonicLC;
         private System.Windows.Forms.ColumnHeader hexcodeLC;
@@ -520,7 +529,7 @@
         private System.Windows.Forms.GroupBox startAddressGB;
         private System.Windows.Forms.TextBox startAddressBox;
         private System.Windows.Forms.Button setAddressButton;
-        private System.Windows.Forms.Timer highTimer;
+        private System.Windows.Forms.ColumnHeader stubColumn;
     }
 }
 

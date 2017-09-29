@@ -2,20 +2,24 @@
 using System.Linq;
 
 namespace One_X {
-    class Instruction : System.Attribute {
+    class Instruction : Attribute {
         public string Name;
-        public int Bytes;
-        public int MCycles;
-        public int TStates;
+        public byte Bytes;
+        public byte MCycles;
+        public byte TStates;
 
         public Action Operation;
         public (byte HO, byte LO) Arguments;
 
-        public Instruction(string Name, int Bytes, int MCycles, int TStates, string method) {
+        public Instruction(string Name, byte Bytes, byte MCycles, byte TStates, string method) {
             this.Name = Name;
             this.Bytes = Bytes;
             this.MCycles = MCycles;
             this.TStates = TStates;
+        }
+
+        public OPCODE GetOPCODE() {
+            return ((OPCODE[])Enum.GetValues(typeof(OPCODE))).First(x => this.Name == x.GetAttributeOfType<Instruction>().Name);
         }
 
         public static Instruction parse(string instr) {

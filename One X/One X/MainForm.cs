@@ -3,23 +3,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Runtime.InteropServices;
 
 namespace One_X {
     public partial class MainForm : Form {
         Parser p = new Parser();
-        bool doHigh = true;
 
         public MainForm() {
             InitializeComponent();
         }
 
+        [DllImport("user32.dll")]
+        static extern bool HideCaret(IntPtr hWnd);
+
         private void MainForm_Load(object sender, EventArgs e) {
-            //highTimer.Start();
+            startAddressBox.GotFocus += (sndr, args) => {
+                startAddressBox.Select(startAddressBox.TextLength, 0);
+                HideCaret(startAddressBox.Handle);
+            };
         }
 
         private void codeBox_KeyUp(object sender, KeyEventArgs e) {
             if(e.KeyCode == Keys.Enter) {
-                doHigh = false;
                 highlight();
             }
         }
@@ -38,8 +43,8 @@ namespace One_X {
         }
 
         private void setAddressButton_Click(object sender, EventArgs e) {
-            p = new Parser(int.Parse(startAddressBox.Text, System.Globalization.NumberStyles.HexNumber));
-            p.Parse(codeBox.Text);
+            p = new Parser(ushort.Parse(startAddressBox.Text, System.Globalization.NumberStyles.HexNumber));
+            highlight();
         }
 
         private void highlight() {
@@ -56,11 +61,32 @@ namespace One_X {
             for (int i = 0; i < highs.Count; i++) {
                 var word = highs[i];
                 var str = word.Word;
-                if (word.SType == Parser.StringType.Label) {
-                    if (highs[i + 1].LineIndex == word.LineIndex) {
-                        // left label
-                        str = pad(str, ls) + ":    ";
-                    }
+                switch(word.SType) {
+                    case Parser.StringType.Mnemonic:
+                        try {
+                            if (highs[i - 1].LineIndex != word.LineIndex) {
+                                var stre = pad("", ls) + "     ";
+                                count += stre.Length;
+                                codeBoxText += stre;
+                            }
+                        } catch {
+                            var stre = pad("", ls) + "     ";
+                            count += stre.Length;
+                            codeBoxText += stre;
+                        }
+                        break;
+                    case Parser.StringType.Label:
+                        try {
+                            if (highs[i - 1].LineIndex != word.LineIndex) {
+                                // left label
+                                str = pad(str, ls) + ":    ";
+                            }
+                        } catch {
+                            str = pad(str, ls) + ":    ";
+                        }
+                        break;
+                    default:
+                        break;
                 }
                 
                 x.Add((word.SType, count, str.Length));
@@ -90,12 +116,42 @@ namespace One_X {
 
             codeBox.DeselectAll();
             codeBox.Select(codeBox.TextLength, 0);
-        }
 
-        private void highTimer_Tick(object sender, EventArgs e) {
-            if (doHigh) highlight(); else doHigh = true;
+            insts.Items.Clear();
+            foreach (var ins in p.instructions) {
+                ListViewItem litem = new ListViewItem(new string[] {
+                    string.Empty,
+                    ins.Key.ToString("X4"),
+                    ins.Value.Name + (ins.Value.Bytes > 1 ? 
+                    (ins.Value.Name.Contains(" ") ? "," : " ") + 
+                    ins.Value.Arguments.ToUShort().ToString(ins.Value.Bytes > 2 ? "X4" : "X2") + "H" : string.Empty),
+                    ((byte)ins.Value.GetOPCODE()).ToString("X2"),
+                    ins.Value.Bytes.ToString(),
+                    ins.Value.MCycles.ToString(),
+                    ins.Value.TStates.ToString()
+                });
+                insts.Items.Add(litem);
+                if (ins.Value.Bytes > 1) {
+                    ListViewItem litemLO = new ListViewItem(new string[] {
+                        string.Empty,
+                        ((ushort)(ins.Key + 1)).ToString("X4"),
+                        string.Empty,
+                        ins.Value.Arguments.LO.ToString("X2")
+                    });
+                    insts.Items.Add(litemLO);
+                    if (ins.Value.Bytes > 2) {
+                        ListViewItem litemHO = new ListViewItem(new string[] {
+                            string.Empty,
+                            ((ushort)(ins.Key + 2)).ToString("X4"),
+                            string.Empty,
+                            ins.Value.Arguments.HO.ToString("X2")
+                        });
+                        insts.Items.Add(litemHO);
+                    }
+                }
+            }
         }
-
+        
         static string pad(string s, int i) {
             string p = string.Empty;
             while (p.Length + s.Length < i) {
