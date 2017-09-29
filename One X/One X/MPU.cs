@@ -580,17 +580,70 @@ namespace One_X {
             running = false;
             PC = 0x0000;
         } //TODO: HALT SIGNAL TO EXECUTOR
+        #endregion
+
+        #region CALL
 
         public static void Call(ushort data) {
             SP -= 2;
             memory.WriteUShort(PC, SP);
             Jump(data);
         }
+        public static void CallNZ(ushort address) {
+            if (!Flag.Z.IsSet()) Call(address);
+        }
+        public static void CallZ(ushort address) {
+            if (Flag.Z.IsSet()) Call(address);
+        }
+        public static void CallC(ushort address) {
+            if (Flag.CY.IsSet()) Call(address);
+        }
+        public static void CallNC(ushort address) {
+            if (!Flag.CY.IsSet()) Call(address);
+        }
+        public static void CallP(ushort address) {
+            if (!Flag.S.IsSet()) Call(address);
+        }
+        public static void CallM(ushort address) {
+            if (Flag.S.IsSet()) Call(address);
+        }
+        public static void CallPE(ushort address) {
+            if (Flag.AC.IsSet()) Call(address);
+        }
+        public static void CallPO(ushort address) {
+            if (!Flag.AC.IsSet()) Call(address);
+        }
+        #endregion
 
+        #region RETURN
         public static void Return() {
             ushort data = memory.ReadUShort(SP);
             SP += 2;
             Jump(data);
+        }
+        public static void ReturnNZ() {
+            if (!Flag.Z.IsSet()) Return();
+        }
+        public static void ReturnZ() {
+            if (Flag.Z.IsSet()) Return();
+        }
+        public static void ReturnC() {
+            if (Flag.CY.IsSet()) Return();
+        }
+        public static void ReturnNC() {
+            if (!Flag.CY.IsSet()) Return();
+        }
+        public static void ReturnP() {
+            if (!Flag.S.IsSet()) Return();
+        }
+        public static void ReturnM() {
+            if (Flag.S.IsSet()) Return();
+        }
+        public static void ReturnPE() {
+            if (Flag.AC.IsSet()) Return();
+        }
+        public static void ReturnPO() {
+            if (!Flag.AC.IsSet()) Return();
         }
         #endregion
 
