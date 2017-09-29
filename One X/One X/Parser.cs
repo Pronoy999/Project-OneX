@@ -71,7 +71,7 @@ namespace One_X {
                             }
                         }
                         else {
-                            instructionList.Add((StringType.Error, i, labelInst[0].Trim()));// Inserting the label ERROR. 
+                            instructionList.Add((StringType.Error, i, labelInst[0].Trim()));// Inserting the label ERROR (INVALID LABEL). 
                         }
 
                         Instruction inst = Instruction.parse(labelInst[1].Trim());
@@ -92,10 +92,14 @@ namespace One_X {
                                     }
                                     else {
                                         instructionList.Add((StringType.Error, i, lit));
+                                        if (labels.Values.Contains(labelInst[0]))
+                                            labels.Remove(address - inst.Bytes); // Removing the Label if the Instruction is not valid. 
                                     }
                                 }
                                 catch (Exception e) {
                                     //TODO:Catch the Exception.
+                                    if (labels.Values.Contains(labelInst[0]))
+                                        labels.Remove(address - inst.Bytes); // Removing the Label if the Instruction is not valid. 
                                 }
                             }
                             else if (inst.Bytes == 3) {
@@ -118,24 +122,32 @@ namespace One_X {
                                             }
                                             else {
                                                 instructionList.Add((StringType.Error, i, lit));  // Label not defined previously. 
+                                                if (labels.Values.Contains(labelInst[0]))
+                                                    labels.Remove(address - inst.Bytes); // Removing the Label if the Instruction is not valid. 
                                             }
                                         }
                                         else {
                                             instructionList.Add((StringType.Error, i, lit));  //Regex not match EXCEPTION. 
+                                            if (labels.Values.Contains(labelInst[0]))
+                                                labels.Remove(address - inst.Bytes); // Removing the Label if the Instruction is not valid.
                                         }
                                     }
                                 }
                                 catch (Exception e) {
                                     //Handle the Regex No match Exception.
+                                    if (labels.Values.Contains(labelInst[0]))
+                                        labels.Remove(address - inst.Bytes); // Removing the Label if the Instruction is not valid.
                                 }
                             }
                         }
                         else {
-                            instructionList.Add((StringType.Error, i, labelInst[1])); //ERROR for NoSuchInstruction. 
+                            instructionList.Add((StringType.Error, i, labelInst[1])); //ERROR for NoSuchInstruction.
+                            if (labels.Values.Contains(labelInst[0]))
+                                labels.Remove(address - inst.Bytes); // Removing the Label if the Instruction is not valid.
                         }
                     }
                     else {
-                        instructionList.Add((StringType.Error, i, line));  // Putting the Error with more than One Colons. 
+                        instructionList.Add((StringType.Error, i, line));  // Putting the Error with more than One Colons.
                     }
                 }
                 else if (line.Length > 0) {
