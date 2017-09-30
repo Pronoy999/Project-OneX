@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -19,6 +19,7 @@ namespace One_X {
         internal ushort startingAddress; // This is the staring address of the code.
         internal Dictionary<ushort, Instruction> instructions = new Dictionary<ushort, Instruction>();  // The list containing the instructins without the label.
         internal Dictionary<ushort, string> labels = new Dictionary<ushort, string>();// The dictionary with the key as the memory address and the label as the value.
+
         string rxLitShort = "^[0-9a-fA-F]{1,4}H?$";
         string rxLitByte = "^[0-9a-fA-F]{1,2}H?$";
         string rxLabel = "^[0-9A-Za-z]+$"; //Regex for Right label.
@@ -28,7 +29,7 @@ namespace One_X {
          * initialize the Starting address from the UI. 
          * </summary>
          * */
-        public Parser(ushort startingAddress) {
+        public Parser(int startingAddress) {
             this.startingAddress = startingAddress;
         }
 
@@ -40,7 +41,7 @@ namespace One_X {
          * </summary>
          */
         public List<(StringType SType, int LineIndex, string Word)> Parse(string code) {
-            ushort address = startingAddress;
+            int address = startingAddress;
             char[] newLine = { '\n' };
             char[] lineSeparator = { ':' };
 
@@ -63,23 +64,19 @@ namespace One_X {
                         labelInst[1] = labelInst[1].Trim();
 
                         if (isValid(labelInst[0], rxLabel)) {
-                            if (labels.Values.Contains(labelInst[0])) {
-                                instructionList.Add((StringType.Error, i, labelInst[0].Trim()));// Inserting the label ERROR. 
-                            } else {
-                                labels.Add(address, labelInst[0]);
-                                instructionList.Add((StringType.Label, i, labelInst[0].Trim()));// Inserting the label.
-                            }
+                            labels.Add(address, labelInst[0]);
+                            instructionList.Add((StringType.Label, i, labelInst[0].Trim()));// Inserting the label. 
                         }
                         else {
-                            instructionList.Add((StringType.Error, i, labelInst[0].Trim()));// Inserting the label ERROR. 
+                            instructionList.Add((StringType.Error, i, labelInst[0].Trim()));// Inserting the label ERROR (INVALID LABEL). 
                         }
 
                         Instruction inst = Instruction.parse(labelInst[1].Trim());
                         if (!string.IsNullOrWhiteSpace(inst.Name)) {
+                            address += inst.Bytes; //Increasing the Address Local Variable.      
+
                             if (inst.Bytes == 1) {
                                 instructionList.Add((StringType.Mnemonic, i, inst.Name));//Adding the Mneumonics. The column index will also include that of the Label.
-                                instructions.Add(address, inst);
-                                address += inst.Bytes;
                             }
                             else if (inst.Bytes == 2) {
                                 try {
@@ -87,15 +84,17 @@ namespace One_X {
                                     instructionList.Add((StringType.Mnemonic, i, inst.Name + labelInst[1].ElementAt(inst.Name.Length)));//Adding the Mneumonics
                                     if (isValid(lit, rxLitByte)) {
                                         instructionList.Add((StringType.Literal, i, lit));//Adding the Literal.
-                                        instructions.Add(address, inst);
-                                        address += inst.Bytes;
                                     }
                                     else {
                                         instructionList.Add((StringType.Error, i, lit));
+                                        if (labels.Values.Contains(labelInst[0]))
+                                            labels.Remove(address - inst.Bytes); // Removing the Label if the Instruction is not valid. 
                                     }
                                 }
                                 catch (Exception e) {
                                     //TODO:Catch the Exception.
+                                    if (labels.Values.Contains(labelInst[0]))
+                                        labels.Remove(address - inst.Bytes); // Removing the Label if the Instruction is not valid. 
                                 }
                             }
                             else if (inst.Bytes == 3) {
@@ -104,77 +103,73 @@ namespace One_X {
                                     instructionList.Add((StringType.Mnemonic, i, inst.Name + labelInst[1].ElementAt(inst.Name.Length)));//Adding the Mneumonics
                                     if (isValid(lit, rxLitShort)) {
                                         instructionList.Add((StringType.Literal, i, lit));//Adding the Literal.
-                                        instructions.Add(address, inst);
-                                        address += inst.Bytes;
                                     }
                                     else {
                                         //instructionList.Add((StringType.Error, lineInd, length, lit.Length)); //NO Match ERROR. 
                                         if (isValid(lit, rxLabel)) {
                                             if (labels.Values.Contains(lit)) {
                                                 instructionList.Add((StringType.Label, i, lit));
-                                                inst.Arguments = labels.First(x => x.Value == lit).Key.ToBytes();
-                                                instructions.Add(address, inst);
-                                                address += inst.Bytes;
                                             }
                                             else {
                                                 instructionList.Add((StringType.Error, i, lit));  // Label not defined previously. 
+                                                if (labels.Values.Contains(labelInst[0]))
+                                                    labels.Remove(address - inst.Bytes); // Removing the Label if the Instruction is not valid. 
                                             }
                                         }
                                         else {
                                             instructionList.Add((StringType.Error, i, lit));  //Regex not match EXCEPTION. 
+                                            if (labels.Values.Contains(labelInst[0]))
+                                                labels.Remove(address - inst.Bytes); // Removing the Label if the Instruction is not valid.
                                         }
                                     }
                                 }
                                 catch (Exception e) {
                                     //Handle the Regex No match Exception.
+                                    if (labels.Values.Contains(labelInst[0]))
+                                        labels.Remove(address - inst.Bytes); // Removing the Label if the Instruction is not valid.
                                 }
                             }
                         }
                         else {
-                            instructionList.Add((StringType.Error, i, labelInst[1])); //ERROR for NoSuchInstruction. 
+                            instructionList.Add((StringType.Error, i, labelInst[1])); //ERROR for NoSuchInstruction.
+                            if (labels.Values.Contains(labelInst[0]))
+                                labels.Remove(address - inst.Bytes); // Removing the Label if the Instruction is not valid.
                         }
                     }
                     else {
-                        instructionList.Add((StringType.Error, i, line));  // Putting the Error with more than One Colons. 
+                        instructionList.Add((StringType.Error, i, line));  // Putting the Error with more than One Colons.
                     }
                 }
                 else if (line.Length > 0) {
-                    line = line.Trim();
-                    Instruction inst = Instruction.parse(line);
+                    Instruction inst = Instruction.parse(line.Trim());
                     if (!string.IsNullOrWhiteSpace(inst.Name)) {
+                        instructions.Add(inst);
+                        address += inst.Bytes;
+
                         if (inst.Bytes == 1) {
-                            instructionList.Add((StringType.Mnemonic, i, inst.Name));//Adding the Mneumonics.
-                            instructions.Add(address, inst);
-                            address += inst.Bytes;
+                            instructionList.Add((StringType.Mnemonic, i, inst.Name));//Adding the Mneumonics.    
                         }
                         else if (inst.Bytes == 2) {
-                            string lit = line.Substring(inst.Name.Length + 1).Trim();
+                            string lit = line.Substring(inst.Name.Length + 1);
                             instructionList.Add((StringType.Mnemonic, i, inst.Name + line.ElementAt(inst.Name.Length)));//Adding the Mnemonics.
                             if (isValid(lit, rxLitByte)) {
-                                instructionList.Add((StringType.Literal, i, lit)); //Adding the Literal.
-                                instructions.Add(address, inst);
-                                address += inst.Bytes;
+                                instructionList.Add((StringType.Literal, i, lit)); //Adding the Literal. 
                             }
                             else {
                                 instructionList.Add((StringType.Error, i, lit)); //Putting ERROR. 
                             }
                         }
                         else if (inst.Bytes == 3) {
-                            string lit = line.Substring(inst.Name.Length + 1).Trim();
+                            string lit = line.Substring(inst.Name.Length + 1);
                             instructionList.Add((StringType.Mnemonic, i, inst.Name + line.ElementAt(inst.Name.Length)));
                             if (isValid(lit, rxLitShort)) {
                                 instructionList.Add((StringType.Literal, i, lit)); //Adding the Literal. 
-                                instructions.Add(address, inst);
-                                address += inst.Bytes;
                             }
                             else {
                                 //instructionList.Add((StringType.Error, lineInd, length + 1, lit.Length)); //Putting ERROR. 
                                 if (isValid(lit, rxLabel)) {
                                     if (labels.Values.Contains(lit)) {
                                         instructionList.Add((StringType.Label, i, lit));
-                                        inst.Arguments = labels.First(x => x.Value == lit).Key.ToBytes();
-                                        instructions.Add(address, inst);
-                                        address += inst.Bytes;
                                     }
                                     else {
                                         instructionList.Add((StringType.Error, i, lit));  // Label not defined previously. 
