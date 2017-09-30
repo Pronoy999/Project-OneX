@@ -16,7 +16,7 @@ namespace One_X {
             Error = 0xFFFF0000
         }
 
-        internal ushort startingAddress; // This is the staring address of the code. 
+        internal ushort startingAddress; // This is the staring address of the code.
         internal Dictionary<ushort, Instruction> instructions = new Dictionary<ushort, Instruction>();  // The list containing the instructins without the label.
         internal Dictionary<ushort, string> labels = new Dictionary<ushort, string>();// The dictionary with the key as the memory address and the label as the value.
         string rxLitShort = "^[0-9a-fA-F]{1,4}H?$";

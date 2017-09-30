@@ -54,6 +54,7 @@
             this.D1Label = new System.Windows.Forms.Label();
             this.D0Label = new System.Windows.Forms.Label();
             this.insts = new System.Windows.Forms.ListView();
+            this.stubColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.addressLC = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.mnemonicLC = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.hexcodeLC = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -63,7 +64,6 @@
             this.startAddressGB = new System.Windows.Forms.GroupBox();
             this.startAddressBox = new System.Windows.Forms.TextBox();
             this.setAddressButton = new System.Windows.Forms.Button();
-            this.stubColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.codePanel.SuspendLayout();
             this.registerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.flagIcon)).BeginInit();
@@ -394,6 +394,11 @@
             this.insts.UseCompatibleStateImageBehavior = false;
             this.insts.View = System.Windows.Forms.View.Details;
             // 
+            // stubColumn
+            // 
+            this.stubColumn.Text = "";
+            this.stubColumn.Width = 0;
+            // 
             // addressLC
             // 
             this.addressLC.Text = "Address";
@@ -403,7 +408,7 @@
             // mnemonicLC
             // 
             this.mnemonicLC.Text = "Mnemonic";
-            this.mnemonicLC.Width = 100;
+            this.mnemonicLC.Width = 121;
             // 
             // hexcodeLC
             // 
@@ -462,11 +467,6 @@
             this.setAddressButton.Text = "SET";
             this.setAddressButton.UseVisualStyleBackColor = true;
             this.setAddressButton.Click += new System.EventHandler(this.setAddressButton_Click);
-            // 
-            // stubColumn
-            // 
-            this.stubColumn.Text = "";
-            this.stubColumn.Width = 0;
             // 
             // MainForm
             // 
