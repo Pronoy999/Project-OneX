@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.codeBox = new Ionic.WinForms.RichTextBoxEx();
+            this.codeBox = new System.Windows.Forms.RichTextBox();
             this.codePanel = new System.Windows.Forms.Panel();
             this.registerPanel = new System.Windows.Forms.Panel();
             this.SFLabel = new System.Windows.Forms.Label();
@@ -78,17 +78,6 @@
             this.codeBox.HideSelection = false;
             this.codeBox.Location = new System.Drawing.Point(0, 0);
             this.codeBox.Name = "codeBox";
-            this.codeBox.NumberAlignment = System.Drawing.StringAlignment.Far;
-            this.codeBox.NumberBackground1 = System.Drawing.SystemColors.Control;
-            this.codeBox.NumberBackground2 = System.Drawing.SystemColors.Control;
-            this.codeBox.NumberBorder = System.Drawing.SystemColors.ControlDarkDark;
-            this.codeBox.NumberBorderThickness = 2F;
-            this.codeBox.NumberColor = System.Drawing.SystemColors.ControlDark;
-            this.codeBox.NumberFont = new System.Drawing.Font("Hack", 10F);
-            this.codeBox.NumberLeadingZeroes = false;
-            this.codeBox.NumberLineCounting = Ionic.WinForms.RichTextBoxEx.LineCounting.AsDisplayed;
-            this.codeBox.NumberPadding = 8;
-            this.codeBox.ShowLineNumbers = false;
             this.codeBox.Size = new System.Drawing.Size(471, 703);
             this.codeBox.TabIndex = 0;
             this.codeBox.Text = "";
@@ -458,10 +447,9 @@
             // startAddressBox
             // 
             this.startAddressBox.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
-            this.startAddressBox.Font = new System.Drawing.Font("Hack", 17F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.startAddressBox.Location = new System.Drawing.Point(6, 25);
             this.startAddressBox.Name = "startAddressBox";
-            this.startAddressBox.Size = new System.Drawing.Size(62, 34);
+            this.startAddressBox.Size = new System.Drawing.Size(62, 26);
             this.startAddressBox.TabIndex = 1;
             this.startAddressBox.TabStop = false;
             this.startAddressBox.Text = "0000";
@@ -504,7 +492,7 @@
 
         #endregion
 
-        private Ionic.WinForms.RichTextBoxEx codeBox;
+        private System.Windows.Forms.RichTextBox codeBox;
         private System.Windows.Forms.Panel codePanel;
         private System.Windows.Forms.Panel registerPanel;
         private System.Windows.Forms.PictureBox flagIcon;

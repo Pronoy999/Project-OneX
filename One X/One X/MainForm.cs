@@ -18,6 +18,8 @@ namespace One_X {
 
         private void MainForm_Load(object sender, EventArgs e) {
             codeBox.Font = Fonts.Fonts.Create(Fonts.FontFamily.Hack, 12);
+            codeBox.NumberFont = Fonts.Fonts.Create(Fonts.FontFamily.Hack, 10);
+            codeBox.ShowLineNumbers = true;
             startAddressBox.Font = Fonts.Fonts.Create(Fonts.FontFamily.Hack, 17);
 
             startAddressBox.GotFocus += (sndr, args) => {
@@ -50,7 +52,7 @@ namespace One_X {
             highlight();
         }
 
-        private void highlight() {
+        private async void highlight() {
             var highs = p.Parse(codeBox.Text);
 
             var ls = padLen(p.labels.Values);
@@ -92,7 +94,7 @@ namespace One_X {
                         break;
                 }
                 
-                x.Add((word.SType, count, str.Length));
+                x.Add((word.SType, count, word.Word.Length));
                 count += str.Length;
                 codeBoxText += str;
                 try {
@@ -111,8 +113,7 @@ namespace One_X {
 
             // color
             foreach (var w in x) {
-                codeBox.Select(w.begin, w.length);
-                codeBox.SelectionColor = Color.FromArgb((int)w.stype);
+                codeBox.SetSelectionColor(w.begin, w.begin + w.length, Color.FromArgb((int)w.stype));
             }
 
             // restore selection

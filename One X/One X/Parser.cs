@@ -57,7 +57,7 @@ namespace One_X {
             // Checking more than One Colons in the line.
             string[] lines = code.Split(newLine);
             for (int i = 0; i < lines.Length; i++) {
-                var line = lines[i];
+                var line = lines[i].ToUpper();
                 if (string.IsNullOrWhiteSpace(line)) continue; // increments counter
                 if (line.Contains(":")) {
                     bool hasOneColon = line.IndexOf(lineSeparator[0]) == line.LastIndexOf(lineSeparator[0]);
