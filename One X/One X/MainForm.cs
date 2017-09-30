@@ -17,6 +17,8 @@ namespace One_X {
         static extern bool HideCaret(IntPtr hWnd);
 
         private void MainForm_Load(object sender, EventArgs e) {
+            codeBox.Font = Fonts.Fonts.Create(Fonts.FontFamily.Hack, 12);
+
             startAddressBox.GotFocus += (sndr, args) => {
                 startAddressBox.Select(startAddressBox.TextLength, 0);
                 HideCaret(startAddressBox.Handle);
