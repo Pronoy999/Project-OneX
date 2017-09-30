@@ -27,8 +27,7 @@ namespace One_X {
                 var inst = ((OPCODE[])Enum.GetValues(typeof(OPCODE))).
                     First(x => !string.IsNullOrWhiteSpace(x.GetAttributeOfType<Instruction>().Name) &&
                     instr.StartsWith(x.GetAttributeOfType<Instruction>().Name)).GetAttributeOfType<Instruction>();
-
-                // TODO PARSE LABEL
+                
                 if (inst.Bytes > 1) {
                     if (inst.Name.Contains(" ")) {
                         if (instr.ElementAt(inst.Name.Length) != ',') throw new Exception();

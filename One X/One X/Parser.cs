@@ -16,9 +16,10 @@ namespace One_X {
             Error = 0xFFFF0000
         }
 
-        internal int startingAddress; // This is the staring address of the code. 
-        internal List<Instruction> instructions = new List<Instruction>();  // The list containing the instructins without the label.
-        internal Dictionary<int, string> labels = new Dictionary<int, string>();// The dictionary with the key as the memory address and the label as the value.
+        internal ushort startingAddress; // This is the staring address of the code.
+        internal Dictionary<ushort, Instruction> instructions = new Dictionary<ushort, Instruction>();  // The list containing the instructins without the label.
+        internal Dictionary<ushort, string> labels = new Dictionary<ushort, string>();// The dictionary with the key as the memory address and the label as the value.
+
         string rxLitShort = "^[0-9a-fA-F]{1,4}H?$";
         string rxLitByte = "^[0-9a-fA-F]{1,2}H?$";
         string rxLabel = "^[0-9A-Za-z]+$"; //Regex for Right label.

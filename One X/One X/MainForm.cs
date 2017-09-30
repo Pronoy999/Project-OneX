@@ -113,7 +113,6 @@ namespace One_X {
             }
 
             // restore selection
-
             codeBox.DeselectAll();
             codeBox.Select(codeBox.TextLength, 0);
 
