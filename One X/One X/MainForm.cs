@@ -18,6 +18,7 @@ namespace One_X {
 
         private void MainForm_Load(object sender, EventArgs e) {
             codeBox.Font = Fonts.Fonts.Create(Fonts.FontFamily.Hack, 12);
+            startAddressBox.Font = Fonts.Fonts.Create(Fonts.FontFamily.Hack, 17);
 
             startAddressBox.GotFocus += (sndr, args) => {
                 startAddressBox.Select(startAddressBox.TextLength, 0);

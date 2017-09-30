@@ -447,10 +447,9 @@
             // startAddressBox
             // 
             this.startAddressBox.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
-            this.startAddressBox.Font = new System.Drawing.Font("Hack", 17F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.startAddressBox.Location = new System.Drawing.Point(6, 25);
             this.startAddressBox.Name = "startAddressBox";
-            this.startAddressBox.Size = new System.Drawing.Size(62, 34);
+            this.startAddressBox.Size = new System.Drawing.Size(62, 26);
             this.startAddressBox.TabIndex = 1;
             this.startAddressBox.TabStop = false;
             this.startAddressBox.Text = "0000";
