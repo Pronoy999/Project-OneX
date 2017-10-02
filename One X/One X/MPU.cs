@@ -683,7 +683,7 @@ namespace One_X {
         }
         #endregion
 
-        //TODO:RIM,SIM
+        //TODO:RIM,SIM,DAA,STC,CMC,IN,OUT,XTHL,PCHL,DI,SPHL,EI
     }
 }
 
