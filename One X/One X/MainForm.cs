@@ -186,7 +186,15 @@ namespace One_X {
         }
 
         private void memBtn_Click(object sender, EventArgs e) {
-            memView.Show();
+            if (memView.Visible) {
+                memView.Hide();
+            } else {
+                memView.Show();
+            }
+            memView.Location = new Point(Location.X + Width, Location.Y);
+        }
+
+        private void MainForm_Move(object sender, EventArgs e) {
             memView.Location = new Point(Location.X + Width, Location.Y);
         }
     }

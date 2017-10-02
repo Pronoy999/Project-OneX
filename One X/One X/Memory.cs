@@ -8,6 +8,7 @@ namespace One_X {
         private FileStream fileStream;
 
         public Memory(string name) {
+            // todo don't delete rather load the memory, need to define better file/project structure
             try { File.Delete(name); } catch { }
             fileStream = new FileStream(name, FileMode.CreateNew, FileAccess.ReadWrite);
             fileStream.SetLength(0x10000);

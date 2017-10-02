@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.codeBox = new Ionic.WinForms.RichTextBoxEx();
             this.codePanel = new System.Windows.Forms.Panel();
             this.registerPanel = new System.Windows.Forms.Panel();
             this.SFLabel = new System.Windows.Forms.Label();
@@ -65,36 +64,12 @@
             this.startAddressBox = new System.Windows.Forms.TextBox();
             this.setAddressButton = new System.Windows.Forms.Button();
             this.memBtn = new System.Windows.Forms.Button();
+            this.codeBox = new Ionic.WinForms.RichTextBoxEx();
             this.codePanel.SuspendLayout();
             this.registerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.flagIcon)).BeginInit();
             this.startAddressGB.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // codeBox
-            // 
-            this.codeBox.AcceptsTab = true;
-            this.codeBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.codeBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.codeBox.HideSelection = false;
-            this.codeBox.Location = new System.Drawing.Point(0, 0);
-            this.codeBox.Name = "codeBox";
-            this.codeBox.NumberAlignment = System.Drawing.StringAlignment.Far;
-            this.codeBox.NumberBackground1 = System.Drawing.SystemColors.Control;
-            this.codeBox.NumberBackground2 = System.Drawing.SystemColors.Control;
-            this.codeBox.NumberBorder = System.Drawing.SystemColors.ControlDarkDark;
-            this.codeBox.NumberBorderThickness = 2F;
-            this.codeBox.NumberColor = System.Drawing.SystemColors.ControlDark;
-            this.codeBox.NumberFont = new System.Drawing.Font("Hack", 10F);
-            this.codeBox.NumberLeadingZeroes = false;
-            this.codeBox.NumberLineCounting = Ionic.WinForms.RichTextBoxEx.LineCounting.AsDisplayed;
-            this.codeBox.NumberPadding = 8;
-            this.codeBox.ShowLineNumbers = false;
-            this.codeBox.Size = new System.Drawing.Size(471, 703);
-            this.codeBox.TabIndex = 0;
-            this.codeBox.Text = "";
-            this.codeBox.WordWrap = false;
-            this.codeBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.codeBox_KeyUp);
             // 
             // codePanel
             // 
@@ -489,6 +464,31 @@
             this.memBtn.UseVisualStyleBackColor = true;
             this.memBtn.Click += new System.EventHandler(this.memBtn_Click);
             // 
+            // codeBox
+            // 
+            this.codeBox.AcceptsTab = true;
+            this.codeBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.codeBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.codeBox.HideSelection = false;
+            this.codeBox.Location = new System.Drawing.Point(0, 0);
+            this.codeBox.Name = "codeBox";
+            this.codeBox.NumberAlignment = System.Drawing.StringAlignment.Far;
+            this.codeBox.NumberBackground1 = System.Drawing.SystemColors.Control;
+            this.codeBox.NumberBackground2 = System.Drawing.SystemColors.Control;
+            this.codeBox.NumberBorder = System.Drawing.SystemColors.ControlDarkDark;
+            this.codeBox.NumberBorderThickness = 2F;
+            this.codeBox.NumberColor = System.Drawing.SystemColors.ControlDark;
+            this.codeBox.NumberFont = new System.Drawing.Font("Hack", 10F);
+            this.codeBox.NumberLeadingZeroes = false;
+            this.codeBox.NumberLineCounting = Ionic.WinForms.RichTextBoxEx.LineCounting.AsDisplayed;
+            this.codeBox.NumberPadding = 8;
+            this.codeBox.ShowLineNumbers = false;
+            this.codeBox.Size = new System.Drawing.Size(471, 703);
+            this.codeBox.TabIndex = 0;
+            this.codeBox.Text = "";
+            this.codeBox.WordWrap = false;
+            this.codeBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.codeBox_KeyUp);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 22F);
@@ -505,6 +505,7 @@
             this.Name = "MainForm";
             this.Text = "Assembly Editor";
             this.Load += new System.EventHandler(this.MainForm_Load);
+            this.Move += new System.EventHandler(this.MainForm_Move);
             this.codePanel.ResumeLayout(false);
             this.registerPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.flagIcon)).EndInit();
