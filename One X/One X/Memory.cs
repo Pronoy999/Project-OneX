@@ -1,32 +1,38 @@
-﻿using System;
+﻿using Be.Windows.Forms;
+using System;
 using System.IO;
 
 namespace One_X {
     public class Memory {
+        internal DynamicFileByteProvider provider;
         private FileStream fileStream;
-        private BinaryReader br;
-        private BinaryWriter bw;
 
         public Memory(string name) {
-            fileStream = new FileStream(name, FileMode.OpenOrCreate);
-            br = new BinaryReader(fileStream);
-            bw = new BinaryWriter(fileStream);
+            try { File.Delete(name); } catch { }
+            fileStream = new FileStream(name, FileMode.CreateNew, FileAccess.ReadWrite);
+            fileStream.SetLength(0x10000);
+
+            provider = new DynamicFileByteProvider(fileStream);
         }
-        public byte ReadByte(ushort loc) {
-            fileStream.Seek(loc, SeekOrigin.Begin);
-            return br.ReadByte();
-        }
+        public byte ReadByte(ushort loc) => provider.ReadByte(loc);
+        public ushort ReadUShort(ushort loc) => (provider.ReadByte(loc + 1), provider.ReadByte(loc)).ToUShort();
+
         public void WriteByte(byte data, ushort loc) {
-            fileStream.Seek(loc, SeekOrigin.Begin);
-            bw.Write(data);
+            provider.WriteByte(loc, data);
+            provider.ApplyChanges();
         }
-        public ushort ReadUShort(ushort loc) {
-            fileStream.Seek(loc, SeekOrigin.Begin);
-            return br.ReadUInt16();
-        }
+
         public void WriteUShort(ushort data, ushort loc) {
-            fileStream.Seek(loc, SeekOrigin.Begin);
-            bw.Write(data);
+            provider.WriteByte(loc, data.ToBytes().LO);
+            provider.WriteByte(loc + 1, data.ToBytes().HO);
+            provider.ApplyChanges();
+        }
+
+        public void Clear(ushort locStart, ushort locEnd) {
+            for (int i = locStart; i <= locEnd; i++) {
+                provider.WriteByte(i, 0x00);
+            }
+            provider.ApplyChanges();
         }
     }
 }

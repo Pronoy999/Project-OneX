@@ -5,6 +5,8 @@ namespace One_X {
     public static class MPU {
         private static bool running = false;
 
+        public static Memory memory;
+
         internal enum Flag : byte {
             Sign = 7,
             Zero = 6,
@@ -20,7 +22,6 @@ namespace One_X {
         }
 
         internal static byte acc;
-        internal static Memory memory;
         internal static byte regB, regC, regD, regE, regH, regL;
         internal static byte regM { get; set; } // TODO Direct to Memory
         internal static byte regA {

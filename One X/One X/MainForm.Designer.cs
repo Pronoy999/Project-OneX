@@ -64,6 +64,7 @@
             this.startAddressGB = new System.Windows.Forms.GroupBox();
             this.startAddressBox = new System.Windows.Forms.TextBox();
             this.setAddressButton = new System.Windows.Forms.Button();
+            this.memBtn = new System.Windows.Forms.Button();
             this.codePanel.SuspendLayout();
             this.registerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.flagIcon)).BeginInit();
@@ -448,7 +449,7 @@
             // 
             this.startAddressGB.Controls.Add(this.startAddressBox);
             this.startAddressGB.Controls.Add(this.setAddressButton);
-            this.startAddressGB.Location = new System.Drawing.Point(555, 12);
+            this.startAddressGB.Location = new System.Drawing.Point(491, 12);
             this.startAddressGB.Name = "startAddressGB";
             this.startAddressGB.Size = new System.Drawing.Size(146, 66);
             this.startAddressGB.TabIndex = 4;
@@ -478,12 +479,23 @@
             this.setAddressButton.UseVisualStyleBackColor = true;
             this.setAddressButton.Click += new System.EventHandler(this.setAddressButton_Click);
             // 
+            // memBtn
+            // 
+            this.memBtn.Location = new System.Drawing.Point(643, 20);
+            this.memBtn.Name = "memBtn";
+            this.memBtn.Size = new System.Drawing.Size(107, 58);
+            this.memBtn.TabIndex = 5;
+            this.memBtn.Text = "EDIT MEMORY";
+            this.memBtn.UseVisualStyleBackColor = true;
+            this.memBtn.Click += new System.EventHandler(this.memBtn_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 22F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.ClientSize = new System.Drawing.Size(1008, 729);
+            this.Controls.Add(this.memBtn);
             this.Controls.Add(this.startAddressGB);
             this.Controls.Add(this.insts);
             this.Controls.Add(this.registerPanel);
@@ -540,6 +552,7 @@
         private System.Windows.Forms.TextBox startAddressBox;
         private System.Windows.Forms.Button setAddressButton;
         private System.Windows.Forms.ColumnHeader stubColumn;
+        private System.Windows.Forms.Button memBtn;
     }
 }
 

@@ -49,6 +49,15 @@ namespace One_X {
             }
         }
 
+        public void WriteToMemory(Memory mem, ushort loc) {
+            mem.WriteByte((byte)GetOPCODE(), loc++);
+            if (Bytes == 2) {
+                mem.WriteByte(Arguments.LO, loc++);
+            } else if (Bytes == 3) {
+                mem.WriteUShort(Arguments.ToUShort(), loc++);
+            }
+        }
+
         public override string ToString() {
             return "[" + Name + ", " + Bytes + ", " + MCycles + ", " + TStates + "]"; // include arguments
         }

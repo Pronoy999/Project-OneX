@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 namespace One_X {
     public partial class MainForm : Form {
         Parser p = new Parser();
+        MemoryViewer memView = new MemoryViewer();
 
         public MainForm() {
             InitializeComponent();
@@ -17,6 +18,9 @@ namespace One_X {
         static extern bool HideCaret(IntPtr hWnd);
 
         private void MainForm_Load(object sender, EventArgs e) {
+            // todo
+            MPU.memory = new Memory(Application.StartupPath + "\\test.bin");
+
             codeBox.Font = Fonts.Fonts.Create(Fonts.FontFamily.Hack, 12);
             codeBox.NumberFont = Fonts.Fonts.Create(Fonts.FontFamily.Hack, 10);
             codeBox.ShowLineNumbers = true;
@@ -52,7 +56,7 @@ namespace One_X {
             highlight();
         }
 
-        private async void highlight() {
+        private void highlight() {
             var highs = p.Parse(codeBox.Text);
 
             var ls = padLen(p.labels.Values);
@@ -120,6 +124,12 @@ namespace One_X {
             codeBox.DeselectAll();
             codeBox.Select(codeBox.TextLength, 0);
 
+            try {
+                ushort start = ushort.Parse(insts.Items[0].SubItems[1].Text);
+                ushort end = ushort.Parse(insts.Items[insts.Items.Count - 1].SubItems[1].Text);
+                MPU.memory.Clear(start, end);
+            } catch (ArgumentOutOfRangeException ex) { }
+            
             insts.Items.Clear();
             foreach (var ins in p.instructions) {
                 ListViewItem litem = new ListViewItem(new string[] {
@@ -152,7 +162,9 @@ namespace One_X {
                         insts.Items.Add(litemHO);
                     }
                 }
+                ins.Value.WriteToMemory(MPU.memory, ins.Key);
             }
+            memView.memBox.Invalidate(); ;
         }
         
         static string pad(string s, int i) {
@@ -171,6 +183,11 @@ namespace One_X {
                 }
             }
             return r;
+        }
+
+        private void memBtn_Click(object sender, EventArgs e) {
+            memView.Show();
+            memView.Location = new Point(Location.X + Width, Location.Y);
         }
     }
 }
