@@ -112,5 +112,26 @@
   <ItemGroup>
     <None Include="resx\flag.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="resx\a.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resx\b.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resx\c.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resx\d.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resx\e.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resx\h.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resx\l.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
