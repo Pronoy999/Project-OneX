@@ -125,8 +125,8 @@ namespace One_X {
             codeBox.Select(codeBox.TextLength, 0);
 
             try {
-                ushort start = ushort.Parse(insts.Items[0].SubItems[1].Text);
-                ushort end = ushort.Parse(insts.Items[insts.Items.Count - 1].SubItems[1].Text);
+                ushort start = ushort.Parse(insts.Items[0].SubItems[1].Text, System.Globalization.NumberStyles.HexNumber);
+                ushort end = ushort.Parse(insts.Items[insts.Items.Count - 1].SubItems[1].Text, System.Globalization.NumberStyles.HexNumber);
                 MPU.memory.Clear(start, end);
             } catch (ArgumentOutOfRangeException ex) { }
             

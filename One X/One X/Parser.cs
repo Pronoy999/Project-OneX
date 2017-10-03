@@ -56,10 +56,27 @@ namespace One_X {
 
             // Checking more than One Colons in the line.
             string[] lines = code.Split(newLine);
+
+            // should contain all error labels as well
+            List<string> tempLabels = new List<string>();
+            Dictionary<ushort, string> reqArgs = new Dictionary<ushort, string>();
+
+            for (int i = 0; i < lines.Length; i++) {
+                var line = lines[i].ToUpper();
+                if (line.Contains(lineSeparator[0])) {
+                    // has label
+                    string[] lineA = line.Split(lineSeparator);
+                    if (lineA.Count() == 2) {
+                        // has one label
+                        tempLabels.Add(lineA[0].Trim());
+                    }
+                }
+            }
+
             for (int i = 0; i < lines.Length; i++) {
                 var line = lines[i].ToUpper();
                 if (string.IsNullOrWhiteSpace(line)) continue; // increments counter
-                if (line.Contains(":")) {
+                if (line.Contains(lineSeparator[0])) {
                     bool hasOneColon = line.IndexOf(lineSeparator[0]) == line.LastIndexOf(lineSeparator[0]);
                     if (hasOneColon) {
                         string[] labelInst = line.Split(lineSeparator);
@@ -67,7 +84,7 @@ namespace One_X {
                         labelInst[0] = labelInst[0].Trim();
                         labelInst[1] = labelInst[1].Trim();
                         
-                        if (isValid(labelInst[0], regex_rxLabel)) {
+                        if (regex_rxLabel.IsMatch(labelInst[0])) {
                             if (labels.Values.Contains(labelInst[0])) {
                                 instructionList.Add((StringType.Error, i, labelInst[0].Trim()));// Inserting the label ERROR. 
                             }
@@ -91,7 +108,7 @@ namespace One_X {
                                 try {
                                     string lit = labelInst[1].Substring(inst.Name.Length + 1).Trim();
                                     instructionList.Add((StringType.Mnemonic, i, inst.Name + labelInst[1].ElementAt(inst.Name.Length)));//Adding the Mneumonics
-                                    if (isValid(lit, regex_rxLitByte)) {
+                                    if (regex_rxLitByte.IsMatch(lit)) {
                                         instructionList.Add((StringType.Literal, i, lit));//Adding the Literal.
                                         instructions.Add(address, inst);
                                         address += inst.Bytes;
@@ -114,16 +131,19 @@ namespace One_X {
                                 try {
                                     string lit = labelInst[1].Substring(inst.Name.Length + 1).Trim();
                                     instructionList.Add((StringType.Mnemonic, i, inst.Name + labelInst[1].ElementAt(inst.Name.Length)));//Adding the Mneumonics
-                                    if (isValid(lit, regex_rxLitShort)) {
+                                    if (regex_rxLitShort.IsMatch(lit)) {
                                         instructionList.Add((StringType.Literal, i, lit));//Adding the Literal.
                                         instructions.Add(address, inst);
                                         address += inst.Bytes;
                                     }
                                     else {
-                                        if (isValid(lit, regex_rxLabel)) {
-                                            if (labels.Values.Contains(lit)) {
+                                        if (regex_rxLabel.IsMatch(lit)) {
+                                            if (tempLabels.Contains(lit)) {
                                                 instructionList.Add((StringType.Label, i, lit));
-                                                inst.Arguments = labels.First(x => x.Value == lit).Key.ToBytes();
+                                                reqArgs.Add(address, lit);
+                                                //try {
+                                                //    inst.Arguments = labels.First(x => x.Value == lit).Key.ToBytes();
+                                                //} catch { }
                                                 instructions.Add(address, inst);
                                                 address += inst.Bytes;
                                             }
@@ -173,7 +193,7 @@ namespace One_X {
                         else if (inst.Bytes == 2) {
                             string lit = line.Substring(inst.Name.Length + 1).Trim();
                             instructionList.Add((StringType.Mnemonic, i, inst.Name + line.ElementAt(inst.Name.Length)));//Adding the Mnemonics.
-                            if (isValid(lit, regex_rxLitByte)) {
+                            if (regex_rxLitByte.IsMatch(lit)) {
                                 instructionList.Add((StringType.Literal, i, lit)); //Adding the Literal.
                                 instructions.Add(address, inst);
                                 address += inst.Bytes;
@@ -185,17 +205,20 @@ namespace One_X {
                         else if (inst.Bytes == 3) {
                             string lit = line.Substring(inst.Name.Length + 1).Trim();
                             instructionList.Add((StringType.Mnemonic, i, inst.Name + line.ElementAt(inst.Name.Length)));
-                            if (isValid(lit, regex_rxLitShort)) {
+                            if (regex_rxLitShort.IsMatch(lit)) {
                                 instructionList.Add((StringType.Literal, i, lit)); //Adding the Literal. 
                                 instructions.Add(address, inst);
                                 address += inst.Bytes;
                             }
                             else {
                                 //instructionList.Add((StringType.Error, lineInd, length + 1, lit.Length)); //Putting ERROR. 
-                                if (isValid(lit, regex_rxLabel)) {
-                                    if (labels.Values.Contains(lit)) {
+                                if (regex_rxLabel.IsMatch(lit)) {
+                                    if (tempLabels.Contains(lit)) {
                                         instructionList.Add((StringType.Label, i, lit));
-                                        inst.Arguments = labels.First(x => x.Value == lit).Key.ToBytes();
+                                        reqArgs.Add(address, lit);
+                                        //try {
+                                        //    inst.Arguments = labels.First(x => x.Value == lit).Key.ToBytes();
+                                        //} catch { }
                                         instructions.Add(address, inst);
                                         address += inst.Bytes;
                                     }
@@ -214,13 +237,15 @@ namespace One_X {
                     }
                 }
             }
+
+            foreach (var v in reqArgs) {
+                try {
+                    instructions[v.Key].Arguments = labels.First(x => x.Value == v.Value).Key.ToBytes();
+                } catch {
+
+                }
+            }
             return instructionList;
-        }
-        private bool isValid(String text, Regex regex) {
-            Match match = regex.Match(text);
-            if (match.Success)
-                return true;
-            return false;
         }
     }
 }
