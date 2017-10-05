@@ -18,7 +18,14 @@ namespace One_X {
             this.MCycles = MCycles;
             this.TStates = TStates;
 
-            this.method = typeof(MPU).GetMethod(method);
+            // todo use if rather than try : better error detection
+            // if (!string.IsNullOrWhiteSpace(method)) {
+            try {
+                this.method = typeof(MPU).GetMethod(method);
+            } catch {
+
+            }
+            // }
         }
 
         public OPCODE GetOPCODE() {
