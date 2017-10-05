@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+using System.Windows.Forms;
 
 namespace One_X {
     class Instruction : Attribute {
@@ -19,13 +20,9 @@ namespace One_X {
             this.TStates = TStates;
 
             // todo use if rather than try : better error detection
-            // if (!string.IsNullOrWhiteSpace(method)) {
-            try {
+            if (!string.IsNullOrWhiteSpace(method)) {
                 this.method = typeof(MPU).GetMethod(method);
-            } catch {
-
             }
-            // }
         }
 
         public OPCODE GetOPCODE() {
@@ -141,7 +138,7 @@ namespace One_X {
             [Instruction("STC", 1, 1, 4, "setCY")] STC = 0x37,
             [Instruction("", 0, 0, 0, "")] UNKN_38 = 0x38,
             [Instruction("DAD SP", 1, 3, 10, "DadSP")] DAD_SP = 0x39,
-            [Instruction("LDA", 3, 4, 13, "LoadA")] LDA = 0x3A,
+            [Instruction("LDA", 3, 4, 13, "LoadAFrom")] LDA = 0x3A,
             [Instruction("DCX SP", 1, 1, 6, "DcxSP")] DCX_SP = 0x3B,
             [Instruction("INR A", 1, 1, 4, "InrA")] INR_A = 0x3C,
             [Instruction("DCR A", 1, 1, 4, "DcrA")] DCR_A = 0x3D,

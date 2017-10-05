@@ -455,7 +455,7 @@ namespace One_X {
         #endregion
 
         #region LOAD
-        public static void LoadA(ushort address) => regA = memory.ReadByte(address);
+        public static void LoadAFrom(ushort address) => regA = memory.ReadByte(address);
         public static void LoadFromBC() => regA = memory.ReadByte(BRp);
         public static void LoadFromDE() => regA = memory.ReadByte(DRp);
         public static void LoadHL(ushort address) => HRp = memory.ReadUShort(address);
