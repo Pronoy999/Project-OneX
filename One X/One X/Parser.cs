@@ -35,6 +35,7 @@ namespace One_X {
          * */
         public Parser(ushort startingAddress) {
             this.startingAddress = startingAddress;
+            MPU.PC = startingAddress;
         }
 
         public Parser() : this(0) { }  //Default Constructor. 

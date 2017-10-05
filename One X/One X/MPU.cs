@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Windows.Forms;
+using Microsoft.VisualBasic;
 using System.Collections;
 
 namespace One_X {
@@ -21,9 +23,17 @@ namespace One_X {
             CY = Carry
         }
 
+        // todo events for all registers/flags. hint: convert to properties
         internal static byte acc;
         internal static byte regB, regC, regD, regE, regH, regL;
-        internal static byte regM { get; set; } // TODO Direct to Memory
+        internal static byte regM {
+            get {
+                return memory.ReadByte(HRp);
+            }
+            set {
+                memory.WriteByte(value, HRp);
+            }
+        }
         internal static byte regA {
             get {
                 return acc;
@@ -581,6 +591,39 @@ namespace One_X {
             running = false;
             PC = 0x0000;
         } //TODO: HALT SIGNAL TO EXECUTOR
+
+        public static void ExPCwHL() {
+            ushort hrp = HRp;
+            HRp = memory.ReadUShort(stackPtr);
+            memory.WriteUShort(hrp, stackPtr);
+        }
+
+        public static void stPCtoHL() => progCntr = HRp;
+
+        public static void stSPtoHL() => stackPtr = HRp;
+
+        public static void setCY() => Flag.Carry.Set();
+
+        public static void compCY() => Flag.Carry.Toggle();
+
+        public static void Input(byte port) {
+            string error = "";
+            while (true) {
+                try {
+                    string str = Interaction.InputBox(error + "\nInput for port : " + port.ToString("X2") + "\nEnter hex value within range: [00 - FF]", "IN " + port.ToString("X2"), "00");
+                    byte b = byte.Parse(str, System.Globalization.NumberStyles.HexNumber);
+                    regA = b;
+                    break;
+                } catch {
+                    error = "Invalid Format!";
+                }
+            }
+        }
+
+        public static void Output(byte port) {
+            MessageBox.Show("Output for port : " + port.ToString("X2") + "\n" + regA.ToString("X2"));
+        }
+
         #endregion
 
         #region CALL
@@ -683,7 +726,23 @@ namespace One_X {
         }
         #endregion
 
-        //TODO:RIM,SIM,DAA,STC,CMC,IN,OUT,XTHL,PCHL,DI,SPHL,EI
+
+        //TODO:RIM,SIM,DAA,DI,EI
+
+        public static void NextStep() {
+            Instruction ins = ((Instruction.OPCODE) memory.ReadByte(PC++)).GetAttributeOfType<Instruction>();
+            if (ins.Bytes > 1) {
+                ins.Arguments.LO = memory.ReadByte(PC++);
+                ins.Arguments.HO = 0x00;
+            }
+            if (ins.Bytes > 2) {
+                ins.Arguments.HO = memory.ReadByte(PC++);
+            }
+            ins.Execute();
+        }
+
+        public static void ExecuteAllSteps() { while (running) NextStep(); }
+        
     }
 }
 

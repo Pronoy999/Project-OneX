@@ -4,6 +4,7 @@ using System.Linq;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
+using Microsoft.VisualBasic;
 
 namespace One_X {
     public partial class MainForm : Form {
@@ -196,6 +197,10 @@ namespace One_X {
 
         private void MainForm_Move(object sender, EventArgs e) {
             memView.Location = new Point(Location.X + Width, Location.Y);
+        }
+
+        private void nextStepBtn_Click(object sender, EventArgs e) {
+
         }
     }
 }

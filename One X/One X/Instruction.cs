@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Reflection;
 
 namespace One_X {
     class Instruction : Attribute {
@@ -7,15 +8,17 @@ namespace One_X {
         public byte Bytes;
         public byte MCycles;
         public byte TStates;
-
-        public Action Operation;
+        
         public (byte HO, byte LO) Arguments;
+        public MethodInfo method;
 
         public Instruction(string Name, byte Bytes, byte MCycles, byte TStates, string method) {
             this.Name = Name;
             this.Bytes = Bytes;
             this.MCycles = MCycles;
             this.TStates = TStates;
+
+            this.method = typeof(MPU).GetMethod(method);
         }
 
         public OPCODE GetOPCODE() {
@@ -47,6 +50,16 @@ namespace One_X {
             } catch {
                 return OPCODE.UNKN_08.GetAttributeOfType<Instruction>();
             }
+        }
+
+        public void Execute() {
+            object[] param = null;
+            if (Bytes == 2) {
+                param = new object[] { Arguments.LO };
+            } else if (Bytes == 3) {
+                param = new object[] { Arguments.ToUShort() };
+            }
+            method.Invoke(null, param);
         }
 
         public void WriteToMemory(Memory mem, ushort loc) {
