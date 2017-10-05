@@ -131,7 +131,7 @@ namespace One_X {
             [Instruction("INR M", 1, 3, 10, "InrM")] INR_M = 0x34,
             [Instruction("DCR M", 1, 3, 10, "DcrM")] DCR_M = 0x35,
             [Instruction("MVI M", 2, 3, 10, "LoadM")] MVI_M = 0x36, // comma
-            [Instruction("STC", 1, 1, 4, "")] STC = 0x37,
+            [Instruction("STC", 1, 1, 4, "setCY")] STC = 0x37,
             [Instruction("", 0, 0, 0, "")] UNKN_38 = 0x38,
             [Instruction("DAD SP", 1, 3, 10, "DadSP")] DAD_SP = 0x39,
             [Instruction("LDA", 3, 4, 13, "LoadA")] LDA = 0x3A,
@@ -139,7 +139,7 @@ namespace One_X {
             [Instruction("INR A", 1, 1, 4, "InrA")] INR_A = 0x3C,
             [Instruction("DCR A", 1, 1, 4, "DcrA")] DCR_A = 0x3D,
             [Instruction("MVI A", 2, 2, 7, "LoadA")] MVI_A = 0x3E, // comma
-            [Instruction("CMC", 1, 1, 4, "")] CMC = 0x3F,
+            [Instruction("CMC", 1, 1, 4, "compCY")] CMC = 0x3F,
             [Instruction("MOV B,B", 1, 1, 4, "MoveBB")] MOV_BB = 0x40,
             [Instruction("MOV B,C", 1, 1, 4, "MoveBC")] MOV_BC = 0x41,
             [Instruction("MOV B,D", 1, 1, 4, "MoveBD")] MOV_BD = 0x42,
@@ -287,7 +287,7 @@ namespace One_X {
             [Instruction("RNC", 1, 3, 10, "ReturnNC")] RNC = 0xD0,
             [Instruction("POP D", 1, 3, 10, "PopDRp")] POP_D = 0xD1,
             [Instruction("JNC", 3, 3, 10, "JumpNC")] JNC = 0xD2,
-            [Instruction("OUT", 2, 3, 10, "")] OUT = 0xD3, // space
+            [Instruction("OUT", 2, 3, 10, "Output")] OUT = 0xD3, // space
             [Instruction("CNC", 3, 5, 18, "CallNC")] CNC = 0xD4,
             [Instruction("PUSH D", 1, 3, 12, "PushDRp")] PUSH_D = 0xD5,
             [Instruction("SUI", 2, 2, 7, "Sui")] SUI = 0xD6, // space
@@ -295,7 +295,7 @@ namespace One_X {
             [Instruction("RC", 1, 3, 10, "ReturnC")] RC = 0xD8,
             [Instruction("", 0, 0, 0, "")] UNKN_D9 = 0xD9,
             [Instruction("JC", 3, 3, 10, "JumpC")] JC = 0xDA,
-            [Instruction("IN", 2, 3, 10, "")] IN = 0xDB, // space
+            [Instruction("IN", 2, 3, 10, "Input")] IN = 0xDB, // space
             [Instruction("CC", 3, 5, 18, "CallC")] CC = 0xDC,
             [Instruction("", 0, 0, 0, "")] UNKN_0D = 0xDD,
             [Instruction("SBI", 2, 2, 7, "Sbi")] SBI = 0xDE, // space
@@ -303,13 +303,13 @@ namespace One_X {
             [Instruction("RPO", 1, 3, 10, "ReturnPO")] RPO = 0xE0,
             [Instruction("POP H", 1, 3, 10, "PopHRP")] POP_H = 0xE1,
             [Instruction("JPO", 1, 3, 10, "JumpPO")] JPO = 0xE2,
-            [Instruction("XTHL", 1, 5, 16, "")] XTHL = 0xE3,
+            [Instruction("XTHL", 1, 5, 16, "ExPCwHL")] XTHL = 0xE3,
             [Instruction("CPO", 3, 5, 18, "CallPO")] CPO = 0xE4,
             [Instruction("PUSH H", 1, 3, 12, "PushHRp")] PUSH_H = 0xE5,
             [Instruction("ANI", 2, 2, 7, "Ani")] ANI = 0xE6, // space
             [Instruction("RST 4", 1, 3, 12, "Reset4")] RST_4 = 0xE7,
             [Instruction("RPE", 1, 3, 10, "ReturnPE")] RPE = 0xE8,
-            [Instruction("PCHL", 1, 1, 6, "")] PCHL = 0xE9,
+            [Instruction("PCHL", 1, 1, 6, "stPCtoHL")] PCHL = 0xE9,
             [Instruction("JPE", 3, 3, 10, "JumpPE")] JPE = 0xEA, // space
             [Instruction("XCHG", 1, 1, 4, "Exchange")] XCHG = 0xEB,
             [Instruction("CPE", 3, 5, 18, "CallPE")] CPE = 0xEC, // space
@@ -325,7 +325,7 @@ namespace One_X {
             [Instruction("ORI", 2, 2, 7, "Ori")] ORI = 0xF6, // space
             [Instruction("RST 6", 1, 3, 12, "Reset6")] RST_6 = 0xF7,
             [Instruction("RM", 1, 3, 10, "ReturnM")] RM = 0xF8,
-            [Instruction("SPHL", 1, 1, 6, "")] SPHL = 0xF9,
+            [Instruction("SPHL", 1, 1, 6, "stSPtoHL")] SPHL = 0xF9,
             [Instruction("JM", 3, 3, 10, "JumpM")] JM = 0xFA, // space
             [Instruction("EI", 1, 1, 4, "")] EI = 0xFB,
             [Instruction("CM", 3, 5, 18, "CallM")] CM = 0xFC, // space
