@@ -134,5 +134,8 @@
   <ItemGroup>
     <None Include="resx\l.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="resx\m.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -61,7 +61,7 @@
             this.ACFlag = new System.Windows.Forms.Label();
             this.NU5Flag = new System.Windows.Forms.Label();
             this.ZFlag = new System.Windows.Forms.Label();
-            this.CFlag = new System.Windows.Forms.Label();
+            this.CYFlag = new System.Windows.Forms.Label();
             this.D7Label = new System.Windows.Forms.Label();
             this.D6Label = new System.Windows.Forms.Label();
             this.D5Label = new System.Windows.Forms.Label();
@@ -85,6 +85,8 @@
             this.nextStepBtn = new System.Windows.Forms.Button();
             this.execButton = new System.Windows.Forms.Button();
             this.codeBox = new Ionic.WinForms.RichTextBoxEx();
+            this.MPoint = new System.Windows.Forms.Label();
+            this.mpointicon = new System.Windows.Forms.PictureBox();
             this.codePanel.SuspendLayout();
             this.registerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.lregicon)).BeginInit();
@@ -96,6 +98,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.aregicon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.flagIcon)).BeginInit();
             this.startAddressGB.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.mpointicon)).BeginInit();
             this.SuspendLayout();
             // 
             // codePanel
@@ -113,6 +116,8 @@
             // registerPanel
             // 
             this.registerPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.registerPanel.Controls.Add(this.MPoint);
+            this.registerPanel.Controls.Add(this.mpointicon);
             this.registerPanel.Controls.Add(this.PCVal);
             this.registerPanel.Controls.Add(this.SPVal);
             this.registerPanel.Controls.Add(this.SPLabel);
@@ -144,7 +149,7 @@
             this.registerPanel.Controls.Add(this.ACFlag);
             this.registerPanel.Controls.Add(this.NU5Flag);
             this.registerPanel.Controls.Add(this.ZFlag);
-            this.registerPanel.Controls.Add(this.CFlag);
+            this.registerPanel.Controls.Add(this.CYFlag);
             this.registerPanel.Controls.Add(this.D7Label);
             this.registerPanel.Controls.Add(this.D6Label);
             this.registerPanel.Controls.Add(this.D5Label);
@@ -215,7 +220,6 @@
             // 
             // lregicon
             // 
-            this.lregicon.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lregicon.Image = global::One_X.Properties.Resources.l;
             this.lregicon.Location = new System.Drawing.Point(123, 226);
             this.lregicon.Name = "lregicon";
@@ -236,7 +240,6 @@
             // 
             // eregicon
             // 
-            this.eregicon.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.eregicon.Image = global::One_X.Properties.Resources.e;
             this.eregicon.Location = new System.Drawing.Point(123, 172);
             this.eregicon.Name = "eregicon";
@@ -257,7 +260,6 @@
             // 
             // cregicon
             // 
-            this.cregicon.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.cregicon.Image = global::One_X.Properties.Resources.c;
             this.cregicon.Location = new System.Drawing.Point(123, 118);
             this.cregicon.Name = "cregicon";
@@ -278,7 +280,6 @@
             // 
             // hregicon
             // 
-            this.hregicon.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.hregicon.Image = global::One_X.Properties.Resources.h;
             this.hregicon.Location = new System.Drawing.Point(15, 226);
             this.hregicon.Name = "hregicon";
@@ -299,7 +300,6 @@
             // 
             // dregicon
             // 
-            this.dregicon.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.dregicon.Image = global::One_X.Properties.Resources.d;
             this.dregicon.Location = new System.Drawing.Point(15, 172);
             this.dregicon.Name = "dregicon";
@@ -320,7 +320,6 @@
             // 
             // bregicon
             // 
-            this.bregicon.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.bregicon.Image = global::One_X.Properties.Resources.b;
             this.bregicon.Location = new System.Drawing.Point(15, 118);
             this.bregicon.Name = "bregicon";
@@ -332,7 +331,7 @@
             // 
             this.AReg.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.AReg.Font = new System.Drawing.Font("Hack", 20F);
-            this.AReg.Location = new System.Drawing.Point(123, 64);
+            this.AReg.Location = new System.Drawing.Point(69, 64);
             this.AReg.Name = "AReg";
             this.AReg.Size = new System.Drawing.Size(48, 48);
             this.AReg.TabIndex = 48;
@@ -341,9 +340,8 @@
             // 
             // aregicon
             // 
-            this.aregicon.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.aregicon.Image = global::One_X.Properties.Resources.a;
-            this.aregicon.Location = new System.Drawing.Point(69, 64);
+            this.aregicon.Location = new System.Drawing.Point(15, 64);
             this.aregicon.Name = "aregicon";
             this.aregicon.Size = new System.Drawing.Size(48, 48);
             this.aregicon.TabIndex = 47;
@@ -517,17 +515,17 @@
             // 
             // CFlag
             // 
-            this.CFlag.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.CFlag.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.CFlag.Font = new System.Drawing.Font("Hack", 8.5F);
-            this.CFlag.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.CFlag.Location = new System.Drawing.Point(211, 15);
-            this.CFlag.Name = "CFlag";
-            this.CFlag.Size = new System.Drawing.Size(24, 24);
-            this.CFlag.TabIndex = 25;
-            this.CFlag.Text = "0";
-            this.CFlag.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.CFlag.UseCompatibleTextRendering = true;
+            this.CYFlag.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.CYFlag.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.CYFlag.Font = new System.Drawing.Font("Hack", 8.5F);
+            this.CYFlag.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.CYFlag.Location = new System.Drawing.Point(211, 15);
+            this.CYFlag.Name = "CFlag";
+            this.CYFlag.Size = new System.Drawing.Size(24, 24);
+            this.CYFlag.TabIndex = 25;
+            this.CYFlag.Text = "0";
+            this.CYFlag.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.CYFlag.UseCompatibleTextRendering = true;
             // 
             // D7Label
             // 
@@ -737,6 +735,7 @@
             this.execButton.TabIndex = 7;
             this.execButton.Text = "Execute\r\nAll Steps";
             this.execButton.UseVisualStyleBackColor = true;
+            this.execButton.Click += new System.EventHandler(this.execButton_Click);
             // 
             // codeBox
             // 
@@ -762,6 +761,26 @@
             this.codeBox.Text = "";
             this.codeBox.WordWrap = false;
             this.codeBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.codeBox_KeyUp);
+            // 
+            // MPoint
+            // 
+            this.MPoint.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.MPoint.Font = new System.Drawing.Font("Hack", 20F);
+            this.MPoint.Location = new System.Drawing.Point(177, 64);
+            this.MPoint.Name = "MPoint";
+            this.MPoint.Size = new System.Drawing.Size(48, 48);
+            this.MPoint.TabIndex = 66;
+            this.MPoint.Text = "00";
+            this.MPoint.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // mpointicon
+            // 
+            this.mpointicon.Image = global::One_X.Properties.Resources.m;
+            this.mpointicon.Location = new System.Drawing.Point(123, 64);
+            this.mpointicon.Name = "mpointicon";
+            this.mpointicon.Size = new System.Drawing.Size(48, 48);
+            this.mpointicon.TabIndex = 65;
+            this.mpointicon.TabStop = false;
             // 
             // MainForm
             // 
@@ -794,6 +813,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.flagIcon)).EndInit();
             this.startAddressGB.ResumeLayout(false);
             this.startAddressGB.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.mpointicon)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -811,7 +831,7 @@
         private System.Windows.Forms.Label ACFlag;
         private System.Windows.Forms.Label NU5Flag;
         private System.Windows.Forms.Label ZFlag;
-        private System.Windows.Forms.Label CFlag;
+        private System.Windows.Forms.Label CYFlag;
         private System.Windows.Forms.Label D0Label;
         private System.Windows.Forms.Label D7Label;
         private System.Windows.Forms.Label D6Label;
@@ -857,6 +877,8 @@
         private System.Windows.Forms.Label PCLabel;
         private System.Windows.Forms.Button nextStepBtn;
         private System.Windows.Forms.Button execButton;
+        private System.Windows.Forms.Label MPoint;
+        private System.Windows.Forms.PictureBox mpointicon;
     }
 }
 

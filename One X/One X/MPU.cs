@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using Microsoft.VisualBasic;
 using System.Collections;
+using System.Threading.Tasks;
 
 namespace One_X {
     public static class MPU {
@@ -23,34 +24,31 @@ namespace One_X {
             CY = Carry
         }
 
-        // todo events for all registers/flags. hint: convert to properties
-        internal static byte acc;
-        internal static byte regB, regC, regD, regE, regH, regL;
-        internal static byte regM {
-            get {
-                return memory.ReadByte(HRp);
-            }
-            set {
-                memory.WriteByte(value, HRp);
+        public class MPUEventArgs: EventArgs {
+            public string VarName;
+            public object NewValue;
+
+            public MPUEventArgs(string varName, object newValue) {
+                VarName = varName;
+                NewValue = newValue;
             }
         }
-        internal static byte regA {
-            get {
-                return acc;
-            }
-            set {
-                acc = value;
-                Flag.Sign.Set(acc.IsNegative());
-                Flag.Zero.Set(acc == 0);
-                Flag.Parity.Set(acc.Parity());
-            }
-        }
+
+        public static event EventHandler<MPUEventArgs> ValueChanged;
+
+        // todo events for all registers/flags.
+        internal static byte regA, regB, regC, regD, regE, regH, regL; //and M
 
         internal static BitArray flags = new BitArray(8, false);
 
         internal static void Set(this Flag flag) => flag.Set(true);
         internal static void Reset(this Flag flag) => flag.Set(false);
-        internal static void Set(this Flag flag, bool set) => flags.Set((byte)flag, set);
+        internal static void Set(this Flag flag, bool set) {
+            flags.Set((byte)flag, set);
+            if (ValueChanged != null) {
+                ValueChanged.Invoke(null, new MPUEventArgs(flag.ToString(), set));
+            }
+        }
         internal static void Toggle(this Flag flag) => flags.Set((byte)flag, !flag.IsSet());
         internal static bool IsSet(this Flag flag) => flags.Get((byte)flag);
 
@@ -59,103 +57,171 @@ namespace One_X {
         #region Properties
         public static byte A {
             get => regA;
-            internal set => regA = value;
+            internal set {
+                regA = value;
+                Flag.Sign.Set(regA.IsNegative());
+                Flag.Zero.Set(regA == 0);
+                Flag.Parity.Set(regA.Parity());
+                if (ValueChanged != null) {
+                    ValueChanged.Invoke(null, new MPUEventArgs("A", A));
+                }
+            }
         }
         public static byte B {
             get => regB;
-            internal set => regB = value;
+            internal set {
+                regB = value;
+                if (ValueChanged != null) {
+                    ValueChanged.Invoke(null, new MPUEventArgs("B", B));
+                }
+            }
         }
         public static byte C {
             get => regC;
-            internal set => regC = value;
+            internal set {
+                regC = value;
+                if (ValueChanged != null) {
+                    ValueChanged.Invoke(null, new MPUEventArgs("C", C));
+                }
+            }
         }
         public static byte D {
             get => regD;
-            internal set => regD = value;
+            internal set {
+                regD = value;
+                if (ValueChanged != null) {
+                    ValueChanged.Invoke(null, new MPUEventArgs("D", D));
+                }
+            }
         }
         public static byte E {
             get => regE;
-            internal set => regE = value;
+            internal set {
+                regE = value;
+                if (ValueChanged != null) {
+                    ValueChanged.Invoke(null, new MPUEventArgs("E", E));
+                }
+            }
         }
         public static byte H {
             get => regH;
-            internal set => regH = value;
+            internal set {
+                regH = value;
+                if (ValueChanged != null) {
+                    ValueChanged.Invoke(null, new MPUEventArgs("H", H));
+                }
+            }
         }
         public static byte L {
             get => regL;
-            internal set => regL = value;
+            internal set {
+                regL = value;
+                if (ValueChanged != null) {
+                    ValueChanged.Invoke(null, new MPUEventArgs("L", L));
+                }
+            }
         }
         public static byte M {
-            get => regM;
-            internal set => regM = value;
+            get => memory.ReadByte(HRp);
+            set {
+                memory.WriteByte(value, HRp);
+                if (ValueChanged != null) {
+                    ValueChanged.Invoke(null, new MPUEventArgs("M", M));
+                }
+            }
         }
         public static ushort HRp {
             get => (H, L).ToUShort();
-            internal set => LoadHRp(value);
+            internal set {
+                LoadHRp(value);
+                if (ValueChanged != null) {
+                    ValueChanged.Invoke(null, new MPUEventArgs("HRp", HRp));
+                }
+            }
         }
         public static ushort BRp {
             get => (B, C).ToUShort();
-            internal set => LoadBRp(value);
+            internal set {
+                LoadBRp(value);
+                if (ValueChanged != null) {
+                    ValueChanged.Invoke(null, new MPUEventArgs("BRp", BRp));
+                }
+            }
         }
         public static ushort DRp {
             get => (D, E).ToUShort();
-            internal set => LoadDRp(value);
+            internal set {
+                LoadDRp(value);
+                if (ValueChanged != null) {
+                    ValueChanged.Invoke(null, new MPUEventArgs("DRp", DRp));
+                }
+            }
         }
         public static ushort PC {
             get => progCntr;
-            internal set => progCntr = value;
+            internal set {
+                progCntr = value;
+                if (ValueChanged != null) {
+                    ValueChanged.Invoke(null, new MPUEventArgs("PC", PC));
+                }
+            }
         }
         public static ushort SP {
             get => stackPtr;
-            internal set => stackPtr = value;
+            internal set {
+                stackPtr = value;
+                if (ValueChanged != null) {
+                    ValueChanged.Invoke(null, new MPUEventArgs("SP", SP));
+                }
+            }
         }
         #endregion
 
         #region MVI
-        public static void LoadB(byte data) => regB = data;
-        public static void LoadC(byte data) => regC = data;
-        public static void LoadD(byte data) => regD = data;
-        public static void LoadE(byte data) => regE = data;
-        public static void LoadH(byte data) => regH = data;
-        public static void LoadL(byte data) => regL = data;
-        public static void LoadM(byte data) => regM = data;
-        public static void LoadA(byte data) => regA = data;
+        public static void LoadB(byte data) => B = data;
+        public static void LoadC(byte data) => C = data;
+        public static void LoadD(byte data) => D = data;
+        public static void LoadE(byte data) => E = data;
+        public static void LoadH(byte data) => H = data;
+        public static void LoadL(byte data) => L = data;
+        public static void LoadM(byte data) => M = data;
+        public static void LoadA(byte data) => A = data;
         #endregion
 
         #region LXI
         public static void LoadBRp(ushort data) {
             var d = data.ToBytes();
-            regB = d.HO;
-            regC = d.LO;
+            B = d.HO;
+            C = d.LO;
         }
         public static void LoadDRp(ushort data) {
             var d = data.ToBytes();
-            regD = d.HO;
-            regE = d.LO;
+            D = d.HO;
+            E = d.LO;
         }
         public static void LoadHRp(ushort data) {
             var d = data.ToBytes();
-            regH = d.HO;
-            regL = d.LO;
+            H = d.HO;
+            L = d.LO;
         }
         public static void LoadSP(ushort data) => stackPtr = data;
         #endregion
 
         #region ADD
-        public static void AddB() => Adi(regB);
-        public static void AddC() => Adi(regC);
-        public static void AddD() => Adi(regD);
-        public static void AddE() => Adi(regE);
-        public static void AddH() => Adi(regH);
-        public static void AddL() => Adi(regL);
-        public static void AddM() => Adi(regM);
-        public static void AddA() => Adi(regA);
+        public static void AddB() => Adi(B);
+        public static void AddC() => Adi(C);
+        public static void AddD() => Adi(D);
+        public static void AddE() => Adi(E);
+        public static void AddH() => Adi(H);
+        public static void AddL() => Adi(L);
+        public static void AddM() => Adi(M);
+        public static void AddA() => Adi(A);
 
         public static void Adi(byte data) {
-            int res = regA + data;
+            int res = A + data;
             Flag.Carry.Set(res > byte.MaxValue);
             // TODO Set AuxiliaryCarry
-            regA = (byte)res;
+            A = (byte)res;
         }
         #endregion
 
@@ -173,32 +239,32 @@ namespace One_X {
         #endregion
 
         #region SUB
-        public static void SubB() => Sui(regB);
-        public static void SubC() => Sui(regC);
-        public static void SubD() => Sui(regD);
-        public static void SubE() => Sui(regE);
-        public static void SubH() => Sui(regH);
-        public static void SubL() => Sui(regL);
-        public static void SubM() => Sui(regM);
-        public static void SubA() => Sui(regA);
+        public static void SubB() => Sui(B);
+        public static void SubC() => Sui(C);
+        public static void SubD() => Sui(D);
+        public static void SubE() => Sui(E);
+        public static void SubH() => Sui(H);
+        public static void SubL() => Sui(L);
+        public static void SubM() => Sui(M);
+        public static void SubA() => Sui(A);
 
         public static void Sui(byte data) {
-            int res = regA + regH.TwosComplement();
+            int res = A + H.TwosComplement();
             Flag.Carry.Set(res <= byte.MaxValue);
-            regA = (byte)res;
+            A = (byte)res;
             // TODO Auxiliary Carry
         }
         #endregion
 
         #region ADC
-        public static void AdcB() => Aci(regB);
-        public static void AdcC() => Aci(regC);
-        public static void AdcD() => Aci(regD);
-        public static void AdcE() => Aci(regE);
-        public static void AdcH() => Aci(regH);
-        public static void AdcL() => Aci(regL);
-        public static void AdcM() => Aci(regM);
-        public static void AdcA() => Aci(regA);
+        public static void AdcB() => Aci(B);
+        public static void AdcC() => Aci(C);
+        public static void AdcD() => Aci(D);
+        public static void AdcE() => Aci(E);
+        public static void AdcH() => Aci(H);
+        public static void AdcL() => Aci(L);
+        public static void AdcM() => Aci(M);
+        public static void AdcA() => Aci(A);
         public static void Aci(byte data) {
             Adi(data);
             Adi((byte)Flag.Carry.IsSet().ToBitInt());
@@ -206,95 +272,95 @@ namespace One_X {
         #endregion
 
         #region SBB
-        public static void SbbB() => Sbi(regB);
-        public static void SbbC() => Sbi(regC);
-        public static void SbbD() => Sbi(regD);
-        public static void SbbE() => Sbi(regE);
-        public static void SbbH() => Sbi(regH);
-        public static void SbbL() => Sbi(regL);
-        public static void SbbM() => Sbi(regM);
-        public static void SbbA() => Sbi(regA);
+        public static void SbbB() => Sbi(B);
+        public static void SbbC() => Sbi(C);
+        public static void SbbD() => Sbi(D);
+        public static void SbbE() => Sbi(E);
+        public static void SbbH() => Sbi(H);
+        public static void SbbL() => Sbi(L);
+        public static void SbbM() => Sbi(M);
+        public static void SbbA() => Sbi(A);
         public static void Sbi(byte data) => Sui((byte)(data + Flag.Carry.IsSet().ToBitInt()));
         #endregion
 
         #region INR
-        public static void InrA() => regA++;
+        public static void InrA() => A++;
         public static void InrB() {
-            regB++;
-            Flag.Sign.Set(regB.IsNegative());
-            Flag.Zero.Set(regB == 0);
-            Flag.Parity.Set(regB.Parity());
+            B++;
+            Flag.Sign.Set(B.IsNegative());
+            Flag.Zero.Set(B == 0);
+            Flag.Parity.Set(B.Parity());
         }
         public static void InrC() {
-            regC++;
-            Flag.Sign.Set(regC.IsNegative());
-            Flag.Zero.Set(regC == 0);
-            Flag.Parity.Set(regC.Parity());
+            C++;
+            Flag.Sign.Set(C.IsNegative());
+            Flag.Zero.Set(C == 0);
+            Flag.Parity.Set(C.Parity());
         }
         public static void InrD() {
-            regD++;
-            Flag.Sign.Set(regD.IsNegative());
-            Flag.Zero.Set(regD == 0);
-            Flag.Parity.Set(regD.Parity());
+            D++;
+            Flag.Sign.Set(D.IsNegative());
+            Flag.Zero.Set(D == 0);
+            Flag.Parity.Set(D.Parity());
         }
         public static void InrE() {
-            regE++;
-            Flag.Sign.Set(regE.IsNegative());
-            Flag.Zero.Set(regE == 0);
-            Flag.Parity.Set(regE.Parity());
+            E++;
+            Flag.Sign.Set(E.IsNegative());
+            Flag.Zero.Set(E == 0);
+            Flag.Parity.Set(E.Parity());
         }
         public static void InrH() {
-            regH++;
-            Flag.Sign.Set(regH.IsNegative());
-            Flag.Zero.Set(regH == 0);
-            Flag.Parity.Set(regH.Parity());
+            H++;
+            Flag.Sign.Set(H.IsNegative());
+            Flag.Zero.Set(H == 0);
+            Flag.Parity.Set(H.Parity());
 
         }
         public static void InrL() {
-            regL++;
-            Flag.Sign.Set(regL.IsNegative());
-            Flag.Zero.Set(regL == 0);
-            Flag.Parity.Set(regL.Parity());
+            L++;
+            Flag.Sign.Set(L.IsNegative());
+            Flag.Zero.Set(L == 0);
+            Flag.Parity.Set(L.Parity());
         }
         #endregion
 
         #region DCR
-        public static void DcrA() => regA--;
+        public static void DcrA() => A--;
         public static void DcrB() {
-            regB--;
-            Flag.Sign.Set(regB.IsNegative());
-            Flag.Zero.Set(regB == 0);
-            Flag.Parity.Set(regB.Parity());
+            B--;
+            Flag.Sign.Set(B.IsNegative());
+            Flag.Zero.Set(B == 0);
+            Flag.Parity.Set(B.Parity());
         }
         public static void DcrC() {
-            regC--;
-            Flag.Sign.Set(regC.IsNegative());
-            Flag.Zero.Set(regC == 0);
-            Flag.Parity.Set(regC.Parity());
+            C--;
+            Flag.Sign.Set(C.IsNegative());
+            Flag.Zero.Set(C == 0);
+            Flag.Parity.Set(C.Parity());
         }
         public static void DcrD() {
-            regD--;
-            Flag.Sign.Set(regD.IsNegative());
-            Flag.Zero.Set(regD == 0);
-            Flag.Parity.Set(regD.Parity());
+            D--;
+            Flag.Sign.Set(D.IsNegative());
+            Flag.Zero.Set(D == 0);
+            Flag.Parity.Set(D.Parity());
         }
         public static void DcrE() {
-            regE--;
-            Flag.Sign.Set(regE.IsNegative());
-            Flag.Zero.Set(regE == 0);
-            Flag.Parity.Set(regE.Parity());
+            E--;
+            Flag.Sign.Set(E.IsNegative());
+            Flag.Zero.Set(E == 0);
+            Flag.Parity.Set(E.Parity());
         }
         public static void DcrH() {
-            regH--;
-            Flag.Sign.Set(regH.IsNegative());
-            Flag.Zero.Set(regH == 0);
-            Flag.Parity.Set(regH.Parity());
+            H--;
+            Flag.Sign.Set(H.IsNegative());
+            Flag.Zero.Set(H == 0);
+            Flag.Parity.Set(H.Parity());
         }
         public static void DcrL() {
-            regL--;
-            Flag.Sign.Set(regL.IsNegative());
-            Flag.Zero.Set(regL == 0);
-            Flag.Parity.Set(regL.Parity());
+            L--;
+            Flag.Sign.Set(L.IsNegative());
+            Flag.Zero.Set(L == 0);
+            Flag.Parity.Set(L.Parity());
         }
         #endregion
 
@@ -313,171 +379,171 @@ namespace One_X {
         #endregion
 
         #region MOV B
-        public static void MoveBB() => LoadB(regB);
-        public static void MoveBC() => LoadB(regC);
-        public static void MoveBD() => LoadB(regD);
-        public static void MoveBE() => LoadB(regE);
-        public static void MoveBH() => LoadB(regH);
-        public static void MoveBL() => LoadB(regL);
-        public static void MoveBM() => LoadB(regM);
-        public static void MoveBA() => LoadB(regA);
+        public static void MoveBB() => LoadB(B);
+        public static void MoveBC() => LoadB(C);
+        public static void MoveBD() => LoadB(D);
+        public static void MoveBE() => LoadB(E);
+        public static void MoveBH() => LoadB(H);
+        public static void MoveBL() => LoadB(L);
+        public static void MoveBM() => LoadB(M);
+        public static void MoveBA() => LoadB(A);
         #endregion
 
         #region MOV C
-        public static void MoveCB() => LoadC(regB);
-        public static void MoveCC() => LoadC(regC);
-        public static void MoveCD() => LoadC(regD);
-        public static void MoveCE() => LoadC(regE);
-        public static void MoveCH() => LoadC(regH);
-        public static void MoveCL() => LoadC(regL);
-        public static void MoveCM() => LoadC(regM);
-        public static void MoveCA() => LoadC(regA);
+        public static void MoveCB() => LoadC(B);
+        public static void MoveCC() => LoadC(C);
+        public static void MoveCD() => LoadC(D);
+        public static void MoveCE() => LoadC(E);
+        public static void MoveCH() => LoadC(H);
+        public static void MoveCL() => LoadC(L);
+        public static void MoveCM() => LoadC(M);
+        public static void MoveCA() => LoadC(A);
         #endregion
 
         #region MOV D
-        public static void MoveDB() => LoadD(regB);
-        public static void MoveDC() => LoadD(regC);
-        public static void MoveDD() => LoadD(regD);
-        public static void MoveDE() => LoadD(regE);
-        public static void MoveDH() => LoadD(regH);
-        public static void MoveDL() => LoadD(regL);
-        public static void MoveDM() => LoadD(regM);
-        public static void MoveDA() => LoadD(regA);
+        public static void MoveDB() => LoadD(B);
+        public static void MoveDC() => LoadD(C);
+        public static void MoveDD() => LoadD(D);
+        public static void MoveDE() => LoadD(E);
+        public static void MoveDH() => LoadD(H);
+        public static void MoveDL() => LoadD(L);
+        public static void MoveDM() => LoadD(M);
+        public static void MoveDA() => LoadD(A);
         #endregion
 
         #region MOV E
-        public static void MoveEB() => LoadE(regB);
-        public static void MoveEC() => LoadE(regC);
-        public static void MoveED() => LoadE(regD);
-        public static void MoveEE() => LoadE(regE);
-        public static void MoveEH() => LoadE(regH);
-        public static void MoveEL() => LoadE(regL);
-        public static void MoveEM() => LoadE(regM);
-        public static void MoveEA() => LoadE(regA);
+        public static void MoveEB() => LoadE(B);
+        public static void MoveEC() => LoadE(C);
+        public static void MoveED() => LoadE(D);
+        public static void MoveEE() => LoadE(E);
+        public static void MoveEH() => LoadE(H);
+        public static void MoveEL() => LoadE(L);
+        public static void MoveEM() => LoadE(M);
+        public static void MoveEA() => LoadE(A);
         #endregion
 
         #region MOV H
-        public static void MoveHB() => LoadH(regB);
-        public static void MoveHC() => LoadH(regC);
-        public static void MoveHD() => LoadH(regD);
-        public static void MoveHE() => LoadH(regE);
-        public static void MoveHH() => LoadH(regH);
-        public static void MoveHL() => LoadH(regL);
-        public static void MoveHM() => LoadH(regM);
-        public static void MoveHA() => LoadH(regA);
+        public static void MoveHB() => LoadH(B);
+        public static void MoveHC() => LoadH(C);
+        public static void MoveHD() => LoadH(D);
+        public static void MoveHE() => LoadH(E);
+        public static void MoveHH() => LoadH(H);
+        public static void MoveHL() => LoadH(L);
+        public static void MoveHM() => LoadH(M);
+        public static void MoveHA() => LoadH(A);
         #endregion
 
         #region MOV L
-        public static void MoveLB() => LoadL(regB);
-        public static void MoveLC() => LoadL(regC);
-        public static void MoveLD() => LoadL(regD);
-        public static void MoveLE() => LoadL(regE);
-        public static void MoveLH() => LoadL(regH);
-        public static void MoveLL() => LoadL(regL);
-        public static void MoveLM() => LoadL(regM);
-        public static void MoveLA() => LoadL(regA);
+        public static void MoveLB() => LoadL(B);
+        public static void MoveLC() => LoadL(C);
+        public static void MoveLD() => LoadL(D);
+        public static void MoveLE() => LoadL(E);
+        public static void MoveLH() => LoadL(H);
+        public static void MoveLL() => LoadL(L);
+        public static void MoveLM() => LoadL(M);
+        public static void MoveLA() => LoadL(A);
         #endregion
 
         #region MOV M
-        public static void MoveMB() => LoadM(regB);
-        public static void MoveMC() => LoadM(regC);
-        public static void MoveMD() => LoadM(regD);
-        public static void MoveME() => LoadM(regE);
-        public static void MoveMH() => LoadM(regH);
-        public static void MoveML() => LoadM(regL);
-        public static void MoveMM() => LoadM(regM);
-        public static void MoveMA() => LoadM(regA);
+        public static void MoveMB() => LoadM(B);
+        public static void MoveMC() => LoadM(C);
+        public static void MoveMD() => LoadM(D);
+        public static void MoveME() => LoadM(E);
+        public static void MoveMH() => LoadM(H);
+        public static void MoveML() => LoadM(L);
+        public static void MoveMM() => LoadM(M);
+        public static void MoveMA() => LoadM(A);
         #endregion
 
         #region MOV A
-        public static void MoveAB() => LoadA(regB);
-        public static void MoveAC() => LoadA(regC);
-        public static void MoveAD() => LoadA(regD);
-        public static void MoveAE() => LoadA(regE);
-        public static void MoveAH() => LoadA(regH);
-        public static void MoveAL() => LoadA(regL);
-        public static void MoveAM() => LoadA(regM);
-        public static void MoveAA() => LoadA(regA);
+        public static void MoveAB() => LoadA(B);
+        public static void MoveAC() => LoadA(C);
+        public static void MoveAD() => LoadA(D);
+        public static void MoveAE() => LoadA(E);
+        public static void MoveAH() => LoadA(H);
+        public static void MoveAL() => LoadA(L);
+        public static void MoveAM() => LoadA(M);
+        public static void MoveAA() => LoadA(A);
         #endregion
 
         #region AND
-        public static void AndB() => Ani(regB);
-        public static void AndC() => Ani(regC);
-        public static void AndD() => Ani(regD);
-        public static void AndE() => Ani(regE);
-        public static void AndH() => Ani(regH);
-        public static void AndL() => Ani(regL);
-        public static void AndM() => Ani(regM);
-        public static void AndA() => Ani(regA);
+        public static void AndB() => Ani(B);
+        public static void AndC() => Ani(C);
+        public static void AndD() => Ani(D);
+        public static void AndE() => Ani(E);
+        public static void AndH() => Ani(H);
+        public static void AndL() => Ani(L);
+        public static void AndM() => Ani(M);
+        public static void AndA() => Ani(A);
 
         public static void Ani(byte data) {
             //TODO:reset CY and set AC
-            regA &= data;
+            A &= data;
         }
         #endregion
 
         #region OR
-        public static void OrB() => Ori(regB);
-        public static void OrC() => Ori(regC);
-        public static void OrD() => Ori(regD);
-        public static void OrE() => Ori(regE);
-        public static void OrH() => Ori(regH);
-        public static void OrL() => Ori(regL);
-        public static void OrM() => Ori(regM);
-        public static void OrA() => Ori(regA);
+        public static void OrB() => Ori(B);
+        public static void OrC() => Ori(C);
+        public static void OrD() => Ori(D);
+        public static void OrE() => Ori(E);
+        public static void OrH() => Ori(H);
+        public static void OrL() => Ori(L);
+        public static void OrM() => Ori(M);
+        public static void OrA() => Ori(A);
         public static void Ori(byte data) {
             //TODO:Z,S,P are modified and AC AND CY are reset
-            regA |= data;
+            A |= data;
         }
         #endregion
 
         #region XOR
-        public static void XorB() => Xri(regB);
-        public static void XorC() => Xri(regC);
-        public static void XorD() => Xri(regD);
-        public static void XorE() => Xri(regE);
-        public static void XorH() => Xri(regH);
-        public static void XorL() => Xri(regL);
-        public static void XorM() => Xri(regM);
-        public static void XorA() => Xri(regA);
+        public static void XorB() => Xri(B);
+        public static void XorC() => Xri(C);
+        public static void XorD() => Xri(D);
+        public static void XorE() => Xri(E);
+        public static void XorH() => Xri(H);
+        public static void XorL() => Xri(L);
+        public static void XorM() => Xri(M);
+        public static void XorA() => Xri(A);
         public static void Xri(byte data) {
             //TODO:Z,S,P are modified and AC AND CY are reset
-            regA ^= data;
+            A ^= data;
         }
 
         #endregion
 
         #region STORE
-        public static void StoreA(ushort address) => memory.WriteByte(regA, address);
-        public static void StoreAtBC() => memory.WriteByte(regA, BRp);
-        public static void StoreAtDE() => memory.WriteByte(regA, DRp);
+        public static void StoreA(ushort address) => memory.WriteByte(A, address);
+        public static void StoreAtBC() => memory.WriteByte(A, BRp);
+        public static void StoreAtDE() => memory.WriteByte(A, DRp);
         public static void StoreHL(ushort address) => memory.WriteUShort(HRp, address);
         #endregion
 
         #region LOAD
-        public static void LoadAFrom(ushort address) => regA = memory.ReadByte(address);
-        public static void LoadFromBC() => regA = memory.ReadByte(BRp);
-        public static void LoadFromDE() => regA = memory.ReadByte(DRp);
+        public static void LoadAFrom(ushort address) => A = memory.ReadByte(address);
+        public static void LoadFromBC() => A = memory.ReadByte(BRp);
+        public static void LoadFromDE() => A = memory.ReadByte(DRp);
         public static void LoadHL(ushort address) => HRp = memory.ReadUShort(address);
         #endregion
 
         #region CMP
-        public static void CmpB() => Cpi(regB);
-        public static void CmpC() => Cpi(regC);
-        public static void CmpD() => Cpi(regD);
-        public static void CmpE() => Cpi(regE);
-        public static void CmpH() => Cpi(regH);
-        public static void CmpL() => Cpi(regL);
-        public static void CmpM() => Cpi(regM);
-        public static void CmpA() => Cpi(regA);
+        public static void CmpB() => Cpi(B);
+        public static void CmpC() => Cpi(C);
+        public static void CmpD() => Cpi(D);
+        public static void CmpE() => Cpi(E);
+        public static void CmpH() => Cpi(H);
+        public static void CmpL() => Cpi(L);
+        public static void CmpM() => Cpi(M);
+        public static void CmpA() => Cpi(A);
         public static void Cpi(byte data) {
-            if (data > regA) {
+            if (data > A) {
                 Flag.Carry.Set();
                 Flag.Zero.Reset();
-            } else if (data == regA) {
+            } else if (data == A) {
                 Flag.Carry.Reset();
                 Flag.Zero.Set();
-            } else { // data < regA
+            } else { // data < A
                 Flag.Carry.Reset();
                 Flag.Zero.Reset();
             }
@@ -527,7 +593,7 @@ namespace One_X {
         }
         public static void PushPSW() {
             SP -= 2;
-            memory.WriteUShort((regA, flags.ToByte()).ToUShort(), SP);
+            memory.WriteUShort((A, flags.ToByte()).ToUShort(), SP);
         }
         #endregion
 
@@ -546,7 +612,7 @@ namespace One_X {
         }
         public static void PopPSW() {
             var data = memory.ReadUShort(SP).ToBytes();
-            regA = data.HO;
+            A = data.HO;
             flags = data.LO.ToBitArray();
             SP += 2;
         }
@@ -554,24 +620,24 @@ namespace One_X {
 
         #region ROTATE
         public static void RRC() {
-            regA = (byte)((regA >> 1) + (regA << 7));
-            Flag.Carry.Set((regA >> 7).ToBitBool());
+            A = (byte)((A >> 1) + (A << 7));
+            Flag.Carry.Set((A >> 7).ToBitBool());
         }
 
         public static void RLC() {
-            Flag.Carry.Set((regA >> 7).ToBitBool());
-            regA = (byte)((regA << 1) + (regA >> 7));
+            Flag.Carry.Set((A >> 7).ToBitBool());
+            A = (byte)((A << 1) + (A >> 7));
         }
 
         public static void RAL() {
-            bool d7 = (regA >> 7).ToBitBool();
-            regA = (byte)(Flag.Carry.IsSet().ToBitInt() + (regA << 1));
+            bool d7 = (A >> 7).ToBitBool();
+            A = (byte)(Flag.Carry.IsSet().ToBitInt() + (A << 1));
             Flag.Carry.Set(d7);
         }
 
         public static void RAR() {
-            bool d0 = (regA & 1).ToBitBool();
-            regA = (byte)((Flag.Carry.IsSet().ToBitInt() << 7) + (regA >> 1));
+            bool d0 = (A & 1).ToBitBool();
+            A = (byte)((Flag.Carry.IsSet().ToBitInt() << 7) + (A >> 1));
             Flag.Carry.Set(d0);
         }
         #endregion
@@ -583,14 +649,14 @@ namespace One_X {
             HRp -= BRp;
         }
 
-        public static void ComplA() => regA = (byte)~regA;
+        public static void ComplA() => A = (byte)~A;
 
-        public static void Nop() { /*sleep for 1000 ms */ }
+        public static void Nop() { System.Threading.Thread.Sleep(1000); }
 
         public static void Halt() {
             running = false;
             PC = 0x0000;
-        } //TODO: HALT SIGNAL TO EXECUTOR
+        }
 
         public static void ExPCwHL() {
             ushort hrp = HRp;
@@ -612,7 +678,7 @@ namespace One_X {
                 try {
                     string str = Interaction.InputBox(error + "\nInput for port : " + port.ToString("X2") + "\nEnter hex value within range: [00 - FF]", "IN " + port.ToString("X2"), "00");
                     byte b = byte.Parse(str, System.Globalization.NumberStyles.HexNumber);
-                    regA = b;
+                    A = b;
                     break;
                 } catch {
                     error = "Invalid Format!";
@@ -621,7 +687,7 @@ namespace One_X {
         }
 
         public static void Output(byte port) {
-            MessageBox.Show("Output for port : " + port.ToString("X2") + "\n" + regA.ToString("X2"));
+            MessageBox.Show("Output for port : " + port.ToString("X2") + "\n" + A.ToString("X2"), "OUT " + port.ToString("X2"), MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         #endregion
@@ -741,7 +807,10 @@ namespace One_X {
             ins.Execute();
         }
 
-        public static void ExecuteAllSteps() { while (running) NextStep(); }
+        public static void ExecuteAllSteps() {
+            running = true;
+            while (running) NextStep();
+        }
         
     }
 }
