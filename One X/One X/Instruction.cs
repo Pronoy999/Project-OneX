@@ -63,7 +63,12 @@ namespace One_X {
             } else if (Bytes == 3) {
                 param = new object[] { Arguments.ToUShort() };
             }
+            //try {
             method.Invoke(null, param);
+            //} catch (Exception ex) {
+            //    MessageBox.Show(Name);
+            //    throw ex;
+            //}
         }
 
         public void WriteToMemory(Memory mem, ushort loc) {
@@ -201,7 +206,7 @@ namespace One_X {
             [Instruction("HLT", 1, 2, 7, "Halt")] HLT = 0x76,
             [Instruction("MOV M,A", 1, 2, 7, "MoveMA")] MOV_MA = 0x77,
             [Instruction("MOV A,B", 1, 1, 4, "MoveAB")] MOV_AB = 0x78,
-            [Instruction("MOV A,C", 1, 1, 4, "MoeAC")] MOV_AC = 0x79,
+            [Instruction("MOV A,C", 1, 1, 4, "MoveAC")] MOV_AC = 0x79,
             [Instruction("MOV A,D", 1, 1, 4, "MoveAD")] MOV_AD = 0x7A,
             [Instruction("MOV A,E", 1, 1, 4, "MoveAE")] MOV_AE = 0x7B,
             [Instruction("MOV A,H", 1, 1, 4, "MoveAH")] MOV_AH = 0x7C,
