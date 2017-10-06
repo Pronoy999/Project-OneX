@@ -82,22 +82,23 @@ namespace One_X {
                 case "SP":
                     SPVal.Text = ((ushort)e.NewValue).ToString("X4");
                     break;
-                case "Sign":
+                case "Sign": case "S":
                     SFlag.Text = ((bool)e.NewValue).ToBitInt().ToString();
                     break;
-                case "Zero":
+                case "Zero": case "Z":
                     ZFlag.Text = ((bool)e.NewValue).ToBitInt().ToString();
                     break;
-                case "AuxiliaryCarry":
+                case "AuxiliaryCarry": case "AC":
                     ACFlag.Text = ((bool)e.NewValue).ToBitInt().ToString();
                     break;
-                case "Parity":
+                case "Parity": case "P":
                     PFlag.Text = ((bool)e.NewValue).ToBitInt().ToString();
                     break;
-                case "Carry":
+                case "Carry": case "CY":
                     CYFlag.Text = ((bool)e.NewValue).ToBitInt().ToString();
                     break;
                 default:
+                    MessageBox.Show(e.VarName);
                     break;
             }
         }
