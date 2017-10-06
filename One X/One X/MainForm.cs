@@ -78,6 +78,13 @@ namespace One_X {
                     break;
                 case "PC":
                     PCVal.Text = ((ushort)e.NewValue).ToString("X4");
+                    foreach (ListViewItem litem in insts.Items) {
+                        if (litem.SubItems[1].Text == PCVal.Text) {
+                            litem.Text = "->";
+                        } else {
+                            litem.Text = string.Empty;
+                        }
+                    }
                     break;
                 case "SP":
                     SPVal.Text = ((ushort)e.NewValue).ToString("X4");
@@ -203,8 +210,12 @@ namespace One_X {
             
             insts.Items.Clear();
             foreach (var ins in p.instructions) {
+                var mark = string.Empty;
+                if (ins.Key.ToString("X4") == startAddressBox.Text) {
+                    mark = "->";
+                }
                 ListViewItem litem = new ListViewItem(new string[] {
-                    string.Empty,
+                    mark,
                     ins.Key.ToString("X4"),
                     ins.Value.Name + (ins.Value.Bytes > 1 ? 
                     (ins.Value.Name.Contains(" ") ? "," : " ") + 

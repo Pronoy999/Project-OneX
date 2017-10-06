@@ -791,8 +791,7 @@ namespace One_X {
             PC = 7 * 0x0008;
         }
         #endregion
-
-
+        
         //TODO:RIM,SIM,DAA,DI,EI
 
         public static void NextStep() {
