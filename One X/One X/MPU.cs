@@ -1192,141 +1192,189 @@ namespace One_X {
         #endregion
 
         #region JUMP
-        public static void Jump(ushort address) {
+        public static ushort Jump(ushort address) {
             progCntr = address;
+            return address;
         }
 
-        public static void JumpNZ(ushort address) {
-            if (!Flag.Z.IsSet()) Jump(address);
+        public static ushort JumpNZ(ushort address) {
+            if (!Flag.Z.IsSet()) {
+                return  Jump(address);
+            }
+            return (ushort)(PC + 3);
         }
-        public static void JumpZ(ushort address) {
-            if (Flag.Z.IsSet()) Jump(address);
+        public static ushort JumpZ(ushort address) {
+            if (Flag.Z.IsSet()) {
+                return Jump(address);
+            }
+            return (ushort)(PC + 3);
         }
-        public static void JumpC(ushort address) {
-            if (Flag.CY.IsSet()) Jump(address);
+        public static ushort JumpC(ushort address) {
+            if (Flag.CY.IsSet()) {
+               return Jump(address);
+            }
+            return (ushort)(PC + 3);
         }
-        public static void JumpNC(ushort address) {
-            if (!Flag.CY.IsSet()) Jump(address);
+        public static ushort JumpNC(ushort address) {
+            if (!Flag.CY.IsSet()) {
+                return Jump(address);
+            }
+            return (ushort)(PC + 3);
         }
-        public static void JumpP(ushort address) {
-            if (!Flag.S.IsSet()) Jump(address);
+        public static ushort JumpP(ushort address) {
+            if (!Flag.S.IsSet()) {
+                return Jump(address);
+            }
+            return (ushort)(PC + 3);
         }
-        public static void JumpM(ushort address) {
-            if (Flag.S.IsSet()) Jump(address);
+        public static ushort JumpM(ushort address) {
+            if (Flag.S.IsSet()) {
+                return Jump(address);
+            }
+            return (ushort)(PC + 3);
         }
-        public static void JumpPE(ushort address) {
-            if (Flag.AC.IsSet()) Jump(address);
+        public static ushort JumpPE(ushort address) {
+            if (Flag.AC.IsSet()) {
+                return Jump(address);
+            }
+            return (ushort)(PC + 3);
         }
-        public static void JumpPO(ushort address) {
-            if (!Flag.AC.IsSet()) Jump(address);
+        public static ushort JumpPO(ushort address) {
+            if (!Flag.AC.IsSet()) {
+                return Jump(address);
+            }
+            return (ushort)(PC + 3);
         }
         #endregion
 
         #region [STACK] PUSH
-        public static void PushBRp() {
+        public static ushort PushBRp() {
             SP -= 2;
             memory.WriteUShort(BRp, SP);
+            return (ushort)(PC + 1);
         }
-        public static void PushDRp() {
+        public static ushort PushDRp() {
             SP -= 2;
             memory.WriteUShort(DRp, SP);
+            return (ushort)(PC + 1);
         }
-        public static void PushHRp() {
+        public static ushort PushHRp() {
             SP -= 2;
             memory.WriteUShort(HRp, SP);
+            return (ushort)(PC + 1);
         }
-        public static void PushPSW() {
+        public static ushort PushPSW() {
             SP -= 2;
             memory.WriteUShort((A, flags.ToByte()).ToUShort(), SP);
+            return (ushort)(PC + 1);
         }
         #endregion
 
         #region [STACK] POP
-        public static void PopBRp() {
+        public static ushort PopBRp() {
             BRp = memory.ReadUShort(SP);
             SP += 2;
+            return (ushort)(PC + 1);
         }
-        public static void PopDRp() {
+        public static ushort PopDRp() {
             DRp = memory.ReadUShort(SP);
             SP += 2;
+            return (ushort)(PC + 1);
         }
-        public static void PopHRp() {
+        public static ushort PopHRp() {
             HRp = memory.ReadUShort(SP);
             SP += 2;
+            return (ushort)(PC + 1);
         }
-        public static void PopPSW() {
+        public static ushort PopPSW() {
             var data = memory.ReadUShort(SP).ToBytes();
             A = data.HO;
             flags = data.LO.ToBitArray();
             SP += 2;
+            return (ushort)(PC + 1);
         }
         #endregion
 
         #region ROTATE
-        public static void RRC() {
+        public static ushort RRC() {
             A = (byte)((A >> 1) + (A << 7));
             Flag.Carry.Set((A >> 7).ToBitBool());
+            return (ushort)(PC + 1);
         }
 
-        public static void RLC() {
+        public static ushort RLC() {
             Flag.Carry.Set((A >> 7).ToBitBool());
             A = (byte)((A << 1) + (A >> 7));
+            return (ushort)(PC + 1);
         }
 
-        public static void RAL() {
+        public static ushort RAL() {
             bool d7 = (A >> 7).ToBitBool();
             A = (byte)(Flag.Carry.IsSet().ToBitInt() + (A << 1));
             Flag.Carry.Set(d7);
+            return (ushort)(PC + 1);
         }
 
-        public static void RAR() {
+        public static ushort RAR() {
             bool d0 = (A & 1).ToBitBool();
             A = (byte)((Flag.Carry.IsSet().ToBitInt() << 7) + (A >> 1));
             Flag.Carry.Set(d0);
+            return (ushort)(PC + 1);
         }
         #endregion
 
         #region MISC
-        public static void Exchange() {
+        public static ushort Exchange() {
             HRp += BRp;
             BRp = (ushort)(HRp - BRp);
             HRp -= BRp;
+            return (ushort)(PC + 1);
         }
 
-        public static void ComplA() {
+        public static ushort ComplA() {
             A = (byte)~A;
+            return (ushort)(PC + 1);
         }
 
-        public static void Nop() { System.Threading.Thread.Sleep(1000); }
+        public static ushort Nop() {
+            System.Threading.Thread.Sleep(1000);
+            return (ushort)(PC + 1);
+        }
 
-        public static void Halt() {
+        public static ushort Halt() {
             running = false;
             PC = 0x0000;
+            return PC;
         }
 
-        public static void ExPCwHL() {
+        public static ushort ExPCwHL() {
             ushort hrp = HRp;
             HRp = memory.ReadUShort(stackPtr);
             memory.WriteUShort(hrp, stackPtr);
+            return (ushort)(PC + 1);
         }
 
-        public static void stPCtoHL() {
+        public static ushort stPCtoHL() {
             progCntr = HRp;
+            return (ushort)(PC + 1);
         }
 
-        public static void stSPtoHL() {
+        public static ushort stSPtoHL() {
             stackPtr = HRp;
+            return (ushort)(PC + 1);
         }
 
-        public static void setCY() {
+        public static ushort setCY() {
             Flag.Carry.Set();
+            return (ushort)(PC + 1);
         }
 
-        public static void compCY() {
+        public static ushort compCY() {
             Flag.Carry.Toggle();
+            return (ushort)(PC + 1);
         }
 
-        public static void Input(byte port) {
+        public static ushort Input(byte port) {
             string error = "";
             while (true) {
                 try {
@@ -1338,44 +1386,70 @@ namespace One_X {
                     error = "Invalid Format!";
                 }
             }
+            return (ushort)(PC + 2);
         }
 
-        public static void Output(byte port) {
+        public static ushort Output(byte port) {
             MessageBox.Show("Output for port : " + port.ToString("X2") + "\n" + A.ToString("X2"), "OUT " + port.ToString("X2"), MessageBoxButtons.OK, MessageBoxIcon.Information);
+            return (ushort)(PC + 2);
         }
 
         #endregion
 
         #region CALL
-
-        public static void Call(ushort data) {
+        public static ushort Call(ushort data) {
             SP -= 2;
             memory.WriteUShort(PC, SP);
             Jump(data);
+            return (ushort)(PC + 3);
         }
-        public static void CallNZ(ushort address) {
-            if (!Flag.Z.IsSet()) Call(address);
+        public static ushort CallNZ(ushort address) {
+            if (!Flag.Z.IsSet()) {
+                return Call(address);
+            }
+            return (ushort)(PC + 3);
         }
-        public static void CallZ(ushort address) {
-            if (Flag.Z.IsSet()) Call(address);
+        public static ushort CallZ(ushort address) {
+            if (Flag.Z.IsSet()) {
+                return Call(address);
+            }
+            return (ushort)(PC + 3);
         }
-        public static void CallC(ushort address) {
-            if (Flag.CY.IsSet()) Call(address);
+        public static ushort CallC(ushort address) {
+            if (Flag.CY.IsSet()) {
+                return Call(address);
+            }
+            return (ushort)(PC + 3);
         }
-        public static void CallNC(ushort address) {
-            if (!Flag.CY.IsSet()) Call(address);
+        public static ushort CallNC(ushort address) {
+            if (!Flag.CY.IsSet()) {
+                return Call(address);
+            }
+            return (ushort)(PC + 3);
         }
-        public static void CallP(ushort address) {
-            if (!Flag.S.IsSet()) Call(address);
+        public static ushort CallP(ushort address) {
+            if (!Flag.S.IsSet()) {
+                return Call(address);
+            }
+            return (ushort)(PC + 3);
         }
-        public static void CallM(ushort address) {
-            if (Flag.S.IsSet()) Call(address);
+        public static ushort CallM(ushort address) {
+            if (Flag.S.IsSet()) {
+                return Call(address);
+            }
+            return (ushort)(PC + 3);
         }
-        public static void CallPE(ushort address) {
-            if (Flag.AC.IsSet()) Call(address);
+        public static ushort CallPE(ushort address) {
+            if (Flag.AC.IsSet()) {
+                return Call(address);
+            }
+            return (ushort)(PC + 3);
         }
-        public static void CallPO(ushort address) {
-            if (!Flag.AC.IsSet()) Call(address);
+        public static ushort CallPO(ushort address) {
+            if (!Flag.AC.IsSet()) {
+                return Call(address);
+            }
+            return (ushort)(PC + 3);
         }
         #endregion
 
