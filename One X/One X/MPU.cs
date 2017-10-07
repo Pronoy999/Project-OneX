@@ -905,227 +905,278 @@ namespace One_X {
         #endregion
 
         #region MOV A
-        public static void MoveAB() {
+        public static ushort MoveAB() {
             LoadA(B);
+            return (ushort)(PC + 1);
         }
 
-        public static void MoveAC() {
+        public static ushort MoveAC() {
             LoadA(C);
+            return (ushort)(PC + 1);
         }
 
-        public static void MoveAD() {
+        public static ushort MoveAD() {
             LoadA(D);
+            return (ushort)(PC + 1);
         }
 
-        public static void MoveAE() {
+        public static ushort MoveAE() {
             LoadA(E);
+            return (ushort)(PC + 1);
         }
 
-        public static void MoveAH() {
+        public static ushort MoveAH() {
             LoadA(H);
+            return (ushort)(PC + 1);
         }
 
-        public static void MoveAL() {
+        public static ushort MoveAL() {
             LoadA(L);
+            return (ushort)(PC + 1);
         }
 
-        public static void MoveAM() {
+        public static ushort MoveAM() {
             LoadA(M);
+            return (ushort)(PC + 1);
         }
 
-        public static void MoveAA() {
+        public static ushort MoveAA() {
             LoadA(A);
+            return (ushort)(PC + 1);
         }
         #endregion
 
         #region AND
-        public static void AndB() {
+        public static ushort AndB() {
             Ani(B);
+            return (ushort)(PC + 1);
         }
 
-        public static void AndC() {
+        public static ushort AndC() {
             Ani(C);
+            return (ushort)(PC + 1);
         }
 
-        public static void AndD() {
+        public static ushort AndD() {
             Ani(D);
+            return (ushort)(PC + 1);
         }
 
-        public static void AndE() {
+        public static ushort AndE() {
             Ani(E);
+            return (ushort)(PC + 1);
         }
 
-        public static void AndH() {
+        public static ushort AndH() {
             Ani(H);
+            return (ushort)(PC + 1);
         }
 
-        public static void AndL() {
+        public static ushort AndL() {
             Ani(L);
+            return (ushort)(PC + 1);
         }
 
-        public static void AndM() {
+        public static ushort AndM() {
             Ani(M);
+            return (ushort)(PC + 1);
         }
 
-        public static void AndA() {
+        public static ushort AndA() {
             Ani(A);
+            return (ushort)(PC + 1);
         }
 
-        public static void Ani(byte data) {
+        public static ushort Ani(byte data) {
             //TODO:reset CY and set AC
             A &= data;
+            return (ushort)(PC + 2);
         }
         #endregion
 
         #region OR
-        public static void OrB() {
+        public static ushort OrB() {
             Ori(B);
+            return (ushort)(PC + 1);
         }
 
-        public static void OrC() {
+        public static ushort OrC() {
             Ori(C);
+            return (ushort)(PC + 1);
         }
 
-        public static void OrD() {
+        public static ushort OrD() {
             Ori(D);
+            return (ushort)(PC + 1);
         }
 
-        public static void OrE() {
+        public static ushort OrE() {
             Ori(E);
+            return (ushort)(PC + 1);
         }
 
-        public static void OrH() {
+        public static ushort OrH() {
             Ori(H);
+            return (ushort)(PC + 1);
         }
 
-        public static void OrL() {
+        public static ushort OrL() {
             Ori(L);
+            return (ushort)(PC + 1);
         }
 
-        public static void OrM() {
+        public static ushort OrM() {
             Ori(M);
+            return (ushort)(PC + 1);
         }
 
-        public static void OrA() {
+        public static ushort OrA() {
             Ori(A);
+            return (ushort)(PC + 1);
         }
 
-        public static void Ori(byte data) {
+        public static ushort Ori(byte data) {
             //TODO:Z,S,P are modified and AC AND CY are reset
             A |= data;
+            return (ushort)(PC + 2);
         }
         #endregion
 
         #region XOR
-        public static void XorB() {
+        public static ushort XorB() {
             Xri(B);
+            return (ushort)(PC + 1);
         }
 
-        public static void XorC() {
+        public static ushort XorC() {
             Xri(C);
+            return (ushort)(PC + 1);
         }
 
-        public static void XorD() {
+        public static ushort XorD() {
             Xri(D);
+            return (ushort)(PC + 1);
         }
 
-        public static void XorE() {
+        public static ushort XorE() {
             Xri(E);
+            return (ushort)(PC + 1);
         }
 
-        public static void XorH() {
+        public static ushort XorH() {
             Xri(H);
+            return (ushort)(PC + 1);
         }
 
-        public static void XorL() {
+        public static ushort XorL() {
             Xri(L);
+            return (ushort)(PC + 1);
         }
 
-        public static void XorM() {
+        public static ushort XorM() {
             Xri(M);
+            return (ushort)(PC + 1);
         }
 
-        public static void XorA() {
+        public static ushort XorA() {
             Xri(A);
+            return (ushort)(PC + 1);
         }
 
-        public static void Xri(byte data) {
+        public static ushort Xri(byte data) {
             //TODO:Z,S,P are modified and AC AND CY are reset
             A ^= data;
+            return (ushort)(PC + 2);
         }
 
         #endregion
 
         #region STORE
-        public static void StoreA(ushort address) {
+        public static ushort StoreA(ushort address) {
             memory.WriteByte(A, address);
+            return (ushort)(PC + 3);
         }
 
-        public static void StoreAtBC() {
+        public static ushort StoreAtBC() {
             memory.WriteByte(A, BRp);
+            return (ushort)(PC + 1);
         }
 
-        public static void StoreAtDE() {
+        public static ushort StoreAtDE() {
             memory.WriteByte(A, DRp);
+            return (ushort)(PC + 1);
         }
 
-        public static void StoreHL(ushort address) {
+        public static ushort StoreHL(ushort address) {
             memory.WriteUShort(HRp, address);
+            return (ushort)(PC + 3);
         }
         #endregion
 
         #region LOAD
-        public static void LoadAFrom(ushort address) {
+        public static ushort LoadAFrom(ushort address) {
             A = memory.ReadByte(address);
+            return (ushort)(PC + 3);
         }
 
-        public static void LoadFromBC() {
+        public static ushort LoadFromBC() {
             A = memory.ReadByte(BRp);
+            return (ushort)(PC + 1);
         }
 
-        public static void LoadFromDE() {
+        public static ushort LoadFromDE() {
             A = memory.ReadByte(DRp);
+            return (ushort)(PC + 1);
         }
 
-        public static void LoadHL(ushort address) {
+        public static ushort LoadHL(ushort address) {
             HRp = memory.ReadUShort(address);
+            return (ushort)(PC + 3);
         }
         #endregion
 
         #region CMP
-        public static void CmpB() {
+        public static ushort CmpB() {
             Cpi(B);
+            return (ushort)(PC + 1);
         }
 
-        public static void CmpC() {
+        public static ushort CmpC() {
             Cpi(C);
+            return (ushort)(PC + 1);
         }
 
-        public static void CmpD() {
+        public static ushort CmpD() {
             Cpi(D);
+            return (ushort)(PC + 1);
         }
 
-        public static void CmpE() {
+        public static ushort CmpE() {
             Cpi(E);
+            return (ushort)(PC + 1);
         }
 
-        public static void CmpH() {
+        public static ushort CmpH() {
             Cpi(H);
+            return (ushort)(PC + 1);
         }
 
-        public static void CmpL() {
+        public static ushort CmpL() {
             Cpi(L);
+            return (ushort)(PC + 1);
         }
 
-        public static void CmpM() {
+        public static ushort CmpM() {
             Cpi(M);
+            return (ushort)(PC + 1);
         }
 
-        public static void CmpA() {
+        public static ushort CmpA() {
             Cpi(A);
+            return (ushort)(PC + 1);
         }
 
-        public static void Cpi(byte data) {
+        public static ushort Cpi(byte data) {
             if (data > A) {
                 Flag.Carry.Set();
                 Flag.Zero.Reset();
@@ -1136,6 +1187,7 @@ namespace One_X {
                 Flag.Carry.Reset();
                 Flag.Zero.Reset();
             }
+            return (ushort)(PC + 2);
         }
         #endregion
 
