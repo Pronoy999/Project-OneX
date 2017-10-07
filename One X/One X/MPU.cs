@@ -178,58 +178,141 @@ namespace One_X {
         #endregion
 
         #region MVI
-        public static void LoadB(byte data) => B = data;
-        public static void LoadC(byte data) => C = data;
-        public static void LoadD(byte data) => D = data;
-        public static void LoadE(byte data) => E = data;
-        public static void LoadH(byte data) => H = data;
-        public static void LoadL(byte data) => L = data;
-        public static void LoadM(byte data) => M = data;
-        public static void LoadA(byte data) => A = data;
+        public static ushort LoadB(byte data) {
+            B = data;
+            return (ushort) (PC+2);
+        }
+        public static ushort LoadC(byte data) {
+            C = data;
+            return (ushort)(PC + 2);
+        }
+
+        public static ushort LoadD(byte data) {
+            D = data;
+            return (ushort)(PC + 2);
+        }
+
+        public static ushort LoadE(byte data) {
+            E = data;
+            return (ushort)(PC + 2);
+        }
+
+        public static ushort LoadH(byte data) {
+            H = data;
+            return (ushort)(PC + 2);
+        }
+
+        public static ushort LoadL(byte data) {
+            L = data;
+            return (ushort)(PC + 2);
+        }
+
+        public static ushort LoadM(byte data) {
+            M = data;
+            return (ushort)(PC + 2);
+        }
+
+        public static ushort LoadA(byte data) {
+            A = data;
+            return (ushort)(PC + 2);
+        }
         #endregion
 
         #region LXI
-        public static void LoadBRp(ushort data) {
+        public static ushort LoadBRp(ushort data) {
             var d = data.ToBytes();
             B = d.HO;
             C = d.LO;
+            return (ushort)(PC + 3);
         }
-        public static void LoadDRp(ushort data) {
+        public static ushort LoadDRp(ushort data) {
             var d = data.ToBytes();
             D = d.HO;
             E = d.LO;
+            return (ushort)(PC + 3);
         }
-        public static void LoadHRp(ushort data) {
+        public static ushort LoadHRp(ushort data) {
             var d = data.ToBytes();
             H = d.HO;
             L = d.LO;
+            return (ushort)(PC + 3);
         }
-        public static void LoadSP(ushort data) => stackPtr = data;
+        public static ushort LoadSP(ushort data) {
+            stackPtr = data;
+            return (ushort)(PC + 3);
+        }
         #endregion
 
         #region ADD
-        public static void AddB() => Adi(B);
-        public static void AddC() => Adi(C);
-        public static void AddD() => Adi(D);
-        public static void AddE() => Adi(E);
-        public static void AddH() => Adi(H);
-        public static void AddL() => Adi(L);
-        public static void AddM() => Adi(M);
-        public static void AddA() => Adi(A);
+        public static ushort AddB() {
+            Adi(B);
+            return (ushort)(PC + 1);
+        }
 
-        public static void Adi(byte data) {
+        public static ushort AddC() {
+            Adi(C);
+            return(ushort)(PC + 1);
+        }
+
+        public static ushort AddD() {
+            Adi(D);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort AddE() {
+            Adi(E);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort AddH() {
+            Adi(H);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort AddL() {
+            Adi(L);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort AddM() {
+            Adi(M);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort AddA() {
+            Adi(A);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort Adi(byte data) {
             int res = A + data;
             Flag.Carry.Set(res > byte.MaxValue);
             // TODO Set AuxiliaryCarry
             A = (byte)res;
+            return (ushort)(PC + 2);
         }
         #endregion
 
         #region DAD
-        public static void DadB() => DadI(BRp);
-        public static void DadD() => DadI(DRp);
-        public static void DadH() => DadI(HRp);
-        public static void DadSP() => DadI(SP);
+        public static ushort DadB() {
+            DadI(BRp);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort DadD() {
+            DadI(DRp);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort DadH() {
+            DadI(HRp);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort DadSP() {
+            DadI(SP);
+            return (ushort)(PC + 1);
+        }
 
         private static void DadI(ushort data) {
             int res = HRp + data;
@@ -239,242 +322,654 @@ namespace One_X {
         #endregion
 
         #region SUB
-        public static void SubB() => Sui(B);
-        public static void SubC() => Sui(C);
-        public static void SubD() => Sui(D);
-        public static void SubE() => Sui(E);
-        public static void SubH() => Sui(H);
-        public static void SubL() => Sui(L);
-        public static void SubM() => Sui(M);
-        public static void SubA() => Sui(A);
+        public static ushort SubB() {
+            Sui(B);
+            return (ushort)(PC + 1);
+        }
 
-        public static void Sui(byte data) {
+        public static ushort SubC() {
+            Sui(C);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort SubD() {
+            Sui(D);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort SubE() {
+            Sui(E);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort SubH() {
+            Sui(H);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort SubL() {
+            Sui(L);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort SubM() {
+            Sui(M);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort SubA() {
+            Sui(A);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort Sui(byte data) {
             int res = A + H.TwosComplement();
             Flag.Carry.Set(res <= byte.MaxValue);
             A = (byte)res;
-            // TODO Auxiliary Carry
+            // TODO: Auxiliary Carry
+            return (ushort)(PC + 2);
         }
         #endregion
 
         #region ADC
-        public static void AdcB() => Aci(B);
-        public static void AdcC() => Aci(C);
-        public static void AdcD() => Aci(D);
-        public static void AdcE() => Aci(E);
-        public static void AdcH() => Aci(H);
-        public static void AdcL() => Aci(L);
-        public static void AdcM() => Aci(M);
-        public static void AdcA() => Aci(A);
-        public static void Aci(byte data) {
+        public static ushort AdcB() {
+            Aci(B);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort AdcC() {
+            Aci(C);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort AdcD() {
+            Aci(D);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort AdcE() {
+            Aci(E);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort AdcH() {
+            Aci(H);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort AdcL() {
+            Aci(L);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort AdcM() {
+            Aci(M);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort AdcA() {
+            Aci(A);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort Aci(byte data) {
             Adi(data);
             Adi((byte)Flag.Carry.IsSet().ToBitInt());
+            return (ushort)(PC + 2);
         }
         #endregion
 
         #region SBB
-        public static void SbbB() => Sbi(B);
-        public static void SbbC() => Sbi(C);
-        public static void SbbD() => Sbi(D);
-        public static void SbbE() => Sbi(E);
-        public static void SbbH() => Sbi(H);
-        public static void SbbL() => Sbi(L);
-        public static void SbbM() => Sbi(M);
-        public static void SbbA() => Sbi(A);
-        public static void Sbi(byte data) => Sui((byte)(data + Flag.Carry.IsSet().ToBitInt()));
+        public static ushort SbbB() {
+            Sbi(B);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort SbbC() {
+            Sbi(C);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort SbbD() {
+            Sbi(D);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort SbbE() {
+            Sbi(E);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort SbbH() {
+            Sbi(H);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort SbbL() {
+            Sbi(L);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort SbbM() {
+            Sbi(M);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort SbbA() {
+            Sbi(A);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort Sbi(byte data) {
+            Sui((byte)(data + Flag.Carry.IsSet().ToBitInt()));
+            return (ushort)(PC + 2);
+        }
         #endregion
 
         #region INR
-        public static void InrA() => A++;
-        public static void InrB() {
+        public static ushort InrA() {
+            A++;
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort InrB() {
             B++;
             Flag.Sign.Set(B.IsNegative());
             Flag.Zero.Set(B == 0);
             Flag.Parity.Set(B.Parity());
+            return (ushort)(PC + 1);
         }
-        public static void InrC() {
+        public static ushort InrC() {
             C++;
             Flag.Sign.Set(C.IsNegative());
             Flag.Zero.Set(C == 0);
             Flag.Parity.Set(C.Parity());
+            return (ushort)(PC + 1);
         }
-        public static void InrD() {
+        public static ushort InrD() {
             D++;
             Flag.Sign.Set(D.IsNegative());
             Flag.Zero.Set(D == 0);
             Flag.Parity.Set(D.Parity());
+            return (ushort)(PC + 1);
         }
-        public static void InrE() {
+        public static ushort InrE() {
             E++;
             Flag.Sign.Set(E.IsNegative());
             Flag.Zero.Set(E == 0);
             Flag.Parity.Set(E.Parity());
+            return (ushort)(PC + 1);
         }
-        public static void InrH() {
+        public static ushort InrH() {
             H++;
             Flag.Sign.Set(H.IsNegative());
             Flag.Zero.Set(H == 0);
             Flag.Parity.Set(H.Parity());
-
+            return (ushort)(PC + 1);
         }
-        public static void InrL() {
+        public static ushort InrL() {
             L++;
             Flag.Sign.Set(L.IsNegative());
             Flag.Zero.Set(L == 0);
             Flag.Parity.Set(L.Parity());
+            return (ushort)(PC + 1);
         }
         #endregion
 
         #region DCR
-        public static void DcrA() => A--;
-        public static void DcrB() {
+        public static ushort DcrA() {
+            A--;
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort DcrB() {
             B--;
             Flag.Sign.Set(B.IsNegative());
             Flag.Zero.Set(B == 0);
             Flag.Parity.Set(B.Parity());
+            return (ushort)(PC + 1);
         }
-        public static void DcrC() {
+        public static ushort DcrC() {
             C--;
             Flag.Sign.Set(C.IsNegative());
             Flag.Zero.Set(C == 0);
             Flag.Parity.Set(C.Parity());
+            return (ushort)(PC + 1);
         }
-        public static void DcrD() {
+        public static ushort DcrD() {
             D--;
             Flag.Sign.Set(D.IsNegative());
             Flag.Zero.Set(D == 0);
             Flag.Parity.Set(D.Parity());
+            return (ushort)(PC + 1);
         }
-        public static void DcrE() {
+        public static ushort DcrE() {
             E--;
             Flag.Sign.Set(E.IsNegative());
             Flag.Zero.Set(E == 0);
             Flag.Parity.Set(E.Parity());
+            return (ushort)(PC + 1);
         }
-        public static void DcrH() {
+        public static ushort DcrH() {
             H--;
             Flag.Sign.Set(H.IsNegative());
             Flag.Zero.Set(H == 0);
             Flag.Parity.Set(H.Parity());
+            return (ushort)(PC + 1);
         }
-        public static void DcrL() {
+        public static ushort DcrL() {
             L--;
             Flag.Sign.Set(L.IsNegative());
             Flag.Zero.Set(L == 0);
             Flag.Parity.Set(L.Parity());
+            return (ushort)(PC + 1);
         }
         #endregion
 
         #region INX
-        public static void InxB() => BRp++;
-        public static void InxD() => DRp++;
-        public static void InxH() => HRp++;
-        public static void InxSP() => SP++;
+        public static ushort InxB() {
+            BRp++;
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort InxD() {
+            DRp++;
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort InxH() {
+            HRp++;
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort InxSP() {
+            SP++;
+            return (ushort)(PC + 1);
+        }
         #endregion
 
         #region DCX
-        public static void DcxB() => BRp--;
-        public static void DcxD() => DRp--;
-        public static void DcxH() => HRp--;
-        public static void DcxSP() => SP--;
+        public static ushort DcxB() {
+            BRp--;
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort DcxD() {
+            DRp--;
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort DcxH() {
+            HRp--;
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort DcxSP() {
+            SP--;
+            return (ushort)(PC + 1);
+        }
         #endregion
 
         #region MOV B
-        public static void MoveBB() => LoadB(B);
-        public static void MoveBC() => LoadB(C);
-        public static void MoveBD() => LoadB(D);
-        public static void MoveBE() => LoadB(E);
-        public static void MoveBH() => LoadB(H);
-        public static void MoveBL() => LoadB(L);
-        public static void MoveBM() => LoadB(M);
-        public static void MoveBA() => LoadB(A);
+        public static ushort MoveBB() {
+            LoadB(B);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort MoveBC() {
+            LoadB(C);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort MoveBD() {
+            LoadB(D);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort MoveBE() {
+            LoadB(E);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort MoveBH() {
+            LoadB(H);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort MoveBL() {
+            LoadB(L);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort MoveBM() {
+            LoadB(M);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort MoveBA() {
+            LoadB(A);
+            return (ushort)(PC + 1);
+        }
         #endregion
 
         #region MOV C
-        public static void MoveCB() => LoadC(B);
-        public static void MoveCC() => LoadC(C);
-        public static void MoveCD() => LoadC(D);
-        public static void MoveCE() => LoadC(E);
-        public static void MoveCH() => LoadC(H);
-        public static void MoveCL() => LoadC(L);
-        public static void MoveCM() => LoadC(M);
-        public static void MoveCA() => LoadC(A);
+        public static ushort MoveCB() {
+            LoadC(B);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort MoveCC() {
+            LoadC(C);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort MoveCD() {
+            LoadC(D);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort MoveCE() {
+            LoadC(E);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort MoveCH() {
+            LoadC(H);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort MoveCL() {
+            LoadC(L);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort MoveCM() {
+            LoadC(M);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort MoveCA() {
+            LoadC(A);
+            return (ushort)(PC + 1);
+        }
         #endregion
 
         #region MOV D
-        public static void MoveDB() => LoadD(B);
-        public static void MoveDC() => LoadD(C);
-        public static void MoveDD() => LoadD(D);
-        public static void MoveDE() => LoadD(E);
-        public static void MoveDH() => LoadD(H);
-        public static void MoveDL() => LoadD(L);
-        public static void MoveDM() => LoadD(M);
-        public static void MoveDA() => LoadD(A);
+        public static ushort MoveDB() {
+            LoadD(B);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort MoveDC() {
+            LoadD(C);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort MoveDD() {
+            LoadD(D);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort MoveDE() {
+            LoadD(E);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort MoveDH() {
+            LoadD(H);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort MoveDL() {
+            LoadD(L);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort MoveDM() {
+            LoadD(M);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort MoveDA() {
+            LoadD(A);
+            return (ushort)(PC + 1);
+        }
         #endregion
 
         #region MOV E
-        public static void MoveEB() => LoadE(B);
-        public static void MoveEC() => LoadE(C);
-        public static void MoveED() => LoadE(D);
-        public static void MoveEE() => LoadE(E);
-        public static void MoveEH() => LoadE(H);
-        public static void MoveEL() => LoadE(L);
-        public static void MoveEM() => LoadE(M);
-        public static void MoveEA() => LoadE(A);
+        public static ushort MoveEB() {
+            LoadE(B);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort MoveEC() {
+            LoadE(C);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort MoveED() {
+            LoadE(D);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort MoveEE() {
+            LoadE(E);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort MoveEH() {
+            LoadE(H);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort MoveEL() {
+            LoadE(L);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort MoveEM() {
+            LoadE(M);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort MoveEA() {
+            LoadE(A);
+            return (ushort)(PC + 1);
+        }
         #endregion
 
         #region MOV H
-        public static void MoveHB() => LoadH(B);
-        public static void MoveHC() => LoadH(C);
-        public static void MoveHD() => LoadH(D);
-        public static void MoveHE() => LoadH(E);
-        public static void MoveHH() => LoadH(H);
-        public static void MoveHL() => LoadH(L);
-        public static void MoveHM() => LoadH(M);
-        public static void MoveHA() => LoadH(A);
+        public static ushort MoveHB() {
+            LoadH(B);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort MoveHC() {
+            LoadH(C);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort MoveHD() {
+            LoadH(D);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort MoveHE() {
+            LoadH(E);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort MoveHH() {
+            LoadH(H);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort MoveHL() {
+            LoadH(L);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort MoveHM() {
+            LoadH(M);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort MoveHA() {
+            LoadH(A);
+            return (ushort)(PC + 1);
+        }
         #endregion
 
         #region MOV L
-        public static void MoveLB() => LoadL(B);
-        public static void MoveLC() => LoadL(C);
-        public static void MoveLD() => LoadL(D);
-        public static void MoveLE() => LoadL(E);
-        public static void MoveLH() => LoadL(H);
-        public static void MoveLL() => LoadL(L);
-        public static void MoveLM() => LoadL(M);
-        public static void MoveLA() => LoadL(A);
+        public static ushort MoveLB() {
+            LoadL(B);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort MoveLC() {
+            LoadL(C);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort MoveLD() {
+            LoadL(D);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort MoveLE() {
+            LoadL(E);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort MoveLH() {
+            LoadL(H);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort MoveLL() {
+            LoadL(L);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort MoveLM() {
+            LoadL(M);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort MoveLA() {
+            LoadL(A);
+            return (ushort)(PC + 1);
+        }
         #endregion
 
         #region MOV M
-        public static void MoveMB() => LoadM(B);
-        public static void MoveMC() => LoadM(C);
-        public static void MoveMD() => LoadM(D);
-        public static void MoveME() => LoadM(E);
-        public static void MoveMH() => LoadM(H);
-        public static void MoveML() => LoadM(L);
-        public static void MoveMM() => LoadM(M);
-        public static void MoveMA() => LoadM(A);
+        public static ushort MoveMB() {
+            LoadM(B);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort MoveMC() {
+            LoadM(C);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort MoveMD() {
+            LoadM(D);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort MoveME() {
+            LoadM(E);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort MoveMH() {
+            LoadM(H);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort MoveML() {
+            LoadM(L);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort MoveMM() {
+            LoadM(M);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort MoveMA() {
+            LoadM(A);
+            return (ushort)(PC + 1);
+        }
         #endregion
 
         #region MOV A
-        public static void MoveAB() => LoadA(B);
-        public static void MoveAC() => LoadA(C);
-        public static void MoveAD() => LoadA(D);
-        public static void MoveAE() => LoadA(E);
-        public static void MoveAH() => LoadA(H);
-        public static void MoveAL() => LoadA(L);
-        public static void MoveAM() => LoadA(M);
-        public static void MoveAA() => LoadA(A);
+        public static void MoveAB() {
+            LoadA(B);
+        }
+
+        public static void MoveAC() {
+            LoadA(C);
+        }
+
+        public static void MoveAD() {
+            LoadA(D);
+        }
+
+        public static void MoveAE() {
+            LoadA(E);
+        }
+
+        public static void MoveAH() {
+            LoadA(H);
+        }
+
+        public static void MoveAL() {
+            LoadA(L);
+        }
+
+        public static void MoveAM() {
+            LoadA(M);
+        }
+
+        public static void MoveAA() {
+            LoadA(A);
+        }
         #endregion
 
         #region AND
-        public static void AndB() => Ani(B);
-        public static void AndC() => Ani(C);
-        public static void AndD() => Ani(D);
-        public static void AndE() => Ani(E);
-        public static void AndH() => Ani(H);
-        public static void AndL() => Ani(L);
-        public static void AndM() => Ani(M);
-        public static void AndA() => Ani(A);
+        public static void AndB() {
+            Ani(B);
+        }
+
+        public static void AndC() {
+            Ani(C);
+        }
+
+        public static void AndD() {
+            Ani(D);
+        }
+
+        public static void AndE() {
+            Ani(E);
+        }
+
+        public static void AndH() {
+            Ani(H);
+        }
+
+        public static void AndL() {
+            Ani(L);
+        }
+
+        public static void AndM() {
+            Ani(M);
+        }
+
+        public static void AndA() {
+            Ani(A);
+        }
 
         public static void Ani(byte data) {
             //TODO:reset CY and set AC
@@ -483,14 +978,38 @@ namespace One_X {
         #endregion
 
         #region OR
-        public static void OrB() => Ori(B);
-        public static void OrC() => Ori(C);
-        public static void OrD() => Ori(D);
-        public static void OrE() => Ori(E);
-        public static void OrH() => Ori(H);
-        public static void OrL() => Ori(L);
-        public static void OrM() => Ori(M);
-        public static void OrA() => Ori(A);
+        public static void OrB() {
+            Ori(B);
+        }
+
+        public static void OrC() {
+            Ori(C);
+        }
+
+        public static void OrD() {
+            Ori(D);
+        }
+
+        public static void OrE() {
+            Ori(E);
+        }
+
+        public static void OrH() {
+            Ori(H);
+        }
+
+        public static void OrL() {
+            Ori(L);
+        }
+
+        public static void OrM() {
+            Ori(M);
+        }
+
+        public static void OrA() {
+            Ori(A);
+        }
+
         public static void Ori(byte data) {
             //TODO:Z,S,P are modified and AC AND CY are reset
             A |= data;
@@ -498,14 +1017,38 @@ namespace One_X {
         #endregion
 
         #region XOR
-        public static void XorB() => Xri(B);
-        public static void XorC() => Xri(C);
-        public static void XorD() => Xri(D);
-        public static void XorE() => Xri(E);
-        public static void XorH() => Xri(H);
-        public static void XorL() => Xri(L);
-        public static void XorM() => Xri(M);
-        public static void XorA() => Xri(A);
+        public static void XorB() {
+            Xri(B);
+        }
+
+        public static void XorC() {
+            Xri(C);
+        }
+
+        public static void XorD() {
+            Xri(D);
+        }
+
+        public static void XorE() {
+            Xri(E);
+        }
+
+        public static void XorH() {
+            Xri(H);
+        }
+
+        public static void XorL() {
+            Xri(L);
+        }
+
+        public static void XorM() {
+            Xri(M);
+        }
+
+        public static void XorA() {
+            Xri(A);
+        }
+
         public static void Xri(byte data) {
             //TODO:Z,S,P are modified and AC AND CY are reset
             A ^= data;
@@ -514,28 +1057,74 @@ namespace One_X {
         #endregion
 
         #region STORE
-        public static void StoreA(ushort address) => memory.WriteByte(A, address);
-        public static void StoreAtBC() => memory.WriteByte(A, BRp);
-        public static void StoreAtDE() => memory.WriteByte(A, DRp);
-        public static void StoreHL(ushort address) => memory.WriteUShort(HRp, address);
+        public static void StoreA(ushort address) {
+            memory.WriteByte(A, address);
+        }
+
+        public static void StoreAtBC() {
+            memory.WriteByte(A, BRp);
+        }
+
+        public static void StoreAtDE() {
+            memory.WriteByte(A, DRp);
+        }
+
+        public static void StoreHL(ushort address) {
+            memory.WriteUShort(HRp, address);
+        }
         #endregion
 
         #region LOAD
-        public static void LoadAFrom(ushort address) => A = memory.ReadByte(address);
-        public static void LoadFromBC() => A = memory.ReadByte(BRp);
-        public static void LoadFromDE() => A = memory.ReadByte(DRp);
-        public static void LoadHL(ushort address) => HRp = memory.ReadUShort(address);
+        public static void LoadAFrom(ushort address) {
+            A = memory.ReadByte(address);
+        }
+
+        public static void LoadFromBC() {
+            A = memory.ReadByte(BRp);
+        }
+
+        public static void LoadFromDE() {
+            A = memory.ReadByte(DRp);
+        }
+
+        public static void LoadHL(ushort address) {
+            HRp = memory.ReadUShort(address);
+        }
         #endregion
 
         #region CMP
-        public static void CmpB() => Cpi(B);
-        public static void CmpC() => Cpi(C);
-        public static void CmpD() => Cpi(D);
-        public static void CmpE() => Cpi(E);
-        public static void CmpH() => Cpi(H);
-        public static void CmpL() => Cpi(L);
-        public static void CmpM() => Cpi(M);
-        public static void CmpA() => Cpi(A);
+        public static void CmpB() {
+            Cpi(B);
+        }
+
+        public static void CmpC() {
+            Cpi(C);
+        }
+
+        public static void CmpD() {
+            Cpi(D);
+        }
+
+        public static void CmpE() {
+            Cpi(E);
+        }
+
+        public static void CmpH() {
+            Cpi(H);
+        }
+
+        public static void CmpL() {
+            Cpi(L);
+        }
+
+        public static void CmpM() {
+            Cpi(M);
+        }
+
+        public static void CmpA() {
+            Cpi(A);
+        }
+
         public static void Cpi(byte data) {
             if (data > A) {
                 Flag.Carry.Set();
@@ -551,7 +1140,10 @@ namespace One_X {
         #endregion
 
         #region JUMP
-        public static void Jump(ushort address) => progCntr = address;
+        public static void Jump(ushort address) {
+            progCntr = address;
+        }
+
         public static void JumpNZ(ushort address) {
             if (!Flag.Z.IsSet()) Jump(address);
         }
@@ -649,7 +1241,9 @@ namespace One_X {
             HRp -= BRp;
         }
 
-        public static void ComplA() => A = (byte)~A;
+        public static void ComplA() {
+            A = (byte)~A;
+        }
 
         public static void Nop() { System.Threading.Thread.Sleep(1000); }
 
@@ -664,13 +1258,21 @@ namespace One_X {
             memory.WriteUShort(hrp, stackPtr);
         }
 
-        public static void stPCtoHL() => progCntr = HRp;
+        public static void stPCtoHL() {
+            progCntr = HRp;
+        }
 
-        public static void stSPtoHL() => stackPtr = HRp;
+        public static void stSPtoHL() {
+            stackPtr = HRp;
+        }
 
-        public static void setCY() => Flag.Carry.Set();
+        public static void setCY() {
+            Flag.Carry.Set();
+        }
 
-        public static void compCY() => Flag.Carry.Toggle();
+        public static void compCY() {
+            Flag.Carry.Toggle();
+        }
 
         public static void Input(byte port) {
             string error = "";
@@ -813,4 +1415,3 @@ namespace One_X {
         
     }
 }
-
