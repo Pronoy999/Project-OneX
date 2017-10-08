@@ -1193,13 +1193,12 @@ namespace One_X {
 
         #region JUMP
         public static ushort Jump(ushort address) {
-            progCntr = address;
             return address;
         }
 
         public static ushort JumpNZ(ushort address) {
             if (!Flag.Z.IsSet()) {
-                return  Jump(address);
+                return Jump(address);
             }
             return (ushort)(PC + 3);
         }
@@ -1343,7 +1342,6 @@ namespace One_X {
 
         public static ushort Halt() {
             running = false;
-            PC = 0x0000;
             return PC;
         }
 
@@ -1355,12 +1353,11 @@ namespace One_X {
         }
 
         public static ushort stPCtoHL() {
-            progCntr = HRp;
-            return (ushort)(PC + 1);
+            return HRp;
         }
 
         public static ushort stSPtoHL() {
-            stackPtr = HRp;
+            SP = HRp;
             return (ushort)(PC + 1);
         }
 
@@ -1400,8 +1397,7 @@ namespace One_X {
         public static ushort Call(ushort data) {
             SP -= 2;
             memory.WriteUShort(PC, SP);
-            Jump(data);
-            return (ushort)(PC + 3);
+            return Jump(data);
         }
         public static ushort CallNZ(ushort address) {
             if (!Flag.Z.IsSet()) {
@@ -1454,84 +1450,92 @@ namespace One_X {
         #endregion
 
         #region RETURN
-        public static void Return() {
+        public static ushort Return() {
             ushort data = memory.ReadUShort(SP);
             SP += 2;
-            Jump(data);
+            return Jump(data);
         }
-        public static void ReturnNZ() {
-            if (!Flag.Z.IsSet()) Return();
+        public static ushort ReturnNZ() {
+            if (!Flag.Z.IsSet()) return Return();
+            return (ushort)(PC + 1);
         }
-        public static void ReturnZ() {
-            if (Flag.Z.IsSet()) Return();
+        public static ushort ReturnZ() {
+            if (Flag.Z.IsSet()) return Return();
+            return (ushort)(PC + 1);
         }
-        public static void ReturnC() {
-            if (Flag.CY.IsSet()) Return();
+        public static ushort ReturnC() {
+            if (Flag.CY.IsSet()) return Return();
+            return (ushort)(PC + 1);
         }
-        public static void ReturnNC() {
-            if (!Flag.CY.IsSet()) Return();
+        public static ushort ReturnNC() {
+            if (!Flag.CY.IsSet()) return Return();
+            return (ushort)(PC + 1);
         }
-        public static void ReturnP() {
-            if (!Flag.S.IsSet()) Return();
+        public static ushort ReturnP() {
+            if (!Flag.S.IsSet()) return Return();
+            return (ushort)(PC + 1);
         }
-        public static void ReturnM() {
-            if (Flag.S.IsSet()) Return();
+        public static ushort ReturnM() {
+            if (Flag.S.IsSet()) return Return();
+            return (ushort)(PC + 1);
         }
-        public static void ReturnPE() {
-            if (Flag.AC.IsSet()) Return();
+        public static ushort ReturnPE() {
+            if (Flag.AC.IsSet()) return Return();
+            return (ushort)(PC + 1);
         }
-        public static void ReturnPO() {
-            if (!Flag.AC.IsSet()) Return();
+        public static ushort ReturnPO() {
+            if (!Flag.AC.IsSet()) return Return();
+            return (ushort)(PC + 1);
         }
         #endregion
 
         #region RST
-        public static void Reset0() {
+        public static ushort Reset0() {
             Halt();
-            PC = 0 * 0x0008;
+            return 0 * 0x0008;
         }
-        public static void Reset1() {
+        public static ushort Reset1() {
             Halt();
-            PC = 1 * 0x0008;
+            return 1 * 0x0008;
         }
-        public static void Reset2() {
+        public static ushort Reset2() {
             Halt();
-            PC = 2 * 0x0008;
+            return 2 * 0x0008;
         }
-        public static void Reset3() {
+        public static ushort Reset3() {
             Halt();
-            PC = 3 * 0x0008;
+            return 3 * 0x0008;
         }
-        public static void Reset4() {
+        public static ushort Reset4() {
             Halt();
-            PC = 4 * 0x0008;
+            return 4 * 0x0008;
         }
-        public static void Reset5() {
+        public static ushort Reset5() {
             Halt();
-            PC = 5 * 0x0008;
+            return 5 * 0x0008;
         }
-        public static void Reset6() {
+        public static ushort Reset6() {
             Halt();
-            PC = 6 * 0x0008;
+            return 6 * 0x0008;
         }
-        public static void Reset7() {
+        public static ushort Reset7() {
             Halt();
-            PC = 7 * 0x0008;
+            return 7 * 0x0008;
         }
         #endregion
         
         //TODO:RIM,SIM,DAA,DI,EI
 
         public static void NextStep() {
-            Instruction ins = ((Instruction.OPCODE) memory.ReadByte(PC++)).GetAttributeOfType<Instruction>();
+            Instruction ins = ((Instruction.OPCODE) memory.ReadByte(PC)).GetAttributeOfType<Instruction>();
             if (ins.Bytes > 1) {
-                ins.Arguments.LO = memory.ReadByte(PC++);
+                ins.Arguments.LO = memory.ReadByte((ushort)(PC + 1));
                 ins.Arguments.HO = 0x00;
             }
             if (ins.Bytes > 2) {
-                ins.Arguments.HO = memory.ReadByte(PC++);
+                ins.Arguments.HO = memory.ReadByte((ushort)(PC + 2));
             }
-            ins.Execute();
+            PC = ins.Execute();
         }
 
         public static void ExecuteAllSteps() {

@@ -56,19 +56,14 @@ namespace One_X {
             }
         }
 
-        public void Execute() {
+        public ushort Execute() {
             object[] param = null;
             if (Bytes == 2) {
                 param = new object[] { Arguments.LO };
             } else if (Bytes == 3) {
                 param = new object[] { Arguments.ToUShort() };
             }
-            //try {
-            method.Invoke(null, param);
-            //} catch (Exception ex) {
-            //    MessageBox.Show(Name);
-            //    throw ex;
-            //}
+            return (ushort) method.Invoke(null, param);
         }
 
         public void WriteToMemory(Memory mem, ushort loc) {
