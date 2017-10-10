@@ -323,7 +323,7 @@ namespace One_X {
             [Instruction("RP", 1, 3, 10, "ReturnP")] RP = 0xF0,
             [Instruction("POP PSW", 1, 3, 10, "PopPSW")] POP_PSW = 0xF1,
             [Instruction("JP", 3, 3, 10, "JumpP")] JP = 0xF2, // space
-            [Instruction("DI", 1, 1, 4, "")] DI = 0xF3,
+            [Instruction("DI", 1, 1, 4, "DisInt")] DI = 0xF3,
             [Instruction("CP", 3, 5, 18, "CallP")] CP = 0xF4, // space
             [Instruction("PUSH PSW", 1, 3, 12, "PushPSW")] PUSH_PSW = 0xF5,
             [Instruction("ORI", 2, 2, 7, "Ori")] ORI = 0xF6, // space
@@ -331,7 +331,7 @@ namespace One_X {
             [Instruction("RM", 1, 3, 10, "ReturnM")] RM = 0xF8,
             [Instruction("SPHL", 1, 1, 6, "stSPtoHL")] SPHL = 0xF9,
             [Instruction("JM", 3, 3, 10, "JumpM")] JM = 0xFA, // space
-            [Instruction("EI", 1, 1, 4, "")] EI = 0xFB,
+            [Instruction("EI", 1, 1, 4, "EnInt")] EI = 0xFB,
             [Instruction("CM", 3, 5, 18, "CallM")] CM = 0xFC, // space
             [Instruction("", 0, 0, 0, "")] UNKN_FD = 0xFD,
             [Instruction("CPI", 2, 2, 7, "Cpi")] CPI = 0xFE, // space

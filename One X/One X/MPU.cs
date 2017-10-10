@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 namespace One_X {
     public static class MPU {
         private static bool running = false;
+        private static bool interpt = true;
 
         public static Memory memory;
 
@@ -1522,8 +1523,16 @@ namespace One_X {
             Halt();
             return 7 * 0x0008;
         }
+        public static ushort EnInt() {
+            interpt = true;
+            return (ushort)(PC + 1);
+        }
+        public static ushort DisInt() {
+            interpt = false;
+            return (ushort)(PC + 1);
+        }
         #endregion
-        
+
         //TODO:RIM,SIM,DAA,DI,EI
 
         public static void NextStep() {

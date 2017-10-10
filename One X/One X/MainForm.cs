@@ -5,11 +5,14 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using Microsoft.VisualBasic;
+using System.Threading.Tasks;
+using System.Windows.Threading;
 
 namespace One_X {
     public partial class MainForm : Form {
         Parser p = new Parser();
         MemoryViewer memView = new MemoryViewer();
+        Dispatcher disp = Dispatcher.CurrentDispatcher;
 
         public MainForm() {
             InitializeComponent();
@@ -36,78 +39,85 @@ namespace One_X {
         }
 
         private void ValueChanged(object sender, MPU.MPUEventArgs e) {
-            switch(e.VarName) {
-                case "A":
-                    AReg.Text = ((byte)e.NewValue).ToString("X2");
-                    break;
-                case "B":
-                    BReg.Text = ((byte)e.NewValue).ToString("X2");
-                    break;
-                case "C":
-                    CReg.Text = ((byte)e.NewValue).ToString("X2");
-                    break;
-                case "D":
-                    DReg.Text = ((byte)e.NewValue).ToString("X2");
-                    break;
-                case "E":
-                    EReg.Text = ((byte)e.NewValue).ToString("X2");
-                    break;
-                case "H":
-                    HReg.Text = ((byte)e.NewValue).ToString("X2");
-                    break;
-                case "L":
-                    LReg.Text = ((byte)e.NewValue).ToString("X2");
-                    break;
-                case "M":
-                    MPoint.Text = ((byte)e.NewValue).ToString("X2");
-                    break;
-                case "HRp":
-                    var bytes = ((ushort)e.NewValue).ToBytes();
-                    HReg.Text = bytes.HO.ToString("X2");
-                    LReg.Text = bytes.LO.ToString("X2");
-                    break;
-                case "BRp":
-                    bytes = ((ushort)e.NewValue).ToBytes();
-                    BReg.Text = bytes.HO.ToString("X2");
-                    CReg.Text = bytes.LO.ToString("X2");
-                    break;
-                case "DRp":
-                    bytes = ((ushort)e.NewValue).ToBytes();
-                    DReg.Text = bytes.HO.ToString("X2");
-                    EReg.Text = bytes.LO.ToString("X2");
-                    break;
-                case "PC":
-                    PCVal.Text = ((ushort)e.NewValue).ToString("X4");
-                    foreach (ListViewItem litem in insts.Items) {
-                        if (litem.SubItems[1].Text == PCVal.Text) {
-                            litem.Text = "->";
-                        } else {
-                            litem.Text = string.Empty;
+            disp.Invoke(delegate () {
+                switch (e.VarName) {
+                    case "A":
+                        AReg.Text = ((byte)e.NewValue).ToString("X2");
+                        break;
+                    case "B":
+                        BReg.Text = ((byte)e.NewValue).ToString("X2");
+                        break;
+                    case "C":
+                        CReg.Text = ((byte)e.NewValue).ToString("X2");
+                        break;
+                    case "D":
+                        DReg.Text = ((byte)e.NewValue).ToString("X2");
+                        break;
+                    case "E":
+                        EReg.Text = ((byte)e.NewValue).ToString("X2");
+                        break;
+                    case "H":
+                        HReg.Text = ((byte)e.NewValue).ToString("X2");
+                        break;
+                    case "L":
+                        LReg.Text = ((byte)e.NewValue).ToString("X2");
+                        break;
+                    case "M":
+                        MPoint.Text = ((byte)e.NewValue).ToString("X2");
+                        break;
+                    case "HRp":
+                        var bytes = ((ushort)e.NewValue).ToBytes();
+                        HReg.Text = bytes.HO.ToString("X2");
+                        LReg.Text = bytes.LO.ToString("X2");
+                        break;
+                    case "BRp":
+                        bytes = ((ushort)e.NewValue).ToBytes();
+                        BReg.Text = bytes.HO.ToString("X2");
+                        CReg.Text = bytes.LO.ToString("X2");
+                        break;
+                    case "DRp":
+                        bytes = ((ushort)e.NewValue).ToBytes();
+                        DReg.Text = bytes.HO.ToString("X2");
+                        EReg.Text = bytes.LO.ToString("X2");
+                        break;
+                    case "PC":
+                        PCVal.Text = ((ushort)e.NewValue).ToString("X4");
+                        foreach (ListViewItem litem in insts.Items) {
+                            if (litem.SubItems[1].Text == PCVal.Text) {
+                                litem.Text = "->";
+                            } else {
+                                litem.Text = string.Empty;
+                            }
                         }
-                    }
-                    break;
-                case "SP":
-                    SPVal.Text = ((ushort)e.NewValue).ToString("X4");
-                    break;
-                case "Sign": case "S":
-                    SFlag.Text = ((bool)e.NewValue).ToBitInt().ToString();
-                    break;
-                case "Zero": case "Z":
-                    ZFlag.Text = ((bool)e.NewValue).ToBitInt().ToString();
-                    break;
-                case "AuxiliaryCarry": case "AC":
-                    ACFlag.Text = ((bool)e.NewValue).ToBitInt().ToString();
-                    break;
-                case "Parity": case "P":
-                    PFlag.Text = ((bool)e.NewValue).ToBitInt().ToString();
-                    break;
-                case "Carry": case "CY":
-                    CYFlag.Text = ((bool)e.NewValue).ToBitInt().ToString();
-                    break;
-                default:
-                    MessageBox.Show(e.VarName);
-                    break;
-            }
+                        break;
+                    case "SP":
+                        SPVal.Text = ((ushort)e.NewValue).ToString("X4");
+                        break;
+                    case "Sign":
+                    case "S":
+                        SFlag.Text = ((bool)e.NewValue).ToBitInt().ToString();
+                        break;
+                    case "Zero":
+                    case "Z":
+                        ZFlag.Text = ((bool)e.NewValue).ToBitInt().ToString();
+                        break;
+                    case "AuxiliaryCarry":
+                    case "AC":
+                        ACFlag.Text = ((bool)e.NewValue).ToBitInt().ToString();
+                        break;
+                    case "Parity":
+                    case "P":
+                        PFlag.Text = ((bool)e.NewValue).ToBitInt().ToString();
+                        break;
+                    case "Carry":
+                    case "CY":
+                        CYFlag.Text = ((bool)e.NewValue).ToBitInt().ToString();
+                        break;
+                    default:
+                        MessageBox.Show(e.VarName);
+                        break;
+                }
+            });
         }
 
         private void codeBox_KeyUp(object sender, KeyEventArgs e) {
@@ -280,12 +290,8 @@ namespace One_X {
             memView.Location = new Point(Location.X + Width, Location.Y);
         }
 
-        private void nextStepBtn_Click(object sender, EventArgs e) {
-            MPU.NextStep();
-        }
+        private async void nextStepBtn_Click(object sender, EventArgs e) => await Task.Run(() => MPU.NextStep());
 
-        private void execButton_Click(object sender, EventArgs e) {
-            MPU.ExecuteAllSteps();
-        }
+        private async void execButton_Click(object sender, EventArgs e) => await Task.Run(() => MPU.ExecuteAllSteps());
     }
 }
