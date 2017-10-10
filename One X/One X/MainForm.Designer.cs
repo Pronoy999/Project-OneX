@@ -86,8 +86,8 @@
             this.memBtn = new System.Windows.Forms.Button();
             this.nextStepBtn = new System.Windows.Forms.Button();
             this.execButton = new System.Windows.Forms.Button();
-            this.codeBox = new Ionic.WinForms.RichTextBoxEx();
             this.stopBtn = new System.Windows.Forms.Button();
+            this.codeBox = new Ionic.WinForms.RichTextBoxEx();
             this.codePanel.SuspendLayout();
             this.registerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mpointicon)).BeginInit();
@@ -758,6 +758,16 @@
             this.execButton.UseVisualStyleBackColor = true;
             this.execButton.Click += new System.EventHandler(this.execButton_Click);
             // 
+            // stopBtn
+            // 
+            this.stopBtn.Location = new System.Drawing.Point(682, 293);
+            this.stopBtn.Name = "stopBtn";
+            this.stopBtn.Size = new System.Drawing.Size(68, 61);
+            this.stopBtn.TabIndex = 8;
+            this.stopBtn.Text = "Stop";
+            this.stopBtn.UseVisualStyleBackColor = true;
+            this.stopBtn.Click += new System.EventHandler(this.stopBtn_Click);
+            // 
             // codeBox
             // 
             this.codeBox.AcceptsTab = true;
@@ -782,16 +792,6 @@
             this.codeBox.Text = "";
             this.codeBox.WordWrap = false;
             this.codeBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.codeBox_KeyUp);
-            // 
-            // stopBtn
-            // 
-            this.stopBtn.Location = new System.Drawing.Point(682, 293);
-            this.stopBtn.Name = "stopBtn";
-            this.stopBtn.Size = new System.Drawing.Size(68, 61);
-            this.stopBtn.TabIndex = 8;
-            this.stopBtn.Text = "Stop";
-            this.stopBtn.UseVisualStyleBackColor = true;
-            this.stopBtn.Click += new System.EventHandler(this.stopBtn_Click);
             // 
             // MainForm
             // 

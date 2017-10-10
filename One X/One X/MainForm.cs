@@ -46,7 +46,7 @@ namespace One_X {
             // todo
             MPU.memory = new Memory(Application.StartupPath + "\\test.bin");
 
-            codeBox.NumberFont = new Font(pfc.Families[0], 10);
+            // codeBox.NumberFont = new Font(pfc.Families[0], 10);
 
             foreach(var f in fontObjects) {
                 if (f is TextBox) {
@@ -62,6 +62,8 @@ namespace One_X {
                     fd.Font = new Font(pfc.Families[0], fd.Font.Size);
                 }
             }
+
+            codeBox.ShowLineNumbers = true;
 
             startAddressBox.GotFocus += (sndr, args) => {
                 startAddressBox.Select(startAddressBox.TextLength, 0);
