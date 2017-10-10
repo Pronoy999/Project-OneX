@@ -1343,7 +1343,7 @@ namespace One_X {
 
         public static ushort Halt() {
             running = false;
-            return PC;
+            return PC + 1;
         }
 
         public static ushort ExPCwHL() {
