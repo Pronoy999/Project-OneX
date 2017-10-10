@@ -1343,7 +1343,7 @@ namespace One_X {
 
         public static ushort Halt() {
             running = false;
-            return PC + 1;
+            return (ushort)(PC + 1);
         }
 
         public static ushort ExPCwHL() {
@@ -1552,5 +1552,8 @@ namespace One_X {
             while (running) NextStep();
         }
         
+        public static void Stop() {
+            running = false;
+        }
     }
 }

@@ -30,6 +30,8 @@
         {
             this.codePanel = new System.Windows.Forms.Panel();
             this.registerPanel = new System.Windows.Forms.Panel();
+            this.MPoint = new System.Windows.Forms.Label();
+            this.mpointicon = new System.Windows.Forms.PictureBox();
             this.PCVal = new System.Windows.Forms.Label();
             this.SPVal = new System.Windows.Forms.Label();
             this.SPLabel = new System.Windows.Forms.Label();
@@ -85,10 +87,10 @@
             this.nextStepBtn = new System.Windows.Forms.Button();
             this.execButton = new System.Windows.Forms.Button();
             this.codeBox = new Ionic.WinForms.RichTextBoxEx();
-            this.MPoint = new System.Windows.Forms.Label();
-            this.mpointicon = new System.Windows.Forms.PictureBox();
+            this.stopBtn = new System.Windows.Forms.Button();
             this.codePanel.SuspendLayout();
             this.registerPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.mpointicon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lregicon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.eregicon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cregicon)).BeginInit();
@@ -98,7 +100,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.aregicon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.flagIcon)).BeginInit();
             this.startAddressGB.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.mpointicon)).BeginInit();
             this.SuspendLayout();
             // 
             // codePanel
@@ -163,6 +164,26 @@
             this.registerPanel.Name = "registerPanel";
             this.registerPanel.Size = new System.Drawing.Size(240, 342);
             this.registerPanel.TabIndex = 2;
+            // 
+            // MPoint
+            // 
+            this.MPoint.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.MPoint.Font = new System.Drawing.Font("Hack", 20F);
+            this.MPoint.Location = new System.Drawing.Point(177, 64);
+            this.MPoint.Name = "MPoint";
+            this.MPoint.Size = new System.Drawing.Size(48, 48);
+            this.MPoint.TabIndex = 66;
+            this.MPoint.Text = "00";
+            this.MPoint.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // mpointicon
+            // 
+            this.mpointicon.Image = global::One_X.Properties.Resources.m;
+            this.mpointicon.Location = new System.Drawing.Point(123, 64);
+            this.mpointicon.Name = "mpointicon";
+            this.mpointicon.Size = new System.Drawing.Size(48, 48);
+            this.mpointicon.TabIndex = 65;
+            this.mpointicon.TabStop = false;
             // 
             // PCVal
             // 
@@ -513,14 +534,14 @@
             this.ZFlag.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.ZFlag.UseCompatibleTextRendering = true;
             // 
-            // CFlag
+            // CYFlag
             // 
             this.CYFlag.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.CYFlag.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.CYFlag.Font = new System.Drawing.Font("Hack", 8.5F);
             this.CYFlag.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
             this.CYFlag.Location = new System.Drawing.Point(211, 15);
-            this.CYFlag.Name = "CFlag";
+            this.CYFlag.Name = "CYFlag";
             this.CYFlag.Size = new System.Drawing.Size(24, 24);
             this.CYFlag.TabIndex = 25;
             this.CYFlag.Text = "0";
@@ -721,7 +742,7 @@
             // 
             this.nextStepBtn.Location = new System.Drawing.Point(491, 293);
             this.nextStepBtn.Name = "nextStepBtn";
-            this.nextStepBtn.Size = new System.Drawing.Size(128, 61);
+            this.nextStepBtn.Size = new System.Drawing.Size(68, 61);
             this.nextStepBtn.TabIndex = 6;
             this.nextStepBtn.Text = "Next Step";
             this.nextStepBtn.UseVisualStyleBackColor = true;
@@ -729,9 +750,9 @@
             // 
             // execButton
             // 
-            this.execButton.Location = new System.Drawing.Point(625, 293);
+            this.execButton.Location = new System.Drawing.Point(565, 293);
             this.execButton.Name = "execButton";
-            this.execButton.Size = new System.Drawing.Size(125, 61);
+            this.execButton.Size = new System.Drawing.Size(111, 61);
             this.execButton.TabIndex = 7;
             this.execButton.Text = "Execute\r\nAll Steps";
             this.execButton.UseVisualStyleBackColor = true;
@@ -762,25 +783,15 @@
             this.codeBox.WordWrap = false;
             this.codeBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.codeBox_KeyUp);
             // 
-            // MPoint
+            // stopBtn
             // 
-            this.MPoint.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.MPoint.Font = new System.Drawing.Font("Hack", 20F);
-            this.MPoint.Location = new System.Drawing.Point(177, 64);
-            this.MPoint.Name = "MPoint";
-            this.MPoint.Size = new System.Drawing.Size(48, 48);
-            this.MPoint.TabIndex = 66;
-            this.MPoint.Text = "00";
-            this.MPoint.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // mpointicon
-            // 
-            this.mpointicon.Image = global::One_X.Properties.Resources.m;
-            this.mpointicon.Location = new System.Drawing.Point(123, 64);
-            this.mpointicon.Name = "mpointicon";
-            this.mpointicon.Size = new System.Drawing.Size(48, 48);
-            this.mpointicon.TabIndex = 65;
-            this.mpointicon.TabStop = false;
+            this.stopBtn.Location = new System.Drawing.Point(682, 293);
+            this.stopBtn.Name = "stopBtn";
+            this.stopBtn.Size = new System.Drawing.Size(68, 61);
+            this.stopBtn.TabIndex = 8;
+            this.stopBtn.Text = "Stop";
+            this.stopBtn.UseVisualStyleBackColor = true;
+            this.stopBtn.Click += new System.EventHandler(this.stopBtn_Click);
             // 
             // MainForm
             // 
@@ -788,6 +799,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.ClientSize = new System.Drawing.Size(1008, 729);
+            this.Controls.Add(this.stopBtn);
             this.Controls.Add(this.execButton);
             this.Controls.Add(this.nextStepBtn);
             this.Controls.Add(this.memBtn);
@@ -803,6 +815,7 @@
             this.Move += new System.EventHandler(this.MainForm_Move);
             this.codePanel.ResumeLayout(false);
             this.registerPanel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.mpointicon)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.lregicon)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.eregicon)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.cregicon)).EndInit();
@@ -813,7 +826,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.flagIcon)).EndInit();
             this.startAddressGB.ResumeLayout(false);
             this.startAddressGB.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.mpointicon)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -879,6 +891,7 @@
         private System.Windows.Forms.Button execButton;
         private System.Windows.Forms.Label MPoint;
         private System.Windows.Forms.PictureBox mpointicon;
+        private System.Windows.Forms.Button stopBtn;
     }
 }
 

@@ -293,5 +293,9 @@ namespace One_X {
         private async void nextStepBtn_Click(object sender, EventArgs e) => await Task.Run(() => MPU.NextStep());
 
         private async void execButton_Click(object sender, EventArgs e) => await Task.Run(() => MPU.ExecuteAllSteps());
+
+        private void stopBtn_Click(object sender, EventArgs e) {
+            MPU.Stop();
+        }
     }
 }
