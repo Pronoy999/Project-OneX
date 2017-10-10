@@ -257,7 +257,7 @@ namespace One_X {
             [Instruction("XRA M", 1, 2, 7, "XorM")] XRA_M = 0xAE,
             [Instruction("XRA A", 1, 1, 4, "XorA")] XRA_A = 0xAF,
             [Instruction("ORA B", 1, 1, 4, "OrB")] ORA_B = 0xB0,
-            [Instruction("ORA C", 1, 1, 4, "Orc")] ORA_C = 0xB1,
+            [Instruction("ORA C", 1, 1, 4, "OrC")] ORA_C = 0xB1,
             [Instruction("ORA D", 1, 1, 4, "OrD")] ORA_D = 0xB2,
             [Instruction("ORA E", 1, 1, 4, "OrE")] ORA_E = 0xB3,
             [Instruction("ORA H", 1, 1, 4, "OrH")] ORA_H = 0xB4,
