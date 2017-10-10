@@ -20,14 +20,24 @@ namespace One_X {
         [DllImport("user32.dll")]
         static extern bool HideCaret(IntPtr hWnd);
 
+        [DllImport("gdi32.dll")]
+        private static extern IntPtr AddFontMemResourceEx(IntPtr pbFont, uint cbFont, IntPtr pdv, [In] ref uint pcFonts);
+
         public PrivateFontCollection pfc = new PrivateFontCollection();
 
         private void MemoryViewer_Load(object sender, EventArgs e) {
             int fontLength = Properties.Resources.Hack.Length;
             byte[] fontdata = Properties.Resources.Hack;
+
             IntPtr data = Marshal.AllocCoTaskMem(fontLength);
             Marshal.Copy(fontdata, 0, data, fontLength);
+
+            uint cFonts = 0;
+            AddFontMemResourceEx(data, (uint)fontLength, IntPtr.Zero, ref cFonts);
+
             pfc.AddMemoryFont(data, fontLength);
+
+            Marshal.FreeCoTaskMem(data);
 
             object[] fontObjects = { memBox, offset };
 
