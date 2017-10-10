@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using Microsoft.VisualBasic;
 using System.Threading.Tasks;
 using System.Windows.Threading;
+using System.Drawing.Text;
 
 namespace One_X {
     public partial class MainForm : Form {
@@ -18,17 +19,39 @@ namespace One_X {
             InitializeComponent();
         }
 
+        public PrivateFontCollection pfc = new PrivateFontCollection();
+
         [DllImport("user32.dll")]
         static extern bool HideCaret(IntPtr hWnd);
 
         private void MainForm_Load(object sender, EventArgs e) {
+            object[] fontObjects = { AReg, BReg, CReg, DReg, EReg, HReg, LReg, MPoint, PCVal, SPVal, NU1Flag, NU3Flag, NU5Flag, SFlag, ZFlag, ACFlag, PFlag, CYFlag, codeBox, startAddressBox };
+
+            int fontLength = Properties.Resources.Hack.Length;
+            byte[] fontdata = Properties.Resources.Hack;
+            IntPtr data = Marshal.AllocCoTaskMem(fontLength);
+            Marshal.Copy(fontdata, 0, data, fontLength);
+            pfc.AddMemoryFont(data, fontLength);
+
             // todo
             MPU.memory = new Memory(Application.StartupPath + "\\test.bin");
 
-            codeBox.Font = Fonts.Fonts.Create(Fonts.FontFamily.Hack, 12);
-            codeBox.NumberFont = Fonts.Fonts.Create(Fonts.FontFamily.Hack, 10);
-            codeBox.ShowLineNumbers = true;
-            startAddressBox.Font = Fonts.Fonts.Create(Fonts.FontFamily.Hack, 17);
+            codeBox.NumberFont = new Font(pfc.Families[0], 10);
+
+            foreach(var f in fontObjects) {
+                if (f is TextBox) {
+                    TextBox fd = f as TextBox;
+                    fd.Font = new Font(pfc.Families[0], fd.Font.Size);
+                }
+                if (f is Label) {
+                    Label fd = f as Label;
+                    fd.Font = new Font(pfc.Families[0], fd.Font.Size);
+                }
+                if (f is Ionic.WinForms.RichTextBoxEx) {
+                    Ionic.WinForms.RichTextBoxEx fd = f as Ionic.WinForms.RichTextBoxEx;
+                    fd.Font = new Font(pfc.Families[0], fd.Font.Size);
+                }
+            }
 
             startAddressBox.GotFocus += (sndr, args) => {
                 startAddressBox.Select(startAddressBox.TextLength, 0);

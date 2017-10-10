@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Text;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -19,7 +20,32 @@ namespace One_X {
         [DllImport("user32.dll")]
         static extern bool HideCaret(IntPtr hWnd);
 
+        public PrivateFontCollection pfc = new PrivateFontCollection();
+
         private void MemoryViewer_Load(object sender, EventArgs e) {
+            int fontLength = Properties.Resources.Hack.Length;
+            byte[] fontdata = Properties.Resources.Hack;
+            IntPtr data = Marshal.AllocCoTaskMem(fontLength);
+            Marshal.Copy(fontdata, 0, data, fontLength);
+            pfc.AddMemoryFont(data, fontLength);
+
+            object[] fontObjects = { memBox, offset };
+
+            foreach (var f in fontObjects) {
+                if (f is TextBox) {
+                    TextBox fd = f as TextBox;
+                    fd.Font = new Font(pfc.Families[0], fd.Font.Size);
+                }
+                if (f is Label) {
+                    Label fd = f as Label;
+                    fd.Font = new Font(pfc.Families[0], fd.Font.Size);
+                }
+                if (f is HexBox) {
+                    HexBox fd = f as HexBox;
+                    fd.Font = new Font(pfc.Families[0], fd.Font.Size);
+                }
+            }
+
             memBox.Font = Fonts.Fonts.Create(Fonts.FontFamily.Hack, 12);
             memBox.ByteProvider = MPU.memory.provider;
 

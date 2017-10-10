@@ -25,9 +25,9 @@
         private void InitializeComponent() {
             this.memBox = new Be.Windows.Forms.HexBox();
             this.statusPanel = new System.Windows.Forms.Panel();
-            this.offsetLabel = new System.Windows.Forms.Label();
-            this.offset = new System.Windows.Forms.TextBox();
             this.gotoBtn = new System.Windows.Forms.Button();
+            this.offset = new System.Windows.Forms.TextBox();
+            this.offsetLabel = new System.Windows.Forms.Label();
             this.statusPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -35,7 +35,7 @@
             // 
             this.memBox.ColumnInfoVisible = true;
             this.memBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.memBox.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.memBox.Font = new System.Drawing.Font("Segoe UI", 12F);
             this.memBox.GroupSeparatorVisible = true;
             this.memBox.LineInfoVisible = true;
             this.memBox.Location = new System.Drawing.Point(0, 0);
@@ -59,15 +59,16 @@
             this.statusPanel.Size = new System.Drawing.Size(600, 32);
             this.statusPanel.TabIndex = 1;
             // 
-            // offsetLabel
+            // gotoBtn
             // 
-            this.offsetLabel.AutoSize = true;
-            this.offsetLabel.Location = new System.Drawing.Point(431, 6);
-            this.offsetLabel.Name = "offsetLabel";
-            this.offsetLabel.Size = new System.Drawing.Size(60, 22);
-            this.offsetLabel.TabIndex = 0;
-            this.offsetLabel.Text = "Offset:";
-            this.offsetLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.gotoBtn.Font = new System.Drawing.Font("Trebuchet MS", 10F);
+            this.gotoBtn.Location = new System.Drawing.Point(537, 3);
+            this.gotoBtn.Name = "gotoBtn";
+            this.gotoBtn.Size = new System.Drawing.Size(60, 26);
+            this.gotoBtn.TabIndex = 2;
+            this.gotoBtn.Text = "GOTO";
+            this.gotoBtn.UseVisualStyleBackColor = true;
+            this.gotoBtn.Click += new System.EventHandler(this.gotoBtn_Click);
             // 
             // offset
             // 
@@ -81,16 +82,15 @@
             this.offset.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.offset.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.offset_KeyPress);
             // 
-            // gotoBtn
+            // offsetLabel
             // 
-            this.gotoBtn.Font = new System.Drawing.Font("Trebuchet MS", 10F);
-            this.gotoBtn.Location = new System.Drawing.Point(537, 3);
-            this.gotoBtn.Name = "gotoBtn";
-            this.gotoBtn.Size = new System.Drawing.Size(60, 26);
-            this.gotoBtn.TabIndex = 2;
-            this.gotoBtn.Text = "GOTO";
-            this.gotoBtn.UseVisualStyleBackColor = true;
-            this.gotoBtn.Click += new System.EventHandler(this.gotoBtn_Click);
+            this.offsetLabel.AutoSize = true;
+            this.offsetLabel.Location = new System.Drawing.Point(431, 6);
+            this.offsetLabel.Name = "offsetLabel";
+            this.offsetLabel.Size = new System.Drawing.Size(60, 22);
+            this.offsetLabel.TabIndex = 0;
+            this.offsetLabel.Text = "Offset:";
+            this.offsetLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // MemoryViewer
             // 
