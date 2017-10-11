@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.codePanel = new System.Windows.Forms.Panel();
+            this.components = new System.ComponentModel.Container();
             this.registerPanel = new System.Windows.Forms.Panel();
             this.MPoint = new System.Windows.Forms.Label();
             this.mpointicon = new System.Windows.Forms.PictureBox();
@@ -87,8 +87,17 @@
             this.nextStepBtn = new System.Windows.Forms.Button();
             this.execButton = new System.Windows.Forms.Button();
             this.stopBtn = new System.Windows.Forms.Button();
+            this.MenuBar = new System.Windows.Forms.MainMenu(this.components);
+            this.menuItem1 = new System.Windows.Forms.MenuItem();
+            this.menuItem2 = new System.Windows.Forms.MenuItem();
+            this.menuItem3 = new System.Windows.Forms.MenuItem();
+            this.menuItem4 = new System.Windows.Forms.MenuItem();
+            this.menuItem5 = new System.Windows.Forms.MenuItem();
+            this.menuItem6 = new System.Windows.Forms.MenuItem();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.codePanel = new System.Windows.Forms.Panel();
             this.codeBox = new Ionic.WinForms.RichTextBoxEx();
-            this.codePanel.SuspendLayout();
             this.registerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mpointicon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lregicon)).BeginInit();
@@ -100,22 +109,13 @@
             ((System.ComponentModel.ISupportInitialize)(this.aregicon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.flagIcon)).BeginInit();
             this.startAddressGB.SuspendLayout();
+            this.panel2.SuspendLayout();
+            this.codePanel.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // codePanel
-            // 
-            this.codePanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.codePanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.codePanel.Controls.Add(this.codeBox);
-            this.codePanel.Location = new System.Drawing.Point(12, 12);
-            this.codePanel.Name = "codePanel";
-            this.codePanel.Size = new System.Drawing.Size(473, 705);
-            this.codePanel.TabIndex = 1;
             // 
             // registerPanel
             // 
+            this.registerPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.registerPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.registerPanel.Controls.Add(this.MPoint);
             this.registerPanel.Controls.Add(this.mpointicon);
@@ -638,6 +638,8 @@
             // 
             // insts
             // 
+            this.insts.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.insts.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.stubColumn,
             this.addressLC,
@@ -650,7 +652,7 @@
             this.insts.Location = new System.Drawing.Point(491, 360);
             this.insts.MultiSelect = false;
             this.insts.Name = "insts";
-            this.insts.Size = new System.Drawing.Size(505, 357);
+            this.insts.Size = new System.Drawing.Size(505, 297);
             this.insts.TabIndex = 3;
             this.insts.UseCompatibleStateImageBehavior = false;
             this.insts.View = System.Windows.Forms.View.Details;
@@ -696,6 +698,7 @@
             // 
             // startAddressGB
             // 
+            this.startAddressGB.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.startAddressGB.Controls.Add(this.startAddressBox);
             this.startAddressGB.Controls.Add(this.setAddressButton);
             this.startAddressGB.Location = new System.Drawing.Point(491, 12);
@@ -730,6 +733,7 @@
             // 
             // memBtn
             // 
+            this.memBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.memBtn.Location = new System.Drawing.Point(643, 20);
             this.memBtn.Name = "memBtn";
             this.memBtn.Size = new System.Drawing.Size(107, 58);
@@ -740,6 +744,7 @@
             // 
             // nextStepBtn
             // 
+            this.nextStepBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.nextStepBtn.Location = new System.Drawing.Point(491, 293);
             this.nextStepBtn.Name = "nextStepBtn";
             this.nextStepBtn.Size = new System.Drawing.Size(68, 61);
@@ -750,6 +755,7 @@
             // 
             // execButton
             // 
+            this.execButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.execButton.Location = new System.Drawing.Point(565, 293);
             this.execButton.Name = "execButton";
             this.execButton.Size = new System.Drawing.Size(111, 61);
@@ -760,6 +766,7 @@
             // 
             // stopBtn
             // 
+            this.stopBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.stopBtn.Location = new System.Drawing.Point(682, 293);
             this.stopBtn.Name = "stopBtn";
             this.stopBtn.Size = new System.Drawing.Size(68, 61);
@@ -767,6 +774,82 @@
             this.stopBtn.Text = "Stop";
             this.stopBtn.UseVisualStyleBackColor = true;
             this.stopBtn.Click += new System.EventHandler(this.stopBtn_Click);
+            // 
+            // MenuBar
+            // 
+            this.MenuBar.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuItem1,
+            this.menuItem2,
+            this.menuItem3,
+            this.menuItem4,
+            this.menuItem5,
+            this.menuItem6});
+            // 
+            // menuItem1
+            // 
+            this.menuItem1.Index = 0;
+            this.menuItem1.Text = "File";
+            // 
+            // menuItem2
+            // 
+            this.menuItem2.Index = 1;
+            this.menuItem2.Text = "Edit";
+            // 
+            // menuItem3
+            // 
+            this.menuItem3.Index = 2;
+            this.menuItem3.Text = "View";
+            // 
+            // menuItem4
+            // 
+            this.menuItem4.Index = 3;
+            this.menuItem4.Text = "Code";
+            // 
+            // menuItem5
+            // 
+            this.menuItem5.Index = 4;
+            this.menuItem5.Text = "Tools";
+            // 
+            // menuItem6
+            // 
+            this.menuItem6.Index = 5;
+            this.menuItem6.Text = "Help";
+            // 
+            // panel1
+            // 
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel1.Location = new System.Drawing.Point(0, 671);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(1008, 21);
+            this.panel1.TabIndex = 9;
+            // 
+            // panel2
+            // 
+            this.panel2.Controls.Add(this.codePanel);
+            this.panel2.Controls.Add(this.stopBtn);
+            this.panel2.Controls.Add(this.startAddressGB);
+            this.panel2.Controls.Add(this.execButton);
+            this.panel2.Controls.Add(this.registerPanel);
+            this.panel2.Controls.Add(this.nextStepBtn);
+            this.panel2.Controls.Add(this.insts);
+            this.panel2.Controls.Add(this.memBtn);
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel2.Location = new System.Drawing.Point(0, 0);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(1008, 671);
+            this.panel2.TabIndex = 10;
+            // 
+            // codePanel
+            // 
+            this.codePanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.codePanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.codePanel.Controls.Add(this.codeBox);
+            this.codePanel.Location = new System.Drawing.Point(12, 12);
+            this.codePanel.Name = "codePanel";
+            this.codePanel.Size = new System.Drawing.Size(473, 645);
+            this.codePanel.TabIndex = 1;
             // 
             // codeBox
             // 
@@ -787,7 +870,7 @@
             this.codeBox.NumberLineCounting = Ionic.WinForms.RichTextBoxEx.LineCounting.AsDisplayed;
             this.codeBox.NumberPadding = 8;
             this.codeBox.ShowLineNumbers = false;
-            this.codeBox.Size = new System.Drawing.Size(471, 703);
+            this.codeBox.Size = new System.Drawing.Size(471, 643);
             this.codeBox.TabIndex = 0;
             this.codeBox.Text = "";
             this.codeBox.WordWrap = false;
@@ -798,22 +881,16 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 22F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.ClientSize = new System.Drawing.Size(1008, 729);
-            this.Controls.Add(this.stopBtn);
-            this.Controls.Add(this.execButton);
-            this.Controls.Add(this.nextStepBtn);
-            this.Controls.Add(this.memBtn);
-            this.Controls.Add(this.startAddressGB);
-            this.Controls.Add(this.insts);
-            this.Controls.Add(this.registerPanel);
-            this.Controls.Add(this.codePanel);
+            this.ClientSize = new System.Drawing.Size(1008, 692);
+            this.Controls.Add(this.panel2);
+            this.Controls.Add(this.panel1);
             this.Font = new System.Drawing.Font("Trebuchet MS", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.Menu = this.MenuBar;
             this.Name = "MainForm";
             this.Text = "Assembly Editor";
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.Move += new System.EventHandler(this.MainForm_Move);
-            this.codePanel.ResumeLayout(false);
             this.registerPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.mpointicon)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.lregicon)).EndInit();
@@ -826,6 +903,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.flagIcon)).EndInit();
             this.startAddressGB.ResumeLayout(false);
             this.startAddressGB.PerformLayout();
+            this.panel2.ResumeLayout(false);
+            this.codePanel.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -833,7 +912,6 @@
         #endregion
 
         private Ionic.WinForms.RichTextBoxEx codeBox;
-        private System.Windows.Forms.Panel codePanel;
         private System.Windows.Forms.Panel registerPanel;
         private System.Windows.Forms.PictureBox flagIcon;
         private System.Windows.Forms.Label SFlag;
@@ -892,6 +970,16 @@
         private System.Windows.Forms.Label MPoint;
         private System.Windows.Forms.PictureBox mpointicon;
         private System.Windows.Forms.Button stopBtn;
+        private System.Windows.Forms.MainMenu MenuBar;
+        private System.Windows.Forms.MenuItem menuItem1;
+        private System.Windows.Forms.MenuItem menuItem2;
+        private System.Windows.Forms.MenuItem menuItem3;
+        private System.Windows.Forms.MenuItem menuItem4;
+        private System.Windows.Forms.MenuItem menuItem5;
+        private System.Windows.Forms.MenuItem menuItem6;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Panel codePanel;
     }
 }
 

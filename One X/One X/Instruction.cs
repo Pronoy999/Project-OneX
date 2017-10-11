@@ -39,7 +39,7 @@ namespace One_X {
             try {
                 var inst = ((OPCODE[])Enum.GetValues(typeof(OPCODE))).
                     First(x => !string.IsNullOrWhiteSpace(x.GetAttributeOfType<Instruction>().Name) &&
-                    instr.StartsWith(x.GetAttributeOfType<Instruction>().Name + s)).GetAttributeOfType<Instruction>();
+                    (instr + " ").StartsWith(x.GetAttributeOfType<Instruction>().Name + s)).GetAttributeOfType<Instruction>();
                 
                 if (inst.Bytes > 1) {
                     if (inst.Name.Contains(" ")) {
