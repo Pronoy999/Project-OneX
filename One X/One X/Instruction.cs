@@ -30,10 +30,16 @@ namespace One_X {
         }
 
         public static Instruction parse(string instr) {
+            string s = string.Empty;
+            if (instr.Contains(",")) {
+                s = ",";
+            } else {
+                s = " ";
+            }
             try {
                 var inst = ((OPCODE[])Enum.GetValues(typeof(OPCODE))).
                     First(x => !string.IsNullOrWhiteSpace(x.GetAttributeOfType<Instruction>().Name) &&
-                    instr.StartsWith(x.GetAttributeOfType<Instruction>().Name)).GetAttributeOfType<Instruction>();
+                    instr.StartsWith(x.GetAttributeOfType<Instruction>().Name + s)).GetAttributeOfType<Instruction>();
                 
                 if (inst.Bytes > 1) {
                     if (inst.Name.Contains(" ")) {
