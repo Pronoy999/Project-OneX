@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace One_X {
     public class Parser {
-        public static string labelPattern = "[ \\t]*(?:(?<label>[\\w]+)[ \\t]*:)?[ \\t]*";
-        public static string pattern = "^" + labelPattern + buildInstructionPattern() + "[ \\t]*$";
+        private static string labelPattern = "[ \\t]*(?:(?<label>[\\w]+)[ \\t]*:)?[ \\t]*";
+        private static string pattern = "^" + labelPattern + buildInstructionPattern() + "[ \\t]*$";
 
-        public static Regex regex = new Regex(pattern, RegexOptions.IgnoreCase | RegexOptions.Compiled);
-        
-        public static string buildInstructionPattern() {
+        private static Regex regex = new Regex(pattern, RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+        private static string buildInstructionPattern() {
             string[] rxps = new string[3] { "(?<oneByte>", "(?<twoByte>", "(?<threeByte>" };
 
             foreach (var inst in Instruction.list) {
