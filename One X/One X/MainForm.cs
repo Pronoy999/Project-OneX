@@ -4,14 +4,13 @@ using System.Linq;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
-using Microsoft.VisualBasic;
 using System.Threading.Tasks;
 using System.Windows.Threading;
 using System.Drawing.Text;
+using System.Diagnostics;
 
 namespace One_X {
     public partial class MainForm : Form {
-        Parser1 p = new Parser1();
         MemoryViewer memView = new MemoryViewer();
         Dispatcher disp = Dispatcher.CurrentDispatcher;
 
@@ -175,123 +174,12 @@ namespace One_X {
         }
 
         private void setAddressButton_Click(object sender, EventArgs e) {
-            p = new Parser1(ushort.Parse(startAddressBox.Text, System.Globalization.NumberStyles.HexNumber));
+            // todo set address in parser
             highlight();
         }
 
         private void highlight() {
-            var highs = p.Parse(codeBox.Text);
 
-            var ls = padLen(p.labels.Values);
-
-            string codeBoxText = string.Empty;
-
-            var x = new List<(Parser1.StringType stype, int begin, int length)>();
-
-            int count = 0;
-
-            for (int i = 0; i < highs.Count; i++) {
-                var word = highs[i];
-                var str = word.Word;
-                switch(word.SType) {
-                    case Parser1.StringType.Mnemonic:
-                        try {
-                            if (highs[i - 1].LineIndex != word.LineIndex) {
-                                var stre = pad("", ls) + "     ";
-                                count += stre.Length;
-                                codeBoxText += stre;
-                            }
-                        } catch {
-                            var stre = pad("", ls) + "     ";
-                            count += stre.Length;
-                            codeBoxText += stre;
-                        }
-                        break;
-                    case Parser1.StringType.Label:
-                        try {
-                            if (highs[i - 1].LineIndex != word.LineIndex) {
-                                // left label
-                                str = pad(str, ls) + ":    ";
-                            }
-                        } catch {
-                            str = pad(str, ls) + ":    ";
-                        }
-                        break;
-                    default:
-                        break;
-                }
-                
-                x.Add((word.SType, count, word.Word.Length));
-                count += str.Length;
-                codeBoxText += str;
-                try {
-                    if (highs[i + 1].LineIndex != word.LineIndex) {
-                        codeBoxText += "\n";
-                        count++;
-                    }
-                } catch {
-                    codeBoxText += "\n";
-                    count++;
-                }
-            }
-
-            codeBox.Clear();
-            codeBox.Text = codeBoxText;
-
-            // color
-            foreach (var w in x) {
-                codeBox.SetSelectionColor(w.begin, w.begin + w.length, Color.FromArgb((int)w.stype));
-            }
-
-            // restore selection
-            codeBox.DeselectAll();
-            codeBox.Select(codeBox.TextLength, 0);
-
-            try {
-                ushort start = ushort.Parse(insts.Items[0].SubItems[1].Text, System.Globalization.NumberStyles.HexNumber);
-                ushort end = ushort.Parse(insts.Items[insts.Items.Count - 1].SubItems[1].Text, System.Globalization.NumberStyles.HexNumber);
-                MPU.memory.Clear(start, end);
-            } catch (ArgumentOutOfRangeException ex) { }
-            
-            insts.Items.Clear();
-            foreach (var ins in p.instructions) {
-                var mark = string.Empty;
-                if (ins.Key.ToString("X4") == startAddressBox.Text) {
-                    mark = "->";
-                }
-                ListViewItem litem = new ListViewItem(new string[] {
-                    mark,
-                    ins.Key.ToString("X4"),
-                    ins.Value.Name + (ins.Value.Bytes > 1 ? 
-                    (ins.Value.Name.Contains(" ") ? "," : " ") + 
-                    ins.Value.Arguments.ToUShort().ToString(ins.Value.Bytes > 2 ? "X4" : "X2") + "H" : string.Empty),
-                    ((byte)ins.Value.GetOPCODE()).ToString("X2"),
-                    ins.Value.Bytes.ToString(),
-                    ins.Value.MCycles.ToString(),
-                    ins.Value.TStates.ToString()
-                });
-                insts.Items.Add(litem);
-                if (ins.Value.Bytes > 1) {
-                    ListViewItem litemLO = new ListViewItem(new string[] {
-                        string.Empty,
-                        ((ushort)(ins.Key + 1)).ToString("X4"),
-                        string.Empty,
-                        ins.Value.Arguments.LO.ToString("X2")
-                    });
-                    insts.Items.Add(litemLO);
-                    if (ins.Value.Bytes > 2) {
-                        ListViewItem litemHO = new ListViewItem(new string[] {
-                            string.Empty,
-                            ((ushort)(ins.Key + 2)).ToString("X4"),
-                            string.Empty,
-                            ins.Value.Arguments.HO.ToString("X2")
-                        });
-                        insts.Items.Add(litemHO);
-                    }
-                }
-                ins.Value.WriteToMemory(MPU.memory, ins.Key);
-            }
-            memView.memBox.Invalidate(); ;
         }
         
         static string pad(string s, int i) {
