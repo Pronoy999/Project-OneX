@@ -168,7 +168,7 @@
             // MPoint
             // 
             this.MPoint.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.MPoint.Font = new System.Drawing.Font("Hack", 20F);
+            this.MPoint.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F);
             this.MPoint.Location = new System.Drawing.Point(177, 64);
             this.MPoint.Name = "MPoint";
             this.MPoint.Size = new System.Drawing.Size(48, 48);
@@ -188,7 +188,7 @@
             // PCVal
             // 
             this.PCVal.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.PCVal.Font = new System.Drawing.Font("Hack", 12F);
+            this.PCVal.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
             this.PCVal.Location = new System.Drawing.Point(123, 277);
             this.PCVal.Name = "PCVal";
             this.PCVal.Size = new System.Drawing.Size(102, 24);
@@ -199,7 +199,7 @@
             // SPVal
             // 
             this.SPVal.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.SPVal.Font = new System.Drawing.Font("Hack", 12F);
+            this.SPVal.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
             this.SPVal.Location = new System.Drawing.Point(123, 300);
             this.SPVal.Name = "SPVal";
             this.SPVal.Size = new System.Drawing.Size(102, 24);
@@ -231,7 +231,7 @@
             // LReg
             // 
             this.LReg.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.LReg.Font = new System.Drawing.Font("Hack", 20F);
+            this.LReg.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F);
             this.LReg.Location = new System.Drawing.Point(177, 226);
             this.LReg.Name = "LReg";
             this.LReg.Size = new System.Drawing.Size(48, 48);
@@ -251,7 +251,7 @@
             // EReg
             // 
             this.EReg.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.EReg.Font = new System.Drawing.Font("Hack", 20F);
+            this.EReg.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F);
             this.EReg.Location = new System.Drawing.Point(177, 172);
             this.EReg.Name = "EReg";
             this.EReg.Size = new System.Drawing.Size(48, 48);
@@ -271,7 +271,7 @@
             // CReg
             // 
             this.CReg.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.CReg.Font = new System.Drawing.Font("Hack", 20F);
+            this.CReg.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F);
             this.CReg.Location = new System.Drawing.Point(177, 118);
             this.CReg.Name = "CReg";
             this.CReg.Size = new System.Drawing.Size(48, 48);
@@ -291,7 +291,7 @@
             // HReg
             // 
             this.HReg.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.HReg.Font = new System.Drawing.Font("Hack", 20F);
+            this.HReg.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F);
             this.HReg.Location = new System.Drawing.Point(69, 226);
             this.HReg.Name = "HReg";
             this.HReg.Size = new System.Drawing.Size(48, 48);
@@ -311,7 +311,7 @@
             // DReg
             // 
             this.DReg.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.DReg.Font = new System.Drawing.Font("Hack", 20F);
+            this.DReg.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F);
             this.DReg.Location = new System.Drawing.Point(69, 172);
             this.DReg.Name = "DReg";
             this.DReg.Size = new System.Drawing.Size(48, 48);
@@ -331,7 +331,7 @@
             // BReg
             // 
             this.BReg.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.BReg.Font = new System.Drawing.Font("Hack", 20F);
+            this.BReg.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F);
             this.BReg.Location = new System.Drawing.Point(69, 118);
             this.BReg.Name = "BReg";
             this.BReg.Size = new System.Drawing.Size(48, 48);
@@ -351,7 +351,7 @@
             // AReg
             // 
             this.AReg.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.AReg.Font = new System.Drawing.Font("Hack", 20F);
+            this.AReg.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F);
             this.AReg.Location = new System.Drawing.Point(69, 64);
             this.AReg.Name = "AReg";
             this.AReg.Size = new System.Drawing.Size(48, 48);
@@ -440,7 +440,7 @@
             // 
             this.SFlag.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.SFlag.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.SFlag.Font = new System.Drawing.Font("Hack", 8.5F);
+            this.SFlag.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.5F);
             this.SFlag.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
             this.SFlag.Location = new System.Drawing.Point(50, 15);
             this.SFlag.Name = "SFlag";
@@ -454,7 +454,7 @@
             // 
             this.NU1Flag.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.NU1Flag.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.NU1Flag.Font = new System.Drawing.Font("Hack", 8.5F);
+            this.NU1Flag.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.5F);
             this.NU1Flag.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
             this.NU1Flag.Location = new System.Drawing.Point(188, 15);
             this.NU1Flag.Name = "NU1Flag";
@@ -468,7 +468,7 @@
             // 
             this.PFlag.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.PFlag.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.PFlag.Font = new System.Drawing.Font("Hack", 8.5F);
+            this.PFlag.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.5F);
             this.PFlag.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
             this.PFlag.Location = new System.Drawing.Point(165, 15);
             this.PFlag.Name = "PFlag";
@@ -482,7 +482,7 @@
             // 
             this.NU3Flag.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.NU3Flag.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.NU3Flag.Font = new System.Drawing.Font("Hack", 8.5F);
+            this.NU3Flag.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.5F);
             this.NU3Flag.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
             this.NU3Flag.Location = new System.Drawing.Point(142, 15);
             this.NU3Flag.Name = "NU3Flag";
@@ -496,7 +496,7 @@
             // 
             this.ACFlag.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.ACFlag.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.ACFlag.Font = new System.Drawing.Font("Hack", 8.5F);
+            this.ACFlag.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.5F);
             this.ACFlag.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
             this.ACFlag.Location = new System.Drawing.Point(119, 15);
             this.ACFlag.Name = "ACFlag";
@@ -510,7 +510,7 @@
             // 
             this.NU5Flag.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.NU5Flag.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.NU5Flag.Font = new System.Drawing.Font("Hack", 8.5F);
+            this.NU5Flag.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.5F);
             this.NU5Flag.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
             this.NU5Flag.Location = new System.Drawing.Point(96, 15);
             this.NU5Flag.Name = "NU5Flag";
@@ -524,7 +524,7 @@
             // 
             this.ZFlag.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.ZFlag.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.ZFlag.Font = new System.Drawing.Font("Hack", 8.5F);
+            this.ZFlag.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.5F);
             this.ZFlag.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
             this.ZFlag.Location = new System.Drawing.Point(73, 15);
             this.ZFlag.Name = "ZFlag";
@@ -538,7 +538,7 @@
             // 
             this.CYFlag.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.CYFlag.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.CYFlag.Font = new System.Drawing.Font("Hack", 8.5F);
+            this.CYFlag.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.5F);
             this.CYFlag.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
             this.CYFlag.Location = new System.Drawing.Point(211, 15);
             this.CYFlag.Name = "CYFlag";
@@ -711,10 +711,10 @@
             // startAddressBox
             // 
             this.startAddressBox.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
-            this.startAddressBox.Font = new System.Drawing.Font("Hack", 17F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.startAddressBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 17F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.startAddressBox.Location = new System.Drawing.Point(6, 25);
             this.startAddressBox.Name = "startAddressBox";
-            this.startAddressBox.Size = new System.Drawing.Size(62, 34);
+            this.startAddressBox.Size = new System.Drawing.Size(62, 33);
             this.startAddressBox.TabIndex = 1;
             this.startAddressBox.TabStop = false;
             this.startAddressBox.Text = "0000";
@@ -865,7 +865,7 @@
             this.codeBox.NumberBorder = System.Drawing.SystemColors.ControlDarkDark;
             this.codeBox.NumberBorderThickness = 2F;
             this.codeBox.NumberColor = System.Drawing.SystemColors.ControlDark;
-            this.codeBox.NumberFont = new System.Drawing.Font("Hack", 10F);
+            this.codeBox.NumberFont = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.codeBox.NumberLeadingZeroes = false;
             this.codeBox.NumberLineCounting = Ionic.WinForms.RichTextBoxEx.LineCounting.AsDisplayed;
             this.codeBox.NumberPadding = 8;
