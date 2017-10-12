@@ -11,7 +11,7 @@ using System.Drawing.Text;
 
 namespace One_X {
     public partial class MainForm : Form {
-        Parser p = new Parser();
+        Parser1 p = new Parser1();
         MemoryViewer memView = new MemoryViewer();
         Dispatcher disp = Dispatcher.CurrentDispatcher;
 
@@ -175,7 +175,7 @@ namespace One_X {
         }
 
         private void setAddressButton_Click(object sender, EventArgs e) {
-            p = new Parser(ushort.Parse(startAddressBox.Text, System.Globalization.NumberStyles.HexNumber));
+            p = new Parser1(ushort.Parse(startAddressBox.Text, System.Globalization.NumberStyles.HexNumber));
             highlight();
         }
 
@@ -186,7 +186,7 @@ namespace One_X {
 
             string codeBoxText = string.Empty;
 
-            var x = new List<(Parser.StringType stype, int begin, int length)>();
+            var x = new List<(Parser1.StringType stype, int begin, int length)>();
 
             int count = 0;
 
@@ -194,7 +194,7 @@ namespace One_X {
                 var word = highs[i];
                 var str = word.Word;
                 switch(word.SType) {
-                    case Parser.StringType.Mnemonic:
+                    case Parser1.StringType.Mnemonic:
                         try {
                             if (highs[i - 1].LineIndex != word.LineIndex) {
                                 var stre = pad("", ls) + "     ";
@@ -207,7 +207,7 @@ namespace One_X {
                             codeBoxText += stre;
                         }
                         break;
-                    case Parser.StringType.Label:
+                    case Parser1.StringType.Label:
                         try {
                             if (highs[i - 1].LineIndex != word.LineIndex) {
                                 // left label
