@@ -94,7 +94,7 @@
             this.menuItem4 = new System.Windows.Forms.MenuItem();
             this.menuItem5 = new System.Windows.Forms.MenuItem();
             this.menuItem6 = new System.Windows.Forms.MenuItem();
-            this.panel1 = new System.Windows.Forms.Panel();
+            this.statusBar = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.codePanel = new System.Windows.Forms.Panel();
             this.codeBox = new Ionic.WinForms.RichTextBoxEx();
@@ -652,7 +652,7 @@
             this.insts.Location = new System.Drawing.Point(491, 360);
             this.insts.MultiSelect = false;
             this.insts.Name = "insts";
-            this.insts.Size = new System.Drawing.Size(505, 297);
+            this.insts.Size = new System.Drawing.Size(505, 294);
             this.insts.TabIndex = 3;
             this.insts.UseCompatibleStateImageBehavior = false;
             this.insts.View = System.Windows.Forms.View.Details;
@@ -815,13 +815,13 @@
             this.menuItem6.Index = 5;
             this.menuItem6.Text = "Help";
             // 
-            // panel1
+            // statusBar
             // 
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(0, 671);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1008, 21);
-            this.panel1.TabIndex = 9;
+            this.statusBar.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.statusBar.Location = new System.Drawing.Point(0, 668);
+            this.statusBar.Name = "statusBar";
+            this.statusBar.Size = new System.Drawing.Size(1008, 24);
+            this.statusBar.TabIndex = 9;
             // 
             // panel2
             // 
@@ -836,7 +836,7 @@
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel2.Location = new System.Drawing.Point(0, 0);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(1008, 671);
+            this.panel2.Size = new System.Drawing.Size(1008, 668);
             this.panel2.TabIndex = 10;
             // 
             // codePanel
@@ -848,7 +848,7 @@
             this.codePanel.Controls.Add(this.codeBox);
             this.codePanel.Location = new System.Drawing.Point(12, 12);
             this.codePanel.Name = "codePanel";
-            this.codePanel.Size = new System.Drawing.Size(473, 645);
+            this.codePanel.Size = new System.Drawing.Size(473, 642);
             this.codePanel.TabIndex = 1;
             // 
             // codeBox
@@ -870,7 +870,7 @@
             this.codeBox.NumberLineCounting = Ionic.WinForms.RichTextBoxEx.LineCounting.AsDisplayed;
             this.codeBox.NumberPadding = 8;
             this.codeBox.ShowLineNumbers = false;
-            this.codeBox.Size = new System.Drawing.Size(471, 643);
+            this.codeBox.Size = new System.Drawing.Size(471, 640);
             this.codeBox.TabIndex = 0;
             this.codeBox.Text = "";
             this.codeBox.WordWrap = false;
@@ -883,7 +883,7 @@
             this.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.ClientSize = new System.Drawing.Size(1008, 692);
             this.Controls.Add(this.panel2);
-            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.statusBar);
             this.Font = new System.Drawing.Font("Trebuchet MS", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Menu = this.MenuBar;
@@ -977,7 +977,7 @@
         private System.Windows.Forms.MenuItem menuItem4;
         private System.Windows.Forms.MenuItem menuItem5;
         private System.Windows.Forms.MenuItem menuItem6;
-        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel statusBar;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Panel codePanel;
     }
