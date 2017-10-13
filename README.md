@@ -2,7 +2,7 @@
 
 This is a simulator of the Intel 8085 Microprocessor. 
 
-#License
+# License
 
 Copyright 2017 Pronoy Mukherjee
 
