@@ -53,6 +53,8 @@ namespace One_X {
                     fd.Font = new Font(pfc.Families[0], fd.Font.Size);
                 }
             }
+
+            codeBox.AutoIndentCharsPatterns = "^\\s*[\\w]+\\s*(?<range>:)\\s*(?<range>[^\\n]+)$";
         }
 
         // todo define global static / settings
@@ -72,6 +74,16 @@ namespace One_X {
 
             e.ChangedRange.SetStyle(literalStyle, RegexHelper.rxRangeLiteralByte);
             e.ChangedRange.SetStyle(literalStyle, RegexHelper.rxRangeLiteralUShort);
+        }
+
+        private void codeBox_AutoIndentNeeded(object sender, AutoIndentEventArgs e) {
+            int lpos = e.PrevLineText.IndexOf(":");
+            if (lpos > 0) {
+                e.AbsoluteIndentation = lpos + 2;
+            }
+            if (e.LineText.Contains(":")) {
+                e.AbsoluteIndentation = 0;
+            }
         }
     }
 }

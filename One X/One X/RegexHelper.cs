@@ -11,7 +11,7 @@ namespace One_X {
         private const string litByte = "(?<litByte>[0-9A-F]{1,2}H?)";
         private const string litUShort = "(?<litUShort>[0-9A-F]{1,4}H?)";
         private const RegexOptions rxOptions = RegexOptions.Compiled | RegexOptions.IgnoreCase;
-
+        
         public static readonly Regex rxRangeLabelOnly;
 
         public static readonly Regex rxRangeOneByte;

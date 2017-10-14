@@ -42,7 +42,7 @@
         '\"',
         '\'',
         '\''};
-            this.codeBox.AutoScrollMinSize = new System.Drawing.Size(56, 16);
+            this.codeBox.AutoScrollMinSize = new System.Drawing.Size(47, 24);
             this.codeBox.BackBrush = null;
             this.codeBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.codeBox.CharHeight = 16;
@@ -53,14 +53,15 @@
             this.codeBox.IsReplaceMode = false;
             this.codeBox.Location = new System.Drawing.Point(12, 12);
             this.codeBox.Name = "codeBox";
-            this.codeBox.Paddings = new System.Windows.Forms.Padding(0);
-            this.codeBox.ReservedCountOfLineNumberChars = 4;
+            this.codeBox.Paddings = new System.Windows.Forms.Padding(0, 4, 0, 4);
+            this.codeBox.ReservedCountOfLineNumberChars = 3;
             this.codeBox.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
             this.codeBox.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("codeBox.ServiceColors")));
             this.codeBox.Size = new System.Drawing.Size(873, 619);
             this.codeBox.TabIndex = 0;
             this.codeBox.Zoom = 100;
             this.codeBox.TextChanged += new System.EventHandler<FastColoredTextBoxNS.TextChangedEventArgs>(this.codeBox_TextChanged);
+            this.codeBox.AutoIndentNeeded += new System.EventHandler<FastColoredTextBoxNS.AutoIndentEventArgs>(this.codeBox_AutoIndentNeeded);
             // 
             // MainForm
             // 
