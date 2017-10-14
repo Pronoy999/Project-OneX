@@ -44,10 +44,12 @@ namespace One_X {
                 }
                 rxps[inst.Bytes - 1] += "|";
             }
+            
+            string tempThreeByte = threeByte + rxps[2].Remove(rxps[2].Length - 1) + ")[ \\t]*";
 
             oneByte += rxps[0].Remove(rxps[0].Length - 1) + ")";
             twoByte += rxps[1].Remove(rxps[1].Length - 1) + ")[ \\t]*" + litByte;
-            threeByte += rxps[2].Remove(rxps[2].Length - 1) + ")[ \\t]*(?:" + litUShort + "|" + label.Replace("label", "reference") + ")";
+            threeByte = tempThreeByte + "(?:" + litUShort + "|" + label.Replace("label", "reference") + ")";
 
             string instruction = "(?<instruction>" + string.Join("|", oneByte, twoByte, threeByte) + ")";
 
@@ -62,9 +64,9 @@ namespace One_X {
             rxRangeThreeByte = new Regex(threeByte.Replace("<threeByte>", "<range>"), rxOptions);
 
             rxRangeLiteralByte = new Regex(twoByte.Replace("<litByte>", "<range>"), rxOptions);
-            rxRangeLiteralUShort = new Regex(threeByte.Replace("<litUShort>", "<range>"), rxOptions);
+            rxRangeLiteralUShort = new Regex(tempThreeByte + litUShort, rxOptions);
 
-            rxRangeReference = new Regex(threeByte.Replace("<reference>", "<range>"), rxOptions);
+            rxRangeReference = new Regex(tempThreeByte + label.Replace("<label>", "<range>"), rxOptions);
         }
     }
 }
