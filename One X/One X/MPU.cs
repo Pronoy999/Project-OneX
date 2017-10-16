@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 namespace One_X {
     public static class MPU {
+        private static string memName = "";
+
         private static bool running = false;
         private static bool interpt = true;
 
@@ -1554,6 +1556,15 @@ namespace One_X {
         
         public static void Stop() {
             running = false;
+        }
+
+        public static void InitMemory(string name) {
+            memName = name;
+            memory = new Memory(memName);
+        }
+
+        public static void CommitMemory() {
+            memory.Commit(memName);
         }
     }
 }

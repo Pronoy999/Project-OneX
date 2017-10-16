@@ -31,22 +31,31 @@
             this.components = new System.ComponentModel.Container();
             this.registerPanel = new System.Windows.Forms.Panel();
             this.MPoint = new System.Windows.Forms.Label();
+            this.mpointicon = new System.Windows.Forms.PictureBox();
             this.PCVal = new System.Windows.Forms.Label();
             this.SPVal = new System.Windows.Forms.Label();
             this.SPLabel = new System.Windows.Forms.Label();
             this.PCLabel = new System.Windows.Forms.Label();
             this.LReg = new System.Windows.Forms.Label();
+            this.lregicon = new System.Windows.Forms.PictureBox();
             this.EReg = new System.Windows.Forms.Label();
+            this.eregicon = new System.Windows.Forms.PictureBox();
             this.CReg = new System.Windows.Forms.Label();
+            this.cregicon = new System.Windows.Forms.PictureBox();
             this.HReg = new System.Windows.Forms.Label();
+            this.hregicon = new System.Windows.Forms.PictureBox();
             this.DReg = new System.Windows.Forms.Label();
+            this.dregicon = new System.Windows.Forms.PictureBox();
             this.BReg = new System.Windows.Forms.Label();
+            this.bregicon = new System.Windows.Forms.PictureBox();
             this.AReg = new System.Windows.Forms.Label();
+            this.aregicon = new System.Windows.Forms.PictureBox();
             this.SFLabel = new System.Windows.Forms.Label();
             this.ZFLabel = new System.Windows.Forms.Label();
             this.ACFLabel = new System.Windows.Forms.Label();
             this.PFLabel = new System.Windows.Forms.Label();
             this.CYFLabel = new System.Windows.Forms.Label();
+            this.flagIcon = new System.Windows.Forms.PictureBox();
             this.SFlag = new System.Windows.Forms.Label();
             this.NU1Flag = new System.Windows.Forms.Label();
             this.PFlag = new System.Windows.Forms.Label();
@@ -111,20 +120,8 @@
             this.statusBar = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.codePanel = new System.Windows.Forms.Panel();
-            this.mpointicon = new System.Windows.Forms.PictureBox();
-            this.lregicon = new System.Windows.Forms.PictureBox();
-            this.eregicon = new System.Windows.Forms.PictureBox();
-            this.cregicon = new System.Windows.Forms.PictureBox();
-            this.hregicon = new System.Windows.Forms.PictureBox();
-            this.dregicon = new System.Windows.Forms.PictureBox();
-            this.bregicon = new System.Windows.Forms.PictureBox();
-            this.aregicon = new System.Windows.Forms.PictureBox();
-            this.flagIcon = new System.Windows.Forms.PictureBox();
             this.codeBox = new Ionic.WinForms.RichTextBoxEx();
             this.registerPanel.SuspendLayout();
-            this.startAddressGB.SuspendLayout();
-            this.panel2.SuspendLayout();
-            this.codePanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mpointicon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lregicon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.eregicon)).BeginInit();
@@ -134,6 +131,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.bregicon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.aregicon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.flagIcon)).BeginInit();
+            this.startAddressGB.SuspendLayout();
+            this.panel2.SuspendLayout();
+            this.codePanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // registerPanel
@@ -199,6 +199,15 @@
             this.MPoint.Text = "00";
             this.MPoint.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // mpointicon
+            // 
+            this.mpointicon.Image = global::One_X.Properties.Resources.m;
+            this.mpointicon.Location = new System.Drawing.Point(123, 64);
+            this.mpointicon.Name = "mpointicon";
+            this.mpointicon.Size = new System.Drawing.Size(48, 48);
+            this.mpointicon.TabIndex = 65;
+            this.mpointicon.TabStop = false;
+            // 
             // PCVal
             // 
             this.PCVal.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -253,6 +262,15 @@
             this.LReg.Text = "00";
             this.LReg.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // lregicon
+            // 
+            this.lregicon.Image = global::One_X.Properties.Resources.l;
+            this.lregicon.Location = new System.Drawing.Point(123, 226);
+            this.lregicon.Name = "lregicon";
+            this.lregicon.Size = new System.Drawing.Size(48, 48);
+            this.lregicon.TabIndex = 59;
+            this.lregicon.TabStop = false;
+            // 
             // EReg
             // 
             this.EReg.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -263,6 +281,15 @@
             this.EReg.TabIndex = 58;
             this.EReg.Text = "00";
             this.EReg.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // eregicon
+            // 
+            this.eregicon.Image = global::One_X.Properties.Resources.e;
+            this.eregicon.Location = new System.Drawing.Point(123, 172);
+            this.eregicon.Name = "eregicon";
+            this.eregicon.Size = new System.Drawing.Size(48, 48);
+            this.eregicon.TabIndex = 57;
+            this.eregicon.TabStop = false;
             // 
             // CReg
             // 
@@ -275,6 +302,15 @@
             this.CReg.Text = "00";
             this.CReg.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // cregicon
+            // 
+            this.cregicon.Image = global::One_X.Properties.Resources.c;
+            this.cregicon.Location = new System.Drawing.Point(123, 118);
+            this.cregicon.Name = "cregicon";
+            this.cregicon.Size = new System.Drawing.Size(48, 48);
+            this.cregicon.TabIndex = 55;
+            this.cregicon.TabStop = false;
+            // 
             // HReg
             // 
             this.HReg.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -285,6 +321,15 @@
             this.HReg.TabIndex = 54;
             this.HReg.Text = "00";
             this.HReg.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // hregicon
+            // 
+            this.hregicon.Image = global::One_X.Properties.Resources.h;
+            this.hregicon.Location = new System.Drawing.Point(15, 226);
+            this.hregicon.Name = "hregicon";
+            this.hregicon.Size = new System.Drawing.Size(48, 48);
+            this.hregicon.TabIndex = 53;
+            this.hregicon.TabStop = false;
             // 
             // DReg
             // 
@@ -297,6 +342,15 @@
             this.DReg.Text = "00";
             this.DReg.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // dregicon
+            // 
+            this.dregicon.Image = global::One_X.Properties.Resources.d;
+            this.dregicon.Location = new System.Drawing.Point(15, 172);
+            this.dregicon.Name = "dregicon";
+            this.dregicon.Size = new System.Drawing.Size(48, 48);
+            this.dregicon.TabIndex = 51;
+            this.dregicon.TabStop = false;
+            // 
             // BReg
             // 
             this.BReg.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -308,6 +362,15 @@
             this.BReg.Text = "00";
             this.BReg.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // bregicon
+            // 
+            this.bregicon.Image = global::One_X.Properties.Resources.b;
+            this.bregicon.Location = new System.Drawing.Point(15, 118);
+            this.bregicon.Name = "bregicon";
+            this.bregicon.Size = new System.Drawing.Size(48, 48);
+            this.bregicon.TabIndex = 49;
+            this.bregicon.TabStop = false;
+            // 
             // AReg
             // 
             this.AReg.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -318,6 +381,15 @@
             this.AReg.TabIndex = 48;
             this.AReg.Text = "00";
             this.AReg.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // aregicon
+            // 
+            this.aregicon.Image = global::One_X.Properties.Resources.a;
+            this.aregicon.Location = new System.Drawing.Point(15, 64);
+            this.aregicon.Name = "aregicon";
+            this.aregicon.Size = new System.Drawing.Size(48, 48);
+            this.aregicon.TabIndex = 47;
+            this.aregicon.TabStop = false;
             // 
             // SFLabel
             // 
@@ -373,6 +445,19 @@
             this.CYFLabel.TabIndex = 42;
             this.CYFLabel.Text = "CY";
             this.CYFLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // flagIcon
+            // 
+            this.flagIcon.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.flagIcon.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.flagIcon.Image = global::One_X.Properties.Resources.flag;
+            this.flagIcon.ImageLocation = "";
+            this.flagIcon.Location = new System.Drawing.Point(3, 3);
+            this.flagIcon.Name = "flagIcon";
+            this.flagIcon.Size = new System.Drawing.Size(48, 48);
+            this.flagIcon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.flagIcon.TabIndex = 33;
+            this.flagIcon.TabStop = false;
             // 
             // SFlag
             // 
@@ -932,91 +1017,6 @@
             this.codePanel.Size = new System.Drawing.Size(473, 600);
             this.codePanel.TabIndex = 1;
             // 
-            // mpointicon
-            // 
-            this.mpointicon.Image = global::One_X.Properties.Resources.m;
-            this.mpointicon.Location = new System.Drawing.Point(123, 64);
-            this.mpointicon.Name = "mpointicon";
-            this.mpointicon.Size = new System.Drawing.Size(48, 48);
-            this.mpointicon.TabIndex = 65;
-            this.mpointicon.TabStop = false;
-            // 
-            // lregicon
-            // 
-            this.lregicon.Image = global::One_X.Properties.Resources.l;
-            this.lregicon.Location = new System.Drawing.Point(123, 226);
-            this.lregicon.Name = "lregicon";
-            this.lregicon.Size = new System.Drawing.Size(48, 48);
-            this.lregicon.TabIndex = 59;
-            this.lregicon.TabStop = false;
-            // 
-            // eregicon
-            // 
-            this.eregicon.Image = global::One_X.Properties.Resources.e;
-            this.eregicon.Location = new System.Drawing.Point(123, 172);
-            this.eregicon.Name = "eregicon";
-            this.eregicon.Size = new System.Drawing.Size(48, 48);
-            this.eregicon.TabIndex = 57;
-            this.eregicon.TabStop = false;
-            // 
-            // cregicon
-            // 
-            this.cregicon.Image = global::One_X.Properties.Resources.c;
-            this.cregicon.Location = new System.Drawing.Point(123, 118);
-            this.cregicon.Name = "cregicon";
-            this.cregicon.Size = new System.Drawing.Size(48, 48);
-            this.cregicon.TabIndex = 55;
-            this.cregicon.TabStop = false;
-            // 
-            // hregicon
-            // 
-            this.hregicon.Image = global::One_X.Properties.Resources.h;
-            this.hregicon.Location = new System.Drawing.Point(15, 226);
-            this.hregicon.Name = "hregicon";
-            this.hregicon.Size = new System.Drawing.Size(48, 48);
-            this.hregicon.TabIndex = 53;
-            this.hregicon.TabStop = false;
-            // 
-            // dregicon
-            // 
-            this.dregicon.Image = global::One_X.Properties.Resources.d;
-            this.dregicon.Location = new System.Drawing.Point(15, 172);
-            this.dregicon.Name = "dregicon";
-            this.dregicon.Size = new System.Drawing.Size(48, 48);
-            this.dregicon.TabIndex = 51;
-            this.dregicon.TabStop = false;
-            // 
-            // bregicon
-            // 
-            this.bregicon.Image = global::One_X.Properties.Resources.b;
-            this.bregicon.Location = new System.Drawing.Point(15, 118);
-            this.bregicon.Name = "bregicon";
-            this.bregicon.Size = new System.Drawing.Size(48, 48);
-            this.bregicon.TabIndex = 49;
-            this.bregicon.TabStop = false;
-            // 
-            // aregicon
-            // 
-            this.aregicon.Image = global::One_X.Properties.Resources.a;
-            this.aregicon.Location = new System.Drawing.Point(15, 64);
-            this.aregicon.Name = "aregicon";
-            this.aregicon.Size = new System.Drawing.Size(48, 48);
-            this.aregicon.TabIndex = 47;
-            this.aregicon.TabStop = false;
-            // 
-            // flagIcon
-            // 
-            this.flagIcon.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.flagIcon.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.flagIcon.Image = global::One_X.Properties.Resources.flag;
-            this.flagIcon.ImageLocation = "";
-            this.flagIcon.Location = new System.Drawing.Point(3, 3);
-            this.flagIcon.Name = "flagIcon";
-            this.flagIcon.Size = new System.Drawing.Size(48, 48);
-            this.flagIcon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
-            this.flagIcon.TabIndex = 33;
-            this.flagIcon.TabStop = false;
-            // 
             // codeBox
             // 
             this.codeBox.AcceptsTab = true;
@@ -1058,10 +1058,6 @@
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.Move += new System.EventHandler(this.MainForm_Move);
             this.registerPanel.ResumeLayout(false);
-            this.startAddressGB.ResumeLayout(false);
-            this.startAddressGB.PerformLayout();
-            this.panel2.ResumeLayout(false);
-            this.codePanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.mpointicon)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.lregicon)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.eregicon)).EndInit();
@@ -1071,6 +1067,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.bregicon)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.aregicon)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.flagIcon)).EndInit();
+            this.startAddressGB.ResumeLayout(false);
+            this.startAddressGB.PerformLayout();
+            this.panel2.ResumeLayout(false);
+            this.codePanel.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
