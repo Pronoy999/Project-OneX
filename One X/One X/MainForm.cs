@@ -18,6 +18,8 @@ namespace One_X {
         private string codeFileName = string.Empty;
         private string saveFileName = string.Empty;
 
+        private Parser parser;
+
         private bool saved = false;
         public PrivateFontCollection pfc = new PrivateFontCollection();
 
@@ -67,6 +69,8 @@ namespace One_X {
             }
             Debug.WriteLine(Application.UserAppDataPath + "\\currentfile");
             New();
+
+            parser = new Parser(0);
         }
 
         // todo define global static / settings
@@ -324,7 +328,7 @@ namespace One_X {
 
         private async void parseTimer_Tick(object sender, EventArgs e) {
             await Task.Run(() => {
-
+                parser.parse(codeBox.Text);
             });
         }
     }
