@@ -59,7 +59,11 @@ namespace One_X {
                 Match match = RegexHelper.rxInstructionLine.Match(line[i]);
                 label = match.Groups[LABEL].Value;
                 if (!label.Equals(string.Empty)) {
-                    labels.Add(label, 00);      // Adding the labels only. 
+                    if(!labels.ContainsKey(label))
+                        labels.Add(label, 00);      // Adding the labels only. 
+                    else {
+                        errorList.Add((DebugLevel.Error, i, 0, label.Length));  //Same Label Already defined.
+                    }
                 }
             }
             //Parsing the Whole Code.    
