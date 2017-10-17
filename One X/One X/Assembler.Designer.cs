@@ -156,6 +156,7 @@
             this.Name = "Assembler";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Assembler";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Assembler_FormClosing);
             this.Load += new System.EventHandler(this.Assembler_Load);
             this.rightPanel.ResumeLayout(false);
             this.startAddressGB.ResumeLayout(false);

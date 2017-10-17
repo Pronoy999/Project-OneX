@@ -655,6 +655,7 @@
             this.MinimumSize = new System.Drawing.Size(616, 405);
             this.Name = "Executer";
             this.Text = "Executer";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Executer_FormClosing);
             this.Load += new System.EventHandler(this.Executer_Load);
             this.registerPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.mpointicon)).EndInit();

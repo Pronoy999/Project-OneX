@@ -59,5 +59,10 @@ namespace One_X {
         private void stopBtn_Click(object sender, EventArgs e) {
             MPU.Stop();
         }
+
+        private void Executer_FormClosing(object sender, FormClosingEventArgs e) {
+            e.Cancel = true;
+            Hide();
+        }
     }
 }

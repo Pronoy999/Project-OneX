@@ -71,5 +71,10 @@ namespace One_X {
                 x.SelectionStart = x.TextLength;
             }
         }
+
+        private void Assembler_FormClosing(object sender, FormClosingEventArgs e) {
+            e.Cancel = true;
+            Hide();
+        }
     }
 }
