@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace One_X {
@@ -67,7 +68,8 @@ namespace One_X {
                     labels.Add(label, 00);      // Adding the labels only. 
                 }
             }
-            //Parsing the Whole Code.         
+            //Parsing the Whole Code.    
+            bool isLabelInserted = false;
             label = string.Empty;
             for (i = 0; i < lineNum; i++) {
                 Match match = RegexHelper.rxInstructionLine.Match(line[i]);
@@ -75,6 +77,7 @@ namespace One_X {
                     label = match.Groups[LABEL].Value;
                 }
                 if (!string.IsNullOrWhiteSpace(label)) {
+                    isLabelInserted = true;
                     if (!labels.ContainsKey(label)) {
                         labels.Add(label, address);
                     }
@@ -99,6 +102,7 @@ namespace One_X {
                 }
 
                 if (string.IsNullOrWhiteSpace(instruction_name)) {
+                    isLabelInserted = false;
                     if (line[i].Length != match.Length) {
                         errorList.Add((DebugLevel.Error, i, match.Length, (line[i].Length - match.Length))); //Lable with Invalid Characters. 
                     }
@@ -108,10 +112,16 @@ namespace One_X {
                 //Getting the Right Literal. 
                 if (!string.IsNullOrWhiteSpace(match.Groups[LIT_BYTE].Value)) {
                     rightLit = match.Groups[LIT_BYTE].Value;
+                    if ((rightLit.ElementAt(rightLit.Length - 1)) == 'H' || (rightLit.ElementAt(rightLit.Length - 1) == 'h')) {
+                        rightLit = rightLit.Remove(rightLit.Length - 1);
+                    }
                     rightLit_type = LIT_BYTE;
                 }
                 else if (!string.IsNullOrWhiteSpace(match.Groups[LIT_USHORT].Value)) {
                     rightLit = match.Groups[LIT_USHORT].Value;
+                    if ((rightLit.ElementAt(rightLit.Length - 1)) == 'H' || (rightLit.ElementAt(rightLit.Length - 1) == 'h')) {
+                        rightLit = rightLit.Remove(rightLit.Length - 1);
+                    }
                     rightLit_type = LIT_USHORT;
                     if (!memory.Contains(ushort.Parse(rightLit,System.Globalization.NumberStyles.HexNumber))) {
                         memory.Add(ushort.Parse(rightLit,System.Globalization.NumberStyles.HexNumber));
@@ -135,63 +145,52 @@ namespace One_X {
                     try {
                         right_LIT = ushort.Parse(rightLit,System.Globalization.NumberStyles.HexNumber);
                     }
-                    catch (Exception) { }
+                    catch (Exception e) { }
                 }
                 else if (rightLit_type == REFERENCE) {
                     tempReference.Add((i, label.Length + instruction_name.Length, rightLit.Length, address, rightLit)); //Adding the temporary reference. 
                 }
-                Instruction inst = null;
-                foreach (Instruction ins in Instruction.list) {
-                    if (ins.Name == instruction_name) {
-                        inst = ins;
-                        break;
-                    }
-                }
+                Instruction inst = getInstructions(instruction_name);
                 //Adding the instructions. 
                 if (rightLit_type != REFERENCE) {
                     try {
                         instructions
                             .Add(address, new Instruction(inst.Name, inst.Bytes, inst.MCycles, inst.TStates, inst.method, right_LIT.ToBytes()));
+                        address += inst.Bytes;
                     }
-                    catch (Exception) { }
+                    catch (Exception e) { }
                  }
                 else {
                     try {
                         instructions
-                            .Add(address, new Instruction(inst.Name, inst.Bytes, inst.MCycles, inst.TStates, inst.method, ((ushort)0).ToBytes()));
+                             .Add(address, new Instruction(inst.Name, inst.Bytes, inst.MCycles, inst.TStates, inst.method, ((ushort)0).ToBytes()));
+                        address += inst.Bytes;
                     }
-                    catch (Exception) { }
+                    catch (Exception e) { }
                 }
                 inst = null;
-                
+                if (isLabelInserted) { label=string.Empty;}
             }
             addReferences();
         }
         private void addReferences() {
-            foreach(var refer in tempReference) {
+            foreach (var refer in tempReference) {
                 try {
                     var lit = labels[refer.reference];
-
                     instructions[refer.address].Arguments = lit.ToBytes();
-                } catch { }
+                }
+                catch(Exception e) { }
             }
-            //foreach(var label in labels) {
-            //    if (refer.reference == label.Key) {
-            //        ushort refAddress = label.Value;
-            //        Instruction originalInstruction = null;
-            //        foreach (Instruction i in Instruction.list) {
-            //            if (instructions[label.Value].Name == i.Name) {
-            //                originalInstruction = i;
-            //                break;
-            //            }
-            //        }
-            //        instructions[label.Value].Bytes = originalInstruction.Bytes;
-            //        instructions[label.Value].MCycles = originalInstruction.MCycles;
-            //        instructions[label.Value].TStates = originalInstruction.TStates;
-            //        instructions[label.Value].method = originalInstruction.method;
-            //        instructions[label.Value].Arguments = refAddress.ToBytes();
-            //    }
-            //}
+        }
+        private Instruction getInstructions(string instructionName) {
+            Instruction inst = null;
+            foreach (Instruction ins in Instruction.list) {
+                if (ins.Name == instructionName) {
+                    inst = ins;
+                    return inst;
+                }
+            }
+            return inst;
         }
     }
 }
