@@ -8,9 +8,7 @@ namespace One_X {
         private FileStream fileStream;
 
         public Memory(string name) {
-            // todo don't delete rather load the memory, need to define better file/project structure
-            try { File.Delete(name); } catch { }
-            fileStream = new FileStream(name, FileMode.CreateNew, FileAccess.ReadWrite);
+            fileStream = new FileStream(name, FileMode.OpenOrCreate, FileAccess.ReadWrite);
             fileStream.SetLength(0x10000);
 
             provider = new DynamicFileByteProvider(fileStream);
@@ -34,6 +32,11 @@ namespace One_X {
                 provider.WriteByte(i, 0x00);
             }
             provider.ApplyChanges();
+        }
+
+        public void Commit(string name) {
+            fileStream.Close();
+            provider.Dispose();
         }
     }
 }

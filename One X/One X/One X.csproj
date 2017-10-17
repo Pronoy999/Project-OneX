@@ -37,9 +37,14 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>.\Be.Windows.Forms.HexBox.dll</HintPath>
     </Reference>
+    <Reference Include="FastColoredTextBox, Version=2.16.21.0, Culture=neutral, PublicKeyToken=fb8aa12b994ef61b, processorArchitecture=MSIL">
+      <HintPath>..\packages\FCTB.2.16.21.0\lib\FastColoredTextBox.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.ValueTuple.4.4.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
     </Reference>
@@ -63,6 +68,12 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="OldMainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OldMainForm.Designer.cs">
+      <DependentUpon>OldMainForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Instruction.cs" />
     <Compile Include="InstructionHelper.cs" />
     <Compile Include="Memory.cs" />
@@ -73,15 +84,20 @@
       <DependentUpon>MemoryViewer.cs</DependentUpon>
     </Compile>
     <Compile Include="MPU.cs" />
+    <Compile Include="OneXFile.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RegexHelper.cs" />
     <Compile Include="RichTextBoxEx.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="User32.cs" />
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OldMainForm.resx">
+      <DependentUpon>OldMainForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MemoryViewer.resx">
       <DependentUpon>MemoryViewer.cs</DependentUpon>

@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 
 namespace One_X {
     class Instruction : Attribute {
+        public static IEnumerable<OPCODE> opcodes = ((OPCODE[])Enum.GetValues(typeof(OPCODE)));
+        public static IEnumerable<Instruction> list = opcodes.Select(x => x.GetAttributeOfType<Instruction>()).Where(x => !string.IsNullOrWhiteSpace(x.Name));
+
         public string Name;
         public byte Bytes;
         public byte MCycles;
@@ -18,48 +22,14 @@ namespace One_X {
             this.Bytes = Bytes;
             this.MCycles = MCycles;
             this.TStates = TStates;
-
-            // todo use if rather than try : better error detection
+            
             if (!string.IsNullOrWhiteSpace(method)) {
                 this.method = typeof(MPU).GetMethod(method);
             }
         }
 
         public OPCODE GetOPCODE() {
-            return ((OPCODE[])Enum.GetValues(typeof(OPCODE))).First(x => this.Name == x.GetAttributeOfType<Instruction>().Name);
-        }
-
-        public static Instruction parse(string instr) {
-            string s = string.Empty;
-            if (instr.Contains(",")) {
-                s = ",";
-            } else {
-                s = " ";
-            }
-            try {
-                var inst = ((OPCODE[])Enum.GetValues(typeof(OPCODE))).
-                    First(x => !string.IsNullOrWhiteSpace(x.GetAttributeOfType<Instruction>().Name) &&
-                    (instr + " ").StartsWith(x.GetAttributeOfType<Instruction>().Name + s)).GetAttributeOfType<Instruction>();
-                
-                if (inst.Bytes > 1) {
-                    if (inst.Name.Contains(" ")) {
-                        if (instr.ElementAt(inst.Name.Length) != ',') throw new Exception();
-                    } else {
-                        if (instr.ElementAt(inst.Name.Length) != ' ') throw new Exception();
-                    }
-                    try {
-                        inst.Arguments = Convert.ToUInt16( // convert to int
-                            instr.Substring(inst.Name.Count() + (inst.Bytes > 1 ? 1 : 0)) // get parameter part
-                            .Trim().ToUpper().Replace("H", "") // strip ending "H"
-                            , 16).ToBytes(); // convert to bytes
-                    } catch (FormatException) {
-                        if (inst.Bytes > 2) return inst;
-                    }
-                }
-                return inst;
-            } catch {
-                return OPCODE.UNKN_08.GetAttributeOfType<Instruction>();
-            }
+            return opcodes.First(x => x.GetAttributeOfType<Instruction>().Name == Name);
         }
 
         public ushort Execute() {

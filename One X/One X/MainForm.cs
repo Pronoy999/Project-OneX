@@ -1,34 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.ComponentModel;
+using System.Data;
 using System.Drawing;
-using System.Windows.Forms;
-using System.Runtime.InteropServices;
-using Microsoft.VisualBasic;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Threading;
+using System.Windows.Forms;
+using FastColoredTextBoxNS;
 using System.Drawing.Text;
+using System.Runtime.InteropServices;
+using System.Diagnostics;
+using System.IO;
 
 namespace One_X {
     public partial class MainForm : Form {
-        Parser p = new Parser();
-        MemoryViewer memView = new MemoryViewer();
-        Dispatcher disp = Dispatcher.CurrentDispatcher;
+        private string codeFileName = string.Empty;
+        private string saveFileName = string.Empty;
 
-        public MainForm() {
-            InitializeComponent();
-        }
-
+        private bool saved = false;
         public PrivateFontCollection pfc = new PrivateFontCollection();
 
         [DllImport("gdi32.dll")]
         private static extern IntPtr AddFontMemResourceEx(IntPtr pbFont, uint cbFont, IntPtr pdv, [In] ref uint pcFonts);
 
-        [DllImport("user32.dll")]
-        static extern bool HideCaret(IntPtr hWnd);
+        public MainForm() {
+            InitializeComponent();
+        }
 
         private void MainForm_Load(object sender, EventArgs e) {
-            object[] fontObjects = { AReg, BReg, CReg, DReg, EReg, HReg, LReg, MPoint, PCVal, SPVal, NU1Flag, NU3Flag, NU5Flag, SFlag, ZFlag, ACFlag, PFlag, CYFlag, codeBox, startAddressBox };
+            MenuItem[] notImp = { updateMI, aboutMI, memeditMI, assemblerMI, datamoniMI, execMI, optionsMI };
+            object[] fontObjects = { codeBox };
 
             int fontLength = Properties.Resources.Hack.Length;
             byte[] fontdata = Properties.Resources.Hack;
@@ -43,12 +45,7 @@ namespace One_X {
 
             Marshal.FreeCoTaskMem(data);
 
-            // todo
-            MPU.memory = new Memory(Application.StartupPath + "\\test.bin");
-
-            // codeBox.NumberFont = new Font(pfc.Families[0], 10);
-
-            foreach(var f in fontObjects) {
+            foreach (var f in fontObjects) {
                 if (f is TextBox) {
                     TextBox fd = f as TextBox;
                     fd.Font = new Font(pfc.Families[0], fd.Font.Size);
@@ -57,280 +54,271 @@ namespace One_X {
                     Label fd = f as Label;
                     fd.Font = new Font(pfc.Families[0], fd.Font.Size);
                 }
-                if (f is Ionic.WinForms.RichTextBoxEx) {
-                    Ionic.WinForms.RichTextBoxEx fd = f as Ionic.WinForms.RichTextBoxEx;
+                if (f is FastColoredTextBox) {
+                    FastColoredTextBox fd = f as FastColoredTextBox;
                     fd.Font = new Font(pfc.Families[0], fd.Font.Size);
                 }
             }
 
-            codeBox.ShowLineNumbers = true;
+            codeBox.AutoIndentCharsPatterns = "^\\s*[\\w]+\\s*(?<range>:)\\s*(?<range>[^\\n]+)$";
 
-            startAddressBox.GotFocus += (sndr, args) => {
-                startAddressBox.Select(startAddressBox.TextLength, 0);
-                HideCaret(startAddressBox.Handle);
-            };
-
-            MPU.ValueChanged += ValueChanged;
+            foreach (var i in notImp) {
+                i.Click += (s, ev) => MessageBox.Show("NOT IMPLEMENTED YET!");
+            }
+            Debug.WriteLine(Application.UserAppDataPath + "\\currentfile");
+            New();
         }
 
-        private void ValueChanged(object sender, MPU.MPUEventArgs e) {
-            disp.Invoke(delegate () {
-                switch (e.VarName) {
-                    case "A":
-                        AReg.Text = ((byte)e.NewValue).ToString("X2");
-                        break;
-                    case "B":
-                        BReg.Text = ((byte)e.NewValue).ToString("X2");
-                        break;
-                    case "C":
-                        CReg.Text = ((byte)e.NewValue).ToString("X2");
-                        break;
-                    case "D":
-                        DReg.Text = ((byte)e.NewValue).ToString("X2");
-                        break;
-                    case "E":
-                        EReg.Text = ((byte)e.NewValue).ToString("X2");
-                        break;
-                    case "H":
-                        HReg.Text = ((byte)e.NewValue).ToString("X2");
-                        break;
-                    case "L":
-                        LReg.Text = ((byte)e.NewValue).ToString("X2");
-                        break;
-                    case "M":
-                        MPoint.Text = ((byte)e.NewValue).ToString("X2");
-                        break;
-                    case "HRp":
-                        var bytes = ((ushort)e.NewValue).ToBytes();
-                        HReg.Text = bytes.HO.ToString("X2");
-                        LReg.Text = bytes.LO.ToString("X2");
-                        break;
-                    case "BRp":
-                        bytes = ((ushort)e.NewValue).ToBytes();
-                        BReg.Text = bytes.HO.ToString("X2");
-                        CReg.Text = bytes.LO.ToString("X2");
-                        break;
-                    case "DRp":
-                        bytes = ((ushort)e.NewValue).ToBytes();
-                        DReg.Text = bytes.HO.ToString("X2");
-                        EReg.Text = bytes.LO.ToString("X2");
-                        break;
-                    case "PC":
-                        PCVal.Text = ((ushort)e.NewValue).ToString("X4");
-                        foreach (ListViewItem litem in insts.Items) {
-                            if (litem.SubItems[1].Text == PCVal.Text) {
-                                litem.Text = "->";
-                            } else {
-                                litem.Text = string.Empty;
-                            }
+        // todo define global static / settings
+        // todo define comment style
+        Style mnemonicStyle = new TextStyle(Brushes.Blue, null, FontStyle.Regular);
+        Style labelStyle = new TextStyle(Brushes.Green, null, FontStyle.Regular);
+        Style literalStyle = new TextStyle(Brushes.Orange, null, FontStyle.Regular);
+
+        private void codeBox_TextChanged(object sender, TextChangedEventArgs e) {
+            e.ChangedRange.ClearStyle(mnemonicStyle, labelStyle, literalStyle);
+
+            e.ChangedRange.SetStyle(mnemonicStyle, RegexHelper.rxRangeOneByte);
+            e.ChangedRange.SetStyle(mnemonicStyle, RegexHelper.rxRangeTwoByte);
+            e.ChangedRange.SetStyle(mnemonicStyle, RegexHelper.rxRangeThreeByte);
+
+            e.ChangedRange.SetStyle(labelStyle, RegexHelper.rxRangeLabelOnly);
+            e.ChangedRange.SetStyle(labelStyle, RegexHelper.rxRangeReference);
+
+            e.ChangedRange.SetStyle(literalStyle, RegexHelper.rxRangeLiteralByte);
+            e.ChangedRange.SetStyle(literalStyle, RegexHelper.rxRangeLiteralUShort);
+
+            UpdateModifiedInfo();
+        }
+
+        private void codeBox_AutoIndentNeeded(object sender, AutoIndentEventArgs e) {
+            int lpos = e.PrevLineText.IndexOf(":");
+            if (lpos > 0) {
+                e.AbsoluteIndentation = lpos + 2;
+            }
+            if (e.LineText.Contains(":")) {
+                e.AbsoluteIndentation = 0;
+            }
+        }
+
+        private void cutMI_Click(object sender, EventArgs e) {
+            codeBox.Cut();
+            UpdateModifiedInfo();
+        }
+
+        private void copyMI_Click(object sender, EventArgs e) => codeBox.Copy();
+
+        private void pasteMI_Click(object sender, EventArgs e) {
+            codeBox.Paste();
+            UpdateModifiedInfo();
+        }
+
+        private void undoMI_Click(object sender, EventArgs e) {
+            codeBox.Undo();
+            UpdateModifiedInfo();
+        }
+
+        private void redoMI_Click(object sender, EventArgs e) {
+            codeBox.Redo();
+            UpdateModifiedInfo();
+        }
+
+        private void selectallMI_Click(object sender, EventArgs e) => codeBox.SelectAll();
+
+        private void zoominMI_Click(object sender, EventArgs e) => codeBox.Zoom += 10;
+
+        private void zoomoutMI_Click(object sender, EventArgs e) => codeBox.Zoom -= 10;
+
+        private void resetzoomMI_Click(object sender, EventArgs e) => codeBox.Zoom = 100;
+
+        private void findMI_Click(object sender, EventArgs e) => codeBox.ShowFindDialog();
+
+        private void replaceMI_Click(object sender, EventArgs e) => codeBox.ShowReplaceDialog();
+
+        private void gotoMI_Click(object sender, EventArgs e) => codeBox.ShowGoToDialog();
+
+        private void findnextMI_Click(object sender, EventArgs e) {
+            try {
+                codeBox.findForm.FindNext(codeBox.findForm.tbFind.Text);
+            } catch (NullReferenceException) {
+                codeBox.ShowFindDialog();
+            }
+        }
+
+        private void ucaseMI_Click(object sender, EventArgs e) {
+            codeBox.UpperCase();
+            UpdateModifiedInfo();
+        }
+
+        private void UpdateModifiedInfo() {
+            codeBox.IsChanged = true;
+            modifiedinfo.Text = (string.IsNullOrWhiteSpace(saveFileName) ? "Untitled" : Path.GetFileName(saveFileName)) + " - *Unsaved Changes*";
+        }
+
+        private void lcaseMI_Click(object sender, EventArgs e) {
+            codeBox.LowerCase();
+            UpdateModifiedInfo();
+        }
+
+        private void cmntMI_Click(object sender, EventArgs e) {
+            codeBox.CommentSelected();
+            UpdateModifiedInfo();
+        }
+
+        private void dellineMI_Click(object sender, EventArgs e) {
+            codeBox.ClearCurrentLine();
+            UpdateModifiedInfo();
+        }
+
+        private void exitMI_Click(object sender, EventArgs e) => SaveAndExit();
+        
+        private void SaveAndExit() {
+            if (!codeBox.IsChanged) {
+                Application.Exit();
+                return;
+            }
+            DialogResult dr = MessageBox.Show("Warning: Unsaved changes!\nSave changes to " + (string.IsNullOrWhiteSpace(saveFileName) ? "new source file" : saveFileName) +  "?", "Confirm Save", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
+            switch (dr) {
+                case DialogResult.No:
+                    saved = true;
+                    break;
+                case DialogResult.Yes:
+                    if (string.IsNullOrWhiteSpace(saveFileName)) {
+                        if (saveFile.ShowDialog() == DialogResult.OK) {
+                            SaveFile(saveFile.FileName);
+                            saved = true;
+                            Application.Exit();
+                            return;
                         }
-                        break;
-                    case "SP":
-                        SPVal.Text = ((ushort)e.NewValue).ToString("X4");
-                        break;
-                    case "Sign":
-                    case "S":
-                        SFlag.Text = ((bool)e.NewValue).ToBitInt().ToString();
-                        break;
-                    case "Zero":
-                    case "Z":
-                        ZFlag.Text = ((bool)e.NewValue).ToBitInt().ToString();
-                        break;
-                    case "AuxiliaryCarry":
-                    case "AC":
-                        ACFlag.Text = ((bool)e.NewValue).ToBitInt().ToString();
-                        break;
-                    case "Parity":
-                    case "P":
-                        PFlag.Text = ((bool)e.NewValue).ToBitInt().ToString();
-                        break;
-                    case "Carry":
-                    case "CY":
-                        CYFlag.Text = ((bool)e.NewValue).ToBitInt().ToString();
-                        break;
-                    default:
-                        MessageBox.Show(e.VarName);
-                        break;
-                }
-            });
+                        saved = false;
+                    } else {
+                        SaveFile(saveFileName);
+                        saved = true;
+                        Application.Exit();
+                    }
+                    return;
+                default:
+                    saved = false;
+                    return;
+            }
+            Application.Exit();
+        }
+        private void SaveAndClose() {
+            if (!codeBox.IsChanged) { CloseFile(); return; }
+            DialogResult dr = MessageBox.Show("Warning: Unsaved changes!\nSave changes to " + (string.IsNullOrWhiteSpace(saveFileName) ? "new source file" : saveFileName) + "?", "Confirm Save", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
+            switch (dr) {
+                case DialogResult.No:
+                    break;
+                case DialogResult.Yes:
+                    if (string.IsNullOrWhiteSpace(saveFileName)) {
+                        if (saveFile.ShowDialog() == DialogResult.OK) {
+                            SaveFile(saveFile.FileName);
+                            CloseFile();
+                        }
+                    } else {
+                        SaveFile(saveFileName);
+                        CloseFile();
+                    }
+                    return;
+                default:
+                    return;
+            }
+            CloseFile();
+        }
+
+        private void CloseFile() {
+            codeBox.Clear();
+            string dir = Application.UserAppDataPath + "\\currentfile";
+            codeFileName = dir + "\\code";
+            codeBox.IsChanged = false;
+            modifiedinfo.Text = "";
+            try { MPU.CommitMemory(); Directory.Delete(dir, true); } catch (IOException) { } catch (NullReferenceException) { }
+
+            codeBox.Visible = false;
+        }
+        private void closeMI_Click(object sender, EventArgs e) => SaveAndClose();
+
+        private void codeBox_SelectionChanged(object sender, EventArgs e) {
+            lineinfo.Text = "Line: " + codeBox.Selection.Bounds.iStartLine;
+            columninfo.Text = "Column: " + codeBox.Selection.Bounds.iStartChar;
+            locinfo.Text = "Location: " + codeBox.SelectionStart;
         }
 
         private void codeBox_KeyUp(object sender, KeyEventArgs e) {
-            if(e.KeyCode == Keys.Enter) {
-                highlight();
+            if (e.KeyCode == Keys.Insert) {
+                insrepinfo.Text = codeBox.IsReplaceMode ? "REPLACE" : "INSERT";
             }
         }
 
-        private void startAddressBox_KeyPress(object sender, KeyPressEventArgs e) {
-            char c = e.KeyChar;
-            if (!((c >= '0' && c <= '9') || (c >= 'A' && c <= 'F') || (c >= 'a' && c <= 'f'))) {
-                e.Handled = true;
-                return;
-            }
-            var x = sender as TextBox;
-            if (x.TextLength == 4) {
-                x.Text = x.Text.Substring(1);
-                x.SelectionStart = x.TextLength;
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e) {
+            if (!saved) {
+                SaveAndExit();
             }
         }
 
-        private void setAddressButton_Click(object sender, EventArgs e) {
-            p = new Parser(ushort.Parse(startAddressBox.Text, System.Globalization.NumberStyles.HexNumber));
-            highlight();
-        }
+        private void openMI_Click(object sender, EventArgs e) {
+            if (openFile.ShowDialog() == DialogResult.OK) {
+                SaveAndClose();
+                MPU.CommitMemory();
+                if (OneXFile.ExtractOneXFile(openFile.FileName, "currentfile")) {
+                    saveFileName = openFile.FileName;
+                    string dir = Application.UserAppDataPath + "\\currentfile";
+                    codeFileName = dir + "\\code";
+                    codeBox.OpenFile(codeFileName, Encoding.UTF8);
+                    MPU.InitMemory(dir + "\\memory");
+                    codeBox.IsChanged = false;
+                    modifiedinfo.Text = Path.GetFileName(saveFileName) + " - *No Changes*";
 
-        private void highlight() {
-            var highs = p.Parse(codeBox.Text);
-
-            var ls = padLen(p.labels.Values);
-
-            string codeBoxText = string.Empty;
-
-            var x = new List<(Parser.StringType stype, int begin, int length)>();
-
-            int count = 0;
-
-            for (int i = 0; i < highs.Count; i++) {
-                var word = highs[i];
-                var str = word.Word;
-                switch(word.SType) {
-                    case Parser.StringType.Mnemonic:
-                        try {
-                            if (highs[i - 1].LineIndex != word.LineIndex) {
-                                var stre = pad("", ls) + "     ";
-                                count += stre.Length;
-                                codeBoxText += stre;
-                            }
-                        } catch {
-                            var stre = pad("", ls) + "     ";
-                            count += stre.Length;
-                            codeBoxText += stre;
-                        }
-                        break;
-                    case Parser.StringType.Label:
-                        try {
-                            if (highs[i - 1].LineIndex != word.LineIndex) {
-                                // left label
-                                str = pad(str, ls) + ":    ";
-                            }
-                        } catch {
-                            str = pad(str, ls) + ":    ";
-                        }
-                        break;
-                    default:
-                        break;
-                }
-                
-                x.Add((word.SType, count, word.Word.Length));
-                count += str.Length;
-                codeBoxText += str;
-                try {
-                    if (highs[i + 1].LineIndex != word.LineIndex) {
-                        codeBoxText += "\n";
-                        count++;
-                    }
-                } catch {
-                    codeBoxText += "\n";
-                    count++;
+                    codeBox.Visible = true;
+                } else {
+                    MessageBox.Show("The selected *.onex file is in invalid format!", "Invalid format!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    CloseFile();
                 }
             }
+        }
 
+        private void saveasMI_Click(object sender, EventArgs e) {
+            if (saveFile.ShowDialog() == DialogResult.OK) {
+                SaveFile(saveFile.FileName);
+            }
+        }
+
+        private void SaveFile(string name) {
+            if (string.IsNullOrWhiteSpace(name)) {
+                saveasMI.PerformClick(); return;
+            }
+            saveFileName = name;
+            string dir = Application.UserAppDataPath + "\\currentfile";
+            codeFileName = dir + "\\code";
+            codeBox.SaveToFile(codeFileName, Encoding.UTF8);
+            MPU.CommitMemory();
+            OneXFile.RepackOneXFile(name, "currentfile");
+            MPU.InitMemory(dir + "\\memory");
+            // commit changes (reset all dirty flags)
+            codeBox.IsChanged = false;
+            modifiedinfo.Text = Path.GetFileName(saveFileName) + " - *Changes Saved*";
+        }
+
+        private void saveMI_Click(object sender, EventArgs e) {
+            SaveFile(saveFileName);
+        }
+
+        private void New() {
+            SaveAndClose();
             codeBox.Clear();
-            codeBox.Text = codeBoxText;
+            string dir = Application.UserAppDataPath + "\\currentfile";
+            codeFileName = dir + "\\code";
+            modifiedinfo.Text = "Untitled - *No Changes*";
+            try { MPU.CommitMemory(); Directory.Delete(dir, true); } catch (IOException) { } catch (NullReferenceException) { }
+            Directory.CreateDirectory(dir);
+            MPU.InitMemory(dir + "\\memory");
+            codeBox.IsChanged = false;
 
-            // color
-            foreach (var w in x) {
-                codeBox.SetSelectionColor(w.begin, w.begin + w.length, Color.FromArgb((int)w.stype));
-            }
-
-            // restore selection
-            codeBox.DeselectAll();
-            codeBox.Select(codeBox.TextLength, 0);
-
-            try {
-                ushort start = ushort.Parse(insts.Items[0].SubItems[1].Text, System.Globalization.NumberStyles.HexNumber);
-                ushort end = ushort.Parse(insts.Items[insts.Items.Count - 1].SubItems[1].Text, System.Globalization.NumberStyles.HexNumber);
-                MPU.memory.Clear(start, end);
-            } catch (ArgumentOutOfRangeException ex) { }
-            
-            insts.Items.Clear();
-            foreach (var ins in p.instructions) {
-                var mark = string.Empty;
-                if (ins.Key.ToString("X4") == startAddressBox.Text) {
-                    mark = "->";
-                }
-                ListViewItem litem = new ListViewItem(new string[] {
-                    mark,
-                    ins.Key.ToString("X4"),
-                    ins.Value.Name + (ins.Value.Bytes > 1 ? 
-                    (ins.Value.Name.Contains(" ") ? "," : " ") + 
-                    ins.Value.Arguments.ToUShort().ToString(ins.Value.Bytes > 2 ? "X4" : "X2") + "H" : string.Empty),
-                    ((byte)ins.Value.GetOPCODE()).ToString("X2"),
-                    ins.Value.Bytes.ToString(),
-                    ins.Value.MCycles.ToString(),
-                    ins.Value.TStates.ToString()
-                });
-                insts.Items.Add(litem);
-                if (ins.Value.Bytes > 1) {
-                    ListViewItem litemLO = new ListViewItem(new string[] {
-                        string.Empty,
-                        ((ushort)(ins.Key + 1)).ToString("X4"),
-                        string.Empty,
-                        ins.Value.Arguments.LO.ToString("X2")
-                    });
-                    insts.Items.Add(litemLO);
-                    if (ins.Value.Bytes > 2) {
-                        ListViewItem litemHO = new ListViewItem(new string[] {
-                            string.Empty,
-                            ((ushort)(ins.Key + 2)).ToString("X4"),
-                            string.Empty,
-                            ins.Value.Arguments.HO.ToString("X2")
-                        });
-                        insts.Items.Add(litemHO);
-                    }
-                }
-                ins.Value.WriteToMemory(MPU.memory, ins.Key);
-            }
-            memView.memBox.Invalidate(); ;
-        }
-        
-        static string pad(string s, int i) {
-            string p = string.Empty;
-            while (p.Length + s.Length < i) {
-                p += " ";
-            }
-            return s + p;
+            codeBox.Visible = true;
         }
 
-        static int padLen(IEnumerable<string> labels) {
-            int r = 4;
-            foreach (string p in labels) {
-                if (p.Length >= r) {
-                    r = 4 * ((p.Length / 4) + 1);
-                }
-            }
-            return r;
-        }
-
-        private void memBtn_Click(object sender, EventArgs e) {
-            if (memView.Visible) {
-                memView.Hide();
-            } else {
-                memView.Show();
-            }
-            memView.Location = new Point(Location.X + Width, Location.Y);
-        }
-
-        private void MainForm_Move(object sender, EventArgs e) {
-            memView.Location = new Point(Location.X + Width, Location.Y);
-        }
-
-        private async void nextStepBtn_Click(object sender, EventArgs e) => await Task.Run(() => MPU.NextStep());
-
-        private async void execButton_Click(object sender, EventArgs e) => await Task.Run(() => MPU.ExecuteAllSteps());
-
-        private void stopBtn_Click(object sender, EventArgs e) {
-            MPU.Stop();
+        private void newMI_Click(object sender, EventArgs e) {
+            New();
         }
     }
 }
