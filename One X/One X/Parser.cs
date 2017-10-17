@@ -33,26 +33,6 @@ namespace One_X {
          */
         string LABEL = "label", REFERENCE = "reference", ONEBYTE_INSTRUCTION = "oneByte", TWOBYTE_INSTRUCTION = "twoByte", THREEBYTE_INSTRUCTION = "threeByte",
             LIT_BYTE = "litByte", LIT_USHORT = "litUshort";
-        /**<summary>
-         * A local Variable to Store Labels.
-         * </summary>
-         */
-        string label = string.Empty;
-        /**<summary>
-         * A Local Variable to store the instrctions. 
-         * </summary>
-         */
-        string instruction_name = string.Empty;
-
-        string instruction_type = string.Empty;
-        /**<summary>
-         * A Local variable to store the right literal.
-         * </summary>
-         */
-        string rightLit = string.Empty;
-        ushort right_LIT;
-
-        string rightLit_type = string.Empty;
 
         char[] newLine = { '\n' };
 
@@ -62,6 +42,16 @@ namespace One_X {
             this.address = address; //Setting address.
         }
         public void parse(string code) {
+
+            string label = string.Empty; //A Local Variable to store the labels. 
+
+            string instruction_name = string.Empty;//A Local Variable to store the instrctions. 
+            string instruction_type = string.Empty;      
+            
+            string rightLit = string.Empty;//A Local variable to store the right literal.
+            string rightLit_type = string.Empty;
+            ushort right_LIT=0;
+
             instructions.Clear();
             labels.Clear();
 
@@ -78,10 +68,10 @@ namespace One_X {
             label = string.Empty;
             for (i = 0; i < lineNum; i++) {
                 Match match = RegexHelper.rxInstructionLine.Match(line[i]);
-                if (!match.Groups[LABEL].Value.Equals(string.Empty)) {
+                if (!string.IsNullOrWhiteSpace(match.Groups[LABEL].Value)) {
                     label = match.Groups[LABEL].Value;
                 }
-                if (label != string.Empty) {
+                if (!string.IsNullOrWhiteSpace(label)) {
                     if (!labels.ContainsKey(label)) {
                         labels.Add(label, address);
                     }
@@ -96,12 +86,12 @@ namespace One_X {
                 }
                 else if (!string.IsNullOrWhiteSpace(match.Groups[TWOBYTE_INSTRUCTION].Value)) {
                     instruction_name = match.Groups[TWOBYTE_INSTRUCTION].Value;
-                    instruction_name = instruction_name.Remove(instruction_name.Length);
+                    instruction_name = instruction_name.Remove(instruction_name.Length-1);
                     instruction_type = TWOBYTE_INSTRUCTION;
                 }
                 else if (!string.IsNullOrWhiteSpace(match.Groups[THREEBYTE_INSTRUCTION].Value)) {
                     instruction_name = match.Groups[THREEBYTE_INSTRUCTION].Value;
-                    instruction_name = instruction_name.Remove(instruction_name.Length);
+                    instruction_name = instruction_name.Remove(instruction_name.Length-1);
                     instruction_type = THREEBYTE_INSTRUCTION;
                 }
 
@@ -113,11 +103,11 @@ namespace One_X {
                 }
 
                 //Getting the Right Literal. 
-                if (match.Groups[LIT_BYTE].Value != string.Empty) {
+                if (!string.IsNullOrWhiteSpace(match.Groups[LIT_BYTE].Value)) {
                     rightLit = match.Groups[LIT_BYTE].Value;
                     rightLit_type = LIT_BYTE;
                 }
-                else if (match.Groups[LIT_USHORT].Value != string.Empty) {
+                else if (!string.IsNullOrWhiteSpace(match.Groups[LIT_USHORT].Value)) {
                     rightLit = match.Groups[LIT_USHORT].Value;
                     rightLit_type = LIT_USHORT;
                     if (!memory.Contains(Convert.ToInt32(rightLit))) {
@@ -127,7 +117,7 @@ namespace One_X {
                         errorList.Add((DebugLevel.Information, i, (label.Length + instruction_name.Length), rightLit.Length));
                     }
                 }
-                else if (match.Groups[REFERENCE].Value != string.Empty) {
+                else if (!string.IsNullOrWhiteSpace(match.Groups[REFERENCE].Value)) {
                     rightLit = match.Groups[REFERENCE].Value;
                     rightLit_type = REFERENCE;
                 }
@@ -139,27 +129,38 @@ namespace One_X {
                     errorList.Add((DebugLevel.Error, i, (label.Length + instruction_name.Length), rightLit.Length));
                 }
                 if (rightLit_type != REFERENCE) {
-                    ushort right_LIT = ushort.Parse(rightLit);
+                    try {
+                        right_LIT = ushort.Parse(rightLit);
+                    }
+                    catch (Exception) { }
                 }
                 else if (rightLit_type == REFERENCE) {
                     tempReference.Add((i, label.Length + instruction_name.Length, rightLit.Length, address, rightLit)); //Adding the temporary reference. 
                 }
-                if (rightLit_type != REFERENCE) {
-                    Instruction inst = null;
-                    foreach(Instruction ins in Instruction.list) {
-                        if (ins.Name == instruction_name) {
-                            inst = ins;                           
-                            break;
-                        }
+                Instruction inst = null;
+                foreach (Instruction ins in Instruction.list) {
+                    if (ins.Name == instruction_name) {
+                        inst = ins;
+                        break;
                     }
-                    //Adding the instructions. 
-                    instructions
-                        .Add(address,new Instruction(inst.Name, inst.Bytes, inst.MCycles, inst.TStates, inst.method, BitHelper.ToBytes(ushort.Parse(rightLit))));
-                    inst = null;
                 }
+                //Adding the instructions. 
+                if (rightLit_type != REFERENCE) {
+                    try {
+                        instructions
+                            .Add(address, new Instruction(inst.Name, inst.Bytes, inst.MCycles, inst.TStates, inst.method, right_LIT.ToBytes()));
+                    }
+                    catch (Exception) { }
+                 }
                 else {
-                    instructions.Add(address, new Instruction(instruction_name, 0, 0, 0,""));//Dummy data for instructions with reference. 
+                    try {
+                        instructions
+                            .Add(address, new Instruction(inst.Name, inst.Bytes, inst.MCycles, inst.TStates, ""));
+                    }
+                    catch (Exception) { }
                 }
+                inst = null;
+                
             }
             addReferences();
         }
