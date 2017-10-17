@@ -54,14 +54,14 @@ namespace One_X {
             string instruction = "(?<instruction>" + string.Join("|", oneByte, twoByte, threeByte) + ")";
 
             // compile all the regex and store
-            rxInstructionLine = new Regex("^[ \\t]*(?:" + label + "[ \\t]*:)?[ \\t]*" + instruction + "[ \\t]*$", rxOptions);
+            rxInstructionLine = new Regex("^[ \\t]*(?:" + label + "[ \\t]*:)?[ \\t]*" + instruction + "[ \\t\\r]*$", rxOptions);
             rxLabelOnly = new Regex("^[ \\t]*(?:" + label + "[ \\t]*:)?[ \\t]*$", rxOptions);
             // compile the range regex and store
             rxRangeLabelOnly = new Regex("^[ \\t]*" + label.Replace("<label>", "<range>") + "[ \\t]*:", rxOptions);
 
-            rxRangeOneByte = new Regex(oneByte.Replace("<oneByte>", "<range>"), rxOptions);
-            rxRangeTwoByte = new Regex(twoByte.Replace("<twoByte>", "<range>"), rxOptions);
-            rxRangeThreeByte = new Regex(threeByte.Replace("<threeByte>", "<range>"), rxOptions);
+            rxRangeOneByte = new Regex("^[ \\t]*(?:" + label + "[ \\t]*:)?[ \\t]*" + oneByte.Replace("<oneByte>", "<range>") + "[ \\t\\r]*$", rxOptions);
+            rxRangeTwoByte = new Regex("^[ \\t]*(?:" + label + "[ \\t]*:)?[ \\t]*" + twoByte.Replace("<twoByte>", "<range>") + "[ \\t\\r]*$", rxOptions);
+            rxRangeThreeByte = new Regex("^[ \\t]*(?:" + label + "[ \\t]*:)?[ \\t]*" + threeByte.Replace("<threeByte>", "<range>" + "[ \\t\\r]*$"), rxOptions);
 
             rxRangeLiteralByte = new Regex(twoByte.Replace("<litByte>", "<range>"), rxOptions);
             rxRangeLiteralUShort = new Regex(tempThreeByte + litUShort, rxOptions);

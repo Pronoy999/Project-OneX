@@ -81,6 +81,7 @@
             this.insrepinfo = new System.Windows.Forms.ToolStripStatusLabel();
             this.openFile = new System.Windows.Forms.OpenFileDialog();
             this.saveFile = new System.Windows.Forms.SaveFileDialog();
+            this.parseTimer = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.codeBox)).BeginInit();
             this.StatusBar.SuspendLayout();
             this.SuspendLayout();
@@ -519,6 +520,12 @@
             this.saveFile.Filter = "OneX Files|*.onex";
             this.saveFile.RestoreDirectory = true;
             // 
+            // parseTimer
+            // 
+            this.parseTimer.Enabled = true;
+            this.parseTimer.Interval = 500;
+            this.parseTimer.Tick += new System.EventHandler(this.parseTimer_Tick);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -598,5 +605,6 @@
         private System.Windows.Forms.ToolStripStatusLabel insrepinfo;
         private System.Windows.Forms.OpenFileDialog openFile;
         private System.Windows.Forms.SaveFileDialog saveFile;
+        private System.Windows.Forms.Timer parseTimer;
     }
 }
