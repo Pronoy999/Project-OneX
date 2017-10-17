@@ -620,6 +620,7 @@
             // execButton
             // 
             this.execButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.execButton.Enabled = false;
             this.execButton.Font = new System.Drawing.Font("Trebuchet MS", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.execButton.Location = new System.Drawing.Point(91, 101);
             this.execButton.Name = "execButton";
