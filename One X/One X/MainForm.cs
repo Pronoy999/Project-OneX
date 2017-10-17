@@ -203,6 +203,7 @@ namespace One_X {
             }
             Application.Exit();
         }
+
         private void SaveAndClose() {
             if (!codeBox.IsChanged) { CloseFile(); return; }
             DialogResult dr = MessageBox.Show("Warning: Unsaved changes!\nSave changes to " + (string.IsNullOrWhiteSpace(saveFileName) ? "new source file" : saveFileName) + "?", "Confirm Save", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
@@ -319,6 +320,12 @@ namespace One_X {
 
         private void newMI_Click(object sender, EventArgs e) {
             New();
+        }
+
+        private async void parseTimer_Tick(object sender, EventArgs e) {
+            await Task.Run(() => {
+
+            });
         }
     }
 }
