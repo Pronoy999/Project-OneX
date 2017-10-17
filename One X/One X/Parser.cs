@@ -22,7 +22,7 @@ namespace One_X {
 
         Dictionary<string, ushort> labels = new Dictionary<string, ushort>();
 
-        List<int> memory = new List<int>();// To generate the warning. 
+        List<ushort> memory = new List<ushort>();// To generate the warning. 
 
         List<(int lineInd, int colInd, int length, ushort address, string reference)> tempReference = 
             new List<(int lineInd, int colInd, int length, ushort address, string reference)>();
@@ -113,8 +113,8 @@ namespace One_X {
                 else if (!string.IsNullOrWhiteSpace(match.Groups[LIT_USHORT].Value)) {
                     rightLit = match.Groups[LIT_USHORT].Value;
                     rightLit_type = LIT_USHORT;
-                    if (!memory.Contains(Convert.ToInt32(rightLit))) {
-                        memory.Add(Convert.ToInt32(rightLit));
+                    if (!memory.Contains(ushort.Parse(rightLit,System.Globalization.NumberStyles.HexNumber))) {
+                        memory.Add(ushort.Parse(rightLit,System.Globalization.NumberStyles.HexNumber));
                     }
                     else {
                         errorList.Add((DebugLevel.Information, i, (label.Length + instruction_name.Length), rightLit.Length));
@@ -133,7 +133,7 @@ namespace One_X {
                 }
                 if (rightLit_type != REFERENCE) {
                     try {
-                        right_LIT = ushort.Parse(rightLit);
+                        right_LIT = ushort.Parse(rightLit,System.Globalization.NumberStyles.HexNumber);
                     }
                     catch (Exception) { }
                 }
