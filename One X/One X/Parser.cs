@@ -43,7 +43,7 @@ namespace One_X {
             this.address = address; //Setting address.
         }
         public void parse(string code) {
-
+            ushort address = this.address;
             string label = string.Empty; //A Local Variable to store the labels. 
 
             string instruction_name = string.Empty;//A Local Variable to store the instrctions. 
