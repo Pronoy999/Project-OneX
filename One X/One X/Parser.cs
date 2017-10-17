@@ -177,7 +177,7 @@ namespace One_X {
                         instructions[label.Value].MCycles = originalInstruction.MCycles;
                         instructions[label.Value].TStates = originalInstruction.TStates;
                         instructions[label.Value].method = originalInstruction.method;
-                        instructions[label.Value].Arguments = BitHelper.ToBytes(refAddress);
+                        instructions[label.Value].Arguments = refAddress.ToBytes();
                     }
                 }
             }
