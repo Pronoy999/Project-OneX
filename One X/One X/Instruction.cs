@@ -26,6 +26,17 @@ namespace One_X {
             this.Arguments = Arguments;
         }
 
+        public Instruction(string Name, byte Bytes, byte MCycles, byte TStates, string method) {
+            this.Name = Name;
+            this.Bytes = Bytes;
+            this.MCycles = MCycles;
+            this.TStates = TStates;
+
+            if (!string.IsNullOrWhiteSpace(method)) {
+                this.method = typeof(MPU).GetMethod(method);
+            }
+        }
+
         public OPCODE GetOPCODE() {
             return opcodes.First(x => x.GetAttributeOfType<Instruction>().Name == Name);
         }

@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace One_X {
     public class Parser {
@@ -32,12 +29,15 @@ namespace One_X {
 
         List<int> memory = new List<int>();// To generate the warning. 
 
+        List<(int lineInd, int colInd, int length, ushort address, string reference)> tempReference = 
+            new List<(int lineInd, int colInd, int length, ushort address, string reference)>();
+
         /**<summary>
          * Variables to store the names of the Regex Groups. 
          *</summary>
          */
-        string LABEL = "label", REFERENCE = "reference", ONEBYTE_INSTRUCTION = "oneByte",TWOBYTE_INSTRUCTION="twoByte",THREEBYTE_INSTRUCTION="threeByte",
-            LIT_BYTE="litByte",LIT_USHORT="litUshort";
+        string LABEL = "label", REFERENCE = "reference", ONEBYTE_INSTRUCTION = "oneByte", TWOBYTE_INSTRUCTION = "twoByte", THREEBYTE_INSTRUCTION = "threeByte",
+            LIT_BYTE = "litByte", LIT_USHORT = "litUshort";
         /**<summary>
          * A local Variable to Store Labels.
          * </summary>
@@ -47,7 +47,7 @@ namespace One_X {
          * A Local Variable to store the instrctions. 
          * </summary>
          */
-        string instruction_name=string.Empty;
+        string instruction_name = string.Empty;
 
         string instruction_type = string.Empty;
         /**<summary>
@@ -79,7 +79,8 @@ namespace One_X {
                 if (inst.Bytes > 1) {
                     if (inst.Name.Contains(" ")) {
                         rxps[inst.Bytes - 1] += ",";
-                    } else {
+                    }
+                    else {
                         rxps[inst.Bytes - 1] += "[ \\t]";
                     }
                 }
@@ -97,7 +98,7 @@ namespace One_X {
             return "(?<instruction>" + string.Join("|", rxps) + ")";
         }
 
-        public void parse(String code) {
+        public void parse(string code) {
             string[] line = code.Split(newLine);
             int i, lineNum = line.Length;
             for (i = 0; i < lineNum; i++) {
@@ -121,59 +122,96 @@ namespace One_X {
                     else if (labels.ContainsKey(label)) {
                         labels[label] = address;
                     }
-                    //Getting the instruction.                    
-                    if (match.Groups[ONEBYTE_INSTRUCTION].Value != string.Empty) {
-                        instruction_name = match.Groups[ONEBYTE_INSTRUCTION].Value;
-                        instruction_type = ONEBYTE_INSTRUCTION;
-                    }
-                    else if (match.Groups[TWOBYTE_INSTRUCTION].Value != string.Empty) {
-                        instruction_name = match.Groups[TWOBYTE_INSTRUCTION].Value;
-                        instruction_type = TWOBYTE_INSTRUCTION;
-                    }
-                    else if (match.Groups[THREEBYTE_INSTRUCTION].Value != string.Empty) {
-                        instruction_name = match.Groups[THREEBYTE_INSTRUCTION].Value;
-                        instruction_type = THREEBYTE_INSTRUCTION;
-                    }
+                }
+                //Getting the instruction.                   
+                if (match.Groups[ONEBYTE_INSTRUCTION].Value != string.Empty) {
+                    instruction_name = match.Groups[ONEBYTE_INSTRUCTION].Value.Trim();
+                    instruction_type = ONEBYTE_INSTRUCTION;
+                }
+                else if (match.Groups[TWOBYTE_INSTRUCTION].Value != string.Empty) {
+                    instruction_name = match.Groups[TWOBYTE_INSTRUCTION].Value.Trim();
+                    instruction_type = TWOBYTE_INSTRUCTION;
+                }
+                else if (match.Groups[THREEBYTE_INSTRUCTION].Value != string.Empty) {
+                    instruction_name = match.Groups[THREEBYTE_INSTRUCTION].Value.Trim();
+                    instruction_type = THREEBYTE_INSTRUCTION;
+                }
 
-                    if (instruction_name == string.Empty) continue; //Blank Label. 
+                if (instruction_name == string.Empty) {
+                    if (line[i].Length != label.Length) {
+                        errorList.Add((DebugLevel.Error, i, label.Length + 1, (line[i].Length - label.Length))); //Lable with Invalid Characters. 
+                    }
+                    continue; //Blank Label. 
+                }
 
-                    //Getting the Right Literal. 
-                    if (match.Groups[LIT_BYTE].Value != string.Empty) {
-                        rightLit = match.Groups[LIT_BYTE].Value;
-                        rightLit_type = LIT_BYTE;
-                    }
-                    else if (match.Groups[LIT_USHORT].Value != string.Empty) {
-                        rightLit = match.Groups[LIT_USHORT].Value;
-                        rightLit_type = LIT_USHORT;
-                    }
-                    else if (match.Groups[REFERENCE].Value != string.Empty) {
-                        rightLit = match.Groups[REFERENCE].Value;
-                        rightLit_type = REFERENCE;
-                    }
-                    //Checking for MisMatch ERROR.
-                    if(instruction_type==ONEBYTE_INSTRUCTION && (rightLit_type == LIT_USHORT || rightLit_type==REFERENCE)) {
-                        errorList.Add((DebugLevel.Error, i, (label.Length + instruction_name.Length), rightLit.Length));
-                    }
-                    else if(instruction_type==TWOBYTE_INSTRUCTION && (rightLit_type == REFERENCE || rightLit_type==LIT_USHORT)) {
-                        errorList.Add((DebugLevel.Error, i, (label.Length + instruction_name.Length), rightLit.Length));
-                    }
-                    if (rightLit_type != REFERENCE) {
-                        ushort right_LIT = ushort.Parse(rightLit);
+                //Getting the Right Literal. 
+                if (match.Groups[LIT_BYTE].Value != string.Empty) {
+                    rightLit = match.Groups[LIT_BYTE].Value;
+                    rightLit_type = LIT_BYTE;
+                }
+                else if (match.Groups[LIT_USHORT].Value != string.Empty) {
+                    rightLit = match.Groups[LIT_USHORT].Value;
+                    rightLit_type = LIT_USHORT;
+                    if (!memory.Contains(Convert.ToInt32(rightLit))) {
+                        memory.Add(Convert.ToInt32(rightLit));
                     }
                     else {
-                        //TODO: If Reference.
+                        errorList.Add((DebugLevel.Information, i, (label.Length + instruction_name.Length), rightLit.Length));
                     }
-                    Instruction ins = null;
-                    foreach(Instruction inst in Instruction.list) {
-                        if (instruction_name == inst.Name) {
-                            ins = inst;
+                }
+                else if (match.Groups[REFERENCE].Value != string.Empty) {
+                    rightLit = match.Groups[REFERENCE].Value;
+                    rightLit_type = REFERENCE;
+                }
+                //Checking for MisMatch ERROR.
+                /*if (instruction_type == ONEBYTE_INSTRUCTION && (rightLit_type == LIT_USHORT || rightLit_type == REFERENCE)) {
+                    errorList.Add((DebugLevel.Error, i, (label.Length + instruction_name.Length), rightLit.Length));
+                }*/
+                else if (instruction_type == TWOBYTE_INSTRUCTION && (rightLit_type == REFERENCE || rightLit_type == LIT_USHORT)) {
+                    errorList.Add((DebugLevel.Error, i, (label.Length + instruction_name.Length), rightLit.Length));
+                }
+                if (rightLit_type != REFERENCE) {
+                    ushort right_LIT = ushort.Parse(rightLit);
+                }
+                else if (rightLit_type == REFERENCE) {
+                    tempReference.Add((i, label.Length + instruction_name.Length, rightLit.Length, address, rightLit)); //Adding the temporary reference. 
+                }
+                if (rightLit_type != REFERENCE) {
+                    Instruction inst = null;
+                    foreach(Instruction ins in Instruction.list) {
+                        if (ins.Name == instruction_name) {
+                            inst = ins;                           
                             break;
                         }
                     }
-                    if (ins != null) {
-                        Instruction newInstruction = new Instruction(ins.Name, ins.Bytes, ins.MCycles, ins.TStates, ins.method, BitHelper.ToBytes(right_LIT));
-                        instructions.Add(address,newInstruction);  // Adding the instruction to the List. 
-                        address += ins.Bytes;
+                    //Adding the instructions. 
+                    instructions
+                        .Add(address,new Instruction(inst.Name, inst.Bytes, inst.MCycles, inst.TStates, inst.method, BitHelper.ToBytes(ushort.Parse(rightLit))));
+                    inst = null;
+                }
+                else {
+                    instructions.Add(address, new Instruction(instruction_name, 0, 0, 0,""));//Dummy data for instructions with reference. 
+                }
+            }
+            addReferences();
+        }
+        private void addReferences() {
+            foreach(var refer in tempReference) {
+                foreach(var label in labels) {
+                    if (refer.reference == label.Key) {
+                        ushort refAddress = label.Value;
+                        Instruction originalInstruction = null;
+                        foreach(Instruction i in Instruction.list) {
+                            if (instructions[label.Value].Name == i.Name) {
+                                originalInstruction = i;
+                                break;
+                            }
+                        }
+                        instructions[label.Value].Bytes = originalInstruction.Bytes;
+                        instructions[label.Value].MCycles = originalInstruction.MCycles;
+                        instructions[label.Value].TStates = originalInstruction.TStates;
+                        instructions[label.Value].method = originalInstruction.method;
+                        instructions[label.Value].Arguments = BitHelper.ToBytes(refAddress);
                     }
                 }
             }
