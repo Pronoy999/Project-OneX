@@ -12,9 +12,13 @@ using System.Drawing.Text;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
 using System.IO;
+using Blue.Windows;
 
 namespace One_X {
     public partial class MainForm : Form {
+        private MemoryViewer memView = new MemoryViewer();
+        private Assembler assembler = new Assembler();
+
         private string codeFileName = string.Empty;
         private string saveFileName = string.Empty;
 
@@ -28,10 +32,11 @@ namespace One_X {
 
         public MainForm() {
             InitializeComponent();
+            StickyWindow.RegisterExternalReferenceForm(this);
         }
 
         private void MainForm_Load(object sender, EventArgs e) {
-            MenuItem[] notImp = { updateMI, aboutMI, memeditMI, assemblerMI, datamoniMI, execMI, optionsMI };
+            MenuItem[] notImp = { updateMI, aboutMI, datamoniMI, execMI, optionsMI };
             object[] fontObjects = { codeBox };
 
             int fontLength = Properties.Resources.Hack.Length;
@@ -175,13 +180,13 @@ namespace One_X {
         }
 
         private void exitMI_Click(object sender, EventArgs e) => SaveAndExit();
-        
+
         private void SaveAndExit() {
             if (!codeBox.IsChanged) {
                 Application.Exit();
                 return;
             }
-            DialogResult dr = MessageBox.Show("Warning: Unsaved changes!\nSave changes to " + (string.IsNullOrWhiteSpace(saveFileName) ? "new source file" : saveFileName) +  "?", "Confirm Save", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
+            DialogResult dr = MessageBox.Show("Warning: Unsaved changes!\nSave changes to " + (string.IsNullOrWhiteSpace(saveFileName) ? "new source file" : saveFileName) + "?", "Confirm Save", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
             switch (dr) {
                 case DialogResult.No:
                     saved = true;
@@ -329,7 +334,99 @@ namespace One_X {
         private async void parseTimer_Tick(object sender, EventArgs e) {
             await Task.Run(() => {
                 parser.parse(codeBox.Text);
+
+                assembler.dispatcher.Invoke(() => {
+                    try {
+                        ushort start = ushort.Parse(assembler.insts.Items[0].SubItems[1].Text, System.Globalization.NumberStyles.HexNumber);
+                        ushort end = ushort.Parse(assembler.insts.Items[assembler.insts.Items.Count - 1].SubItems[1].Text, System.Globalization.NumberStyles.HexNumber);
+                    
+                        MPU.memory.Clear(start, end);
+                    } catch (ArgumentOutOfRangeException ex) { }
+                });
+
+                assembler.dispatcher.Invoke(() => {
+                    assembler.insts.Items.Clear();
+                });
+                foreach (var ins in parser.instructions) {
+                    var mark = string.Empty;
+                    if (ins.Key.ToString("X4") == assembler.startAddressBox.Text) {
+                        mark = "->";
+                    }
+                    ListViewItem litem = new ListViewItem(new string[] {
+                    mark,
+                    ins.Key.ToString("X4"),
+                    ins.Value.Name + (ins.Value.Bytes > 1 ?
+                    (ins.Value.Name.Contains(" ") ? "," : " ") +
+                    ins.Value.Arguments.ToUShort().ToString(ins.Value.Bytes > 2 ? "X4" : "X2") + "H" : string.Empty),
+                    ((byte)ins.Value.GetOPCODE()).ToString("X2"),
+                    ins.Value.Bytes.ToString(),
+                    ins.Value.MCycles.ToString(),
+                    ins.Value.TStates.ToString()
+                });
+
+                    assembler.dispatcher.Invoke(() => {
+                        assembler.insts.Items.Add(litem);
+                    });
+                    if (ins.Value.Bytes > 1) {
+                        ListViewItem litemLO = new ListViewItem(new string[] {
+                        string.Empty,
+                        ((ushort)(ins.Key + 1)).ToString("X4"),
+                        string.Empty,
+                        ins.Value.Arguments.LO.ToString("X2")
+                    });
+
+                        assembler.dispatcher.Invoke(() => {
+                            assembler.insts.Items.Add(litemLO);
+                        });
+                        if (ins.Value.Bytes > 2) {
+                            ListViewItem litemHO = new ListViewItem(new string[] {
+                            string.Empty,
+                            ((ushort)(ins.Key + 2)).ToString("X4"),
+                            string.Empty,
+                            ins.Value.Arguments.HO.ToString("X2")
+                        });
+
+                            assembler.dispatcher.Invoke(() => {
+                                assembler.insts.Items.Add(litemHO);
+                            });
+                        }
+                    }
+                    ins.Value.WriteToMemory(MPU.memory, ins.Key);
+                }
+                memView.memBox.Invalidate();
             });
+        }
+
+        private void memeditMI_Click(object sender, EventArgs e) {
+            if (memView.Visible) {
+                memView.Hide();
+            } else {
+                memView.Show();
+            }
+            if (IsOnScreen(new Point(Location.X + Width + 20, Location.Y - 20))) {
+                memView.Location = new Point(Location.X + Width, Location.Y);
+            }
+        }
+
+        public bool IsOnScreen(Point pt) {
+            Screen[] screens = Screen.AllScreens;
+            foreach (Screen screen in screens) {
+                if (screen.WorkingArea.Contains(pt)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private void assemblerMI_Click(object sender, EventArgs e) {
+            if (assembler.Visible) {
+                assembler.Hide();
+            } else {
+                assembler.Show();
+            }
+            if (IsOnScreen(new Point(Location.X - 20, Location.Y + Height + 20))) {
+                assembler.Location = new Point(Location.X, Location.Y + Height);
+            }
         }
     }
 }

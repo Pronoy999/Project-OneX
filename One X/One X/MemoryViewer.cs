@@ -1,4 +1,5 @@
 ﻿using Be.Windows.Forms;
+using Blue.Windows;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,8 +14,11 @@ using System.Windows.Forms;
 
 namespace One_X {
     public partial class MemoryViewer : Form {
+        private StickyWindow window;
+
         public MemoryViewer() {
             InitializeComponent();
+            window = new StickyWindow(this);
         }
 
         [DllImport("user32.dll")]

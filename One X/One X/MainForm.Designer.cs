@@ -115,7 +115,7 @@
             this.codeBox.ReservedCountOfLineNumberChars = 3;
             this.codeBox.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
             this.codeBox.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("codeBox.ServiceColors")));
-            this.codeBox.Size = new System.Drawing.Size(897, 619);
+            this.codeBox.Size = new System.Drawing.Size(704, 417);
             this.codeBox.TabIndex = 0;
             this.codeBox.Zoom = 100;
             this.codeBox.TextChanged += new System.EventHandler<FastColoredTextBoxNS.TextChangedEventArgs>(this.codeBox_TextChanged);
@@ -281,11 +281,13 @@
             // 
             this.memeditMI.Index = 0;
             this.memeditMI.Text = "Memory Editor";
+            this.memeditMI.Click += new System.EventHandler(this.memeditMI_Click);
             // 
             // assemblerMI
             // 
             this.assemblerMI.Index = 1;
             this.assemblerMI.Text = "Assembler";
+            this.assemblerMI.Click += new System.EventHandler(this.assemblerMI_Click);
             // 
             // datamoniMI
             // 
@@ -462,9 +464,9 @@
             this.modifiedinfo,
             this.locinfo,
             this.insrepinfo});
-            this.StatusBar.Location = new System.Drawing.Point(0, 619);
+            this.StatusBar.Location = new System.Drawing.Point(0, 417);
             this.StatusBar.Name = "StatusBar";
-            this.StatusBar.Size = new System.Drawing.Size(897, 24);
+            this.StatusBar.Size = new System.Drawing.Size(704, 24);
             this.StatusBar.SizingGrip = false;
             this.StatusBar.TabIndex = 1;
             // 
@@ -490,14 +492,15 @@
             // modifiedinfo
             // 
             this.modifiedinfo.AutoSize = false;
+            this.modifiedinfo.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Right;
             this.modifiedinfo.Name = "modifiedinfo";
-            this.modifiedinfo.Size = new System.Drawing.Size(382, 19);
+            this.modifiedinfo.Size = new System.Drawing.Size(189, 19);
             this.modifiedinfo.Spring = true;
             // 
             // locinfo
             // 
             this.locinfo.AutoSize = false;
-            this.locinfo.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right)));
+            this.locinfo.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Right;
             this.locinfo.Name = "locinfo";
             this.locinfo.Size = new System.Drawing.Size(150, 19);
             this.locinfo.Text = "Location: 0";
@@ -530,12 +533,12 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(897, 643);
+            this.ClientSize = new System.Drawing.Size(704, 441);
             this.Controls.Add(this.codeBox);
             this.Controls.Add(this.StatusBar);
             this.Menu = this.MenuBar;
+            this.MinimumSize = new System.Drawing.Size(720, 480);
             this.Name = "MainForm";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "MainForm";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);
