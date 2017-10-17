@@ -99,7 +99,7 @@
         '\"',
         '\'',
         '\''};
-            this.codeBox.AutoScrollMinSize = new System.Drawing.Size(47, 24);
+            this.codeBox.AutoScrollMinSize = new System.Drawing.Size(2, 24);
             this.codeBox.BackBrush = null;
             this.codeBox.CharHeight = 16;
             this.codeBox.CharWidth = 9;
