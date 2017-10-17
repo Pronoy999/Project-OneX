@@ -54,6 +54,9 @@ namespace One_X {
 
             instructions.Clear();
             labels.Clear();
+            errorList.Clear();
+            tempReference.Clear();
+            memory.Clear();
 
             string[] line = code.Split(newLine);
             int i, lineNum = line.Length;
