@@ -76,5 +76,9 @@ namespace One_X {
             e.Cancel = true;
             Hide();
         }
+
+        private void setAddressButton_Click(object sender, EventArgs e) {
+            MainForm.startAddress = ushort.Parse(startAddressBox.Text, System.Globalization.NumberStyles.HexNumber);
+        }
     }
 }

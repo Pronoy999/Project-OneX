@@ -140,6 +140,7 @@
             this.setAddressButton.TabIndex = 0;
             this.setAddressButton.Text = "SET";
             this.setAddressButton.UseVisualStyleBackColor = true;
+            this.setAddressButton.Click += new System.EventHandler(this.setAddressButton_Click);
             // 
             // Assembler
             // 

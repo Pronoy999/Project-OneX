@@ -80,6 +80,10 @@ namespace One_X {
 
             parser = new Parser(0);
             MPU.ValueChanged += ValueChanged;
+
+            memeditMI.PerformClick();
+            execMI.PerformClick();
+            assemblerMI.PerformClick();
         }
 
         // todo define global static / settings
@@ -341,7 +345,8 @@ namespace One_X {
                 memView.Close();
                 memView.Dispose();
             } catch { }
-            try { MPU.CommitMemory(); Directory.Delete(dir, true); } catch (IOException) { } catch (NullReferenceException) { }
+            try { MPU.CommitMemory(); }  catch (NullReferenceException) { }
+            try { Directory.Delete(dir, true); } catch (IOException) { }
             Directory.CreateDirectory(dir);
             MPU.InitMemory(dir + "\\memory");
             memView = new MemoryViewer();
@@ -354,8 +359,8 @@ namespace One_X {
             New();
         }
 
-        private async void parseTimer_Tick(object sender, EventArgs e) {
-            
+        private void parseTimer_Tick(object sender, EventArgs e) {
+            parse();
         }
 
         private void memeditMI_Click(object sender, EventArgs e) {
@@ -401,8 +406,16 @@ namespace One_X {
             }
         }
 
-        private async void insrepinfo_Click(object sender, EventArgs e) {
+        private void insrepinfo_Click(object sender, EventArgs e) => parse();
+
+        public static ushort startAddress = 0x0000;
+
+        public async void parse() {
             await Task.Run(() => {
+                assembler.dispatcher.Invoke(() => {
+                    assembler.insts.BeginUpdate();
+                });
+                parser = new Parser(startAddress);
                 parser.parse(codeBox.Text);
 
                 assembler.dispatcher.Invoke(() => {
@@ -419,9 +432,15 @@ namespace One_X {
                 });
                 foreach (var ins in parser.instructions) {
                     var mark = string.Empty;
-                    if (ins.Key.ToString("X4") == assembler.startAddressBox.Text) {
-                        mark = "->";
-                    }
+                    assembler.dispatcher.Invoke(() => {
+                        foreach (ListViewItem lsitem in assembler.insts.Items) {
+                            if (lsitem.SubItems[1].Text == executer.PCVal.Text) {
+                                lsitem.Text = "->";
+                            } else {
+                                lsitem.Text = string.Empty;
+                            }
+                        }
+                    });
                     ListViewItem litem = new ListViewItem(new string[] {
                         mark,
                         ins.Key.ToString("X4"),
@@ -464,9 +483,12 @@ namespace One_X {
                     ins.Value.WriteToMemory(MPU.memory, ins.Key);
                 }
                 memView.memBox.Invalidate();
+
+                assembler.dispatcher.Invoke(() => {
+                    assembler.insts.EndUpdate();
+                });
             });
         }
-
 
         private void ValueChanged(object sender, MPU.MPUEventArgs e) {
             executer.dispatcher.Invoke(delegate () {
