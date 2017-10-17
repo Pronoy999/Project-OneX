@@ -18,6 +18,7 @@ namespace One_X {
     public partial class MainForm : Form {
         private MemoryViewer memView = new MemoryViewer();
         private Assembler assembler = new Assembler();
+        private Executer executer = new Executer();
 
         private string codeFileName = string.Empty;
         private string saveFileName = string.Empty;
@@ -36,7 +37,9 @@ namespace One_X {
         }
 
         private void MainForm_Load(object sender, EventArgs e) {
-            MenuItem[] notImp = { updateMI, aboutMI, datamoniMI, execMI, optionsMI };
+            Size = MinimumSize;
+
+            MenuItem[] notImp = { updateMI, aboutMI, datamoniMI, optionsMI };
             object[] fontObjects = { codeBox };
 
             int fontLength = Properties.Resources.Hack.Length;
@@ -332,69 +335,7 @@ namespace One_X {
         }
 
         private async void parseTimer_Tick(object sender, EventArgs e) {
-            await Task.Run(() => {
-                parser.parse(codeBox.Text);
-
-                assembler.dispatcher.Invoke(() => {
-                    try {
-                        ushort start = ushort.Parse(assembler.insts.Items[0].SubItems[1].Text, System.Globalization.NumberStyles.HexNumber);
-                        ushort end = ushort.Parse(assembler.insts.Items[assembler.insts.Items.Count - 1].SubItems[1].Text, System.Globalization.NumberStyles.HexNumber);
-                    
-                        MPU.memory.Clear(start, end);
-                    } catch (ArgumentOutOfRangeException ex) { }
-                });
-
-                assembler.dispatcher.Invoke(() => {
-                    assembler.insts.Items.Clear();
-                });
-                foreach (var ins in parser.instructions) {
-                    var mark = string.Empty;
-                    if (ins.Key.ToString("X4") == assembler.startAddressBox.Text) {
-                        mark = "->";
-                    }
-                    ListViewItem litem = new ListViewItem(new string[] {
-                    mark,
-                    ins.Key.ToString("X4"),
-                    ins.Value.Name + (ins.Value.Bytes > 1 ?
-                    (ins.Value.Name.Contains(" ") ? "," : " ") +
-                    ins.Value.Arguments.ToUShort().ToString(ins.Value.Bytes > 2 ? "X4" : "X2") + "H" : string.Empty),
-                    ((byte)ins.Value.GetOPCODE()).ToString("X2"),
-                    ins.Value.Bytes.ToString(),
-                    ins.Value.MCycles.ToString(),
-                    ins.Value.TStates.ToString()
-                });
-
-                    assembler.dispatcher.Invoke(() => {
-                        assembler.insts.Items.Add(litem);
-                    });
-                    if (ins.Value.Bytes > 1) {
-                        ListViewItem litemLO = new ListViewItem(new string[] {
-                        string.Empty,
-                        ((ushort)(ins.Key + 1)).ToString("X4"),
-                        string.Empty,
-                        ins.Value.Arguments.LO.ToString("X2")
-                    });
-
-                        assembler.dispatcher.Invoke(() => {
-                            assembler.insts.Items.Add(litemLO);
-                        });
-                        if (ins.Value.Bytes > 2) {
-                            ListViewItem litemHO = new ListViewItem(new string[] {
-                            string.Empty,
-                            ((ushort)(ins.Key + 2)).ToString("X4"),
-                            string.Empty,
-                            ins.Value.Arguments.HO.ToString("X2")
-                        });
-
-                            assembler.dispatcher.Invoke(() => {
-                                assembler.insts.Items.Add(litemHO);
-                            });
-                        }
-                    }
-                    ins.Value.WriteToMemory(MPU.memory, ins.Key);
-                }
-                memView.memBox.Invalidate();
-            });
+            
         }
 
         private void memeditMI_Click(object sender, EventArgs e) {
@@ -427,6 +368,83 @@ namespace One_X {
             if (IsOnScreen(new Point(Location.X - 20, Location.Y + Height + 20))) {
                 assembler.Location = new Point(Location.X, Location.Y + Height);
             }
+        }
+
+        private void execMI_Click(object sender, EventArgs e) {
+            if (executer.Visible) {
+                executer.Hide();
+            } else {
+                executer.Show();
+            }
+            if (IsOnScreen(new Point(Location.X + Width + 20, Location.Y + Height + 20))) {
+                executer.Location = new Point(Location.X + Width, Location.Y + Height);
+            }
+        }
+
+        private async void insrepinfo_Click(object sender, EventArgs e) {
+            await Task.Run(() => {
+                parser.parse(codeBox.Text);
+
+                assembler.dispatcher.Invoke(() => {
+                    try {
+                        ushort start = ushort.Parse(assembler.insts.Items[0].SubItems[1].Text, System.Globalization.NumberStyles.HexNumber);
+                        ushort end = ushort.Parse(assembler.insts.Items[assembler.insts.Items.Count - 1].SubItems[1].Text, System.Globalization.NumberStyles.HexNumber);
+
+                        MPU.memory.Clear(start, end);
+                    } catch (ArgumentOutOfRangeException ex) { }
+                });
+
+                assembler.dispatcher.Invoke(() => {
+                    assembler.insts.Items.Clear();
+                });
+                foreach (var ins in parser.instructions) {
+                    var mark = string.Empty;
+                    if (ins.Key.ToString("X4") == assembler.startAddressBox.Text) {
+                        mark = "->";
+                    }
+                    ListViewItem litem = new ListViewItem(new string[] {
+                        mark,
+                        ins.Key.ToString("X4"),
+                        ins.Value.Name + (ins.Value.Bytes > 1 ?
+                        (ins.Value.Name.Contains(" ") ? "," : " ") +
+                        ins.Value.Arguments.ToUShort().ToString(ins.Value.Bytes > 2 ? "X4" : "X2") + "H" : string.Empty),
+                        ((byte)ins.Value.GetOPCODE()).ToString("X2"),
+                        ins.Value.Bytes.ToString(),
+                        ins.Value.MCycles.ToString(),
+                        ins.Value.TStates.ToString()
+                    });
+
+                    assembler.dispatcher.Invoke(() => {
+                        assembler.insts.Items.Add(litem);
+                    });
+                    if (ins.Value.Bytes > 1) {
+                        ListViewItem litemLO = new ListViewItem(new string[] {
+                            string.Empty,
+                            ((ushort)(ins.Key + 1)).ToString("X4"),
+                            string.Empty,
+                            ins.Value.Arguments.LO.ToString("X2")
+                        });
+
+                        assembler.dispatcher.Invoke(() => {
+                            assembler.insts.Items.Add(litemLO);
+                        });
+                        if (ins.Value.Bytes > 2) {
+                            ListViewItem litemHO = new ListViewItem(new string[] {
+                                string.Empty,
+                                ((ushort)(ins.Key + 2)).ToString("X4"),
+                                string.Empty,
+                                ins.Value.Arguments.HO.ToString("X2")
+                            });
+
+                            assembler.dispatcher.Invoke(() => {
+                                assembler.insts.Items.Add(litemHO);
+                            });
+                        }
+                    }
+                    ins.Value.WriteToMemory(MPU.memory, ins.Key);
+                }
+                memView.memBox.Invalidate();
+            });
         }
     }
 }
