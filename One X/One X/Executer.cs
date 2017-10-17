@@ -64,5 +64,10 @@ namespace One_X {
             e.Cancel = true;
             Hide();
         }
+
+        private void resetBtn_Click(object sender, EventArgs e) {
+            MPU.Stop();
+            MPU.PC = 0x0000;
+        }
     }
 }

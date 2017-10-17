@@ -527,6 +527,7 @@
             // 
             // parseTimer
             // 
+            this.parseTimer.Enabled = true;
             this.parseTimer.Interval = 500;
             this.parseTimer.Tick += new System.EventHandler(this.parseTimer_Tick);
             // 

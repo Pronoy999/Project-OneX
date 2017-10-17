@@ -69,6 +69,7 @@
             this.stopBtn = new System.Windows.Forms.Button();
             this.execButton = new System.Windows.Forms.Button();
             this.nextStepBtn = new System.Windows.Forms.Button();
+            this.resetBtn = new System.Windows.Forms.Button();
             this.registerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mpointicon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lregicon)).BeginInit();
@@ -608,9 +609,9 @@
             // 
             this.stopBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.stopBtn.Font = new System.Drawing.Font("Trebuchet MS", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.stopBtn.Location = new System.Drawing.Point(229, 226);
+            this.stopBtn.Location = new System.Drawing.Point(91, 183);
             this.stopBtn.Name = "stopBtn";
-            this.stopBtn.Size = new System.Drawing.Size(113, 61);
+            this.stopBtn.Size = new System.Drawing.Size(174, 61);
             this.stopBtn.TabIndex = 11;
             this.stopBtn.Text = "Stop";
             this.stopBtn.UseVisualStyleBackColor = true;
@@ -620,9 +621,9 @@
             // 
             this.execButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.execButton.Font = new System.Drawing.Font("Trebuchet MS", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.execButton.Location = new System.Drawing.Point(12, 226);
+            this.execButton.Location = new System.Drawing.Point(91, 101);
             this.execButton.Name = "execButton";
-            this.execButton.Size = new System.Drawing.Size(211, 61);
+            this.execButton.Size = new System.Drawing.Size(174, 61);
             this.execButton.TabIndex = 10;
             this.execButton.Text = "Execute\r\nAll Steps";
             this.execButton.UseVisualStyleBackColor = true;
@@ -632,19 +633,32 @@
             // 
             this.nextStepBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.nextStepBtn.Font = new System.Drawing.Font("Trebuchet MS", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.nextStepBtn.Location = new System.Drawing.Point(12, 64);
+            this.nextStepBtn.Location = new System.Drawing.Point(91, 20);
             this.nextStepBtn.Name = "nextStepBtn";
-            this.nextStepBtn.Size = new System.Drawing.Size(330, 61);
+            this.nextStepBtn.Size = new System.Drawing.Size(174, 61);
             this.nextStepBtn.TabIndex = 9;
             this.nextStepBtn.Text = "Next Step";
             this.nextStepBtn.UseVisualStyleBackColor = true;
             this.nextStepBtn.Click += new System.EventHandler(this.nextStepBtn_Click);
+            // 
+            // resetBtn
+            // 
+            this.resetBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.resetBtn.Font = new System.Drawing.Font("Trebuchet MS", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.resetBtn.Location = new System.Drawing.Point(91, 269);
+            this.resetBtn.Name = "resetBtn";
+            this.resetBtn.Size = new System.Drawing.Size(174, 61);
+            this.resetBtn.TabIndex = 12;
+            this.resetBtn.Text = "Reset";
+            this.resetBtn.UseVisualStyleBackColor = true;
+            this.resetBtn.Click += new System.EventHandler(this.resetBtn_Click);
             // 
             // Executer
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.ClientSize = new System.Drawing.Size(600, 366);
+            this.Controls.Add(this.resetBtn);
             this.Controls.Add(this.stopBtn);
             this.Controls.Add(this.execButton);
             this.Controls.Add(this.nextStepBtn);
@@ -719,5 +733,6 @@
         private System.Windows.Forms.Button stopBtn;
         private System.Windows.Forms.Button execButton;
         private System.Windows.Forms.Button nextStepBtn;
+        private System.Windows.Forms.Button resetBtn;
     }
 }
