@@ -245,6 +245,10 @@ namespace One_X {
             codeFileName = dir + "\\code";
             codeBox.IsChanged = false;
             modifiedinfo.Text = "";
+            try {
+                memView.Close();
+                memView.Dispose();
+            } catch { }
             try { MPU.CommitMemory(); Directory.Delete(dir, true); } catch (IOException) { } catch (NullReferenceException) { }
 
             codeBox.Visible = false;
@@ -272,6 +276,10 @@ namespace One_X {
         private void openMI_Click(object sender, EventArgs e) {
             if (openFile.ShowDialog() == DialogResult.OK) {
                 SaveAndClose();
+                try {
+                    memView.Close();
+                    memView.Dispose();
+                } catch { }
                 MPU.CommitMemory();
                 if (OneXFile.ExtractOneXFile(openFile.FileName, "currentfile")) {
                     saveFileName = openFile.FileName;
@@ -279,6 +287,7 @@ namespace One_X {
                     codeFileName = dir + "\\code";
                     codeBox.OpenFile(codeFileName, Encoding.UTF8);
                     MPU.InitMemory(dir + "\\memory");
+                    memView = new MemoryViewer();
                     codeBox.IsChanged = false;
                     modifiedinfo.Text = Path.GetFileName(saveFileName) + " - *No Changes*";
 
@@ -304,9 +313,14 @@ namespace One_X {
             string dir = Application.UserAppDataPath + "\\currentfile";
             codeFileName = dir + "\\code";
             codeBox.SaveToFile(codeFileName, Encoding.UTF8);
+            try {
+                memView.Close();
+                memView.Dispose();
+            } catch { }
             MPU.CommitMemory();
             OneXFile.RepackOneXFile(name, "currentfile");
             MPU.InitMemory(dir + "\\memory");
+            memView = new MemoryViewer();
             // commit changes (reset all dirty flags)
             codeBox.IsChanged = false;
             modifiedinfo.Text = Path.GetFileName(saveFileName) + " - *Changes Saved*";
@@ -322,9 +336,14 @@ namespace One_X {
             string dir = Application.UserAppDataPath + "\\currentfile";
             codeFileName = dir + "\\code";
             modifiedinfo.Text = "Untitled - *No Changes*";
+            try {
+                memView.Close();
+                memView.Dispose();
+            } catch { }
             try { MPU.CommitMemory(); Directory.Delete(dir, true); } catch (IOException) { } catch (NullReferenceException) { }
             Directory.CreateDirectory(dir);
             MPU.InitMemory(dir + "\\memory");
+            memView = new MemoryViewer();
             codeBox.IsChanged = false;
 
             codeBox.Visible = true;

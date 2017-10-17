@@ -66,6 +66,9 @@
             this.D2Label = new System.Windows.Forms.Label();
             this.D1Label = new System.Windows.Forms.Label();
             this.D0Label = new System.Windows.Forms.Label();
+            this.stopBtn = new System.Windows.Forms.Button();
+            this.execButton = new System.Windows.Forms.Button();
+            this.nextStepBtn = new System.Windows.Forms.Button();
             this.registerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mpointicon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lregicon)).BeginInit();
@@ -601,11 +604,44 @@
             this.D0Label.Text = "D₀";
             this.D0Label.TextAlign = System.Drawing.ContentAlignment.BottomRight;
             // 
+            // stopBtn
+            // 
+            this.stopBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.stopBtn.Location = new System.Drawing.Point(192, 226);
+            this.stopBtn.Name = "stopBtn";
+            this.stopBtn.Size = new System.Drawing.Size(150, 61);
+            this.stopBtn.TabIndex = 11;
+            this.stopBtn.Text = "Stop";
+            this.stopBtn.UseVisualStyleBackColor = true;
+            // 
+            // execButton
+            // 
+            this.execButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.execButton.Location = new System.Drawing.Point(12, 226);
+            this.execButton.Name = "execButton";
+            this.execButton.Size = new System.Drawing.Size(174, 61);
+            this.execButton.TabIndex = 10;
+            this.execButton.Text = "Execute\r\nAll Steps";
+            this.execButton.UseVisualStyleBackColor = true;
+            // 
+            // nextStepBtn
+            // 
+            this.nextStepBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.nextStepBtn.Location = new System.Drawing.Point(12, 64);
+            this.nextStepBtn.Name = "nextStepBtn";
+            this.nextStepBtn.Size = new System.Drawing.Size(330, 61);
+            this.nextStepBtn.TabIndex = 9;
+            this.nextStepBtn.Text = "Next Step";
+            this.nextStepBtn.UseVisualStyleBackColor = true;
+            // 
             // Executer
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.ClientSize = new System.Drawing.Size(600, 366);
+            this.Controls.Add(this.stopBtn);
+            this.Controls.Add(this.execButton);
+            this.Controls.Add(this.nextStepBtn);
             this.Controls.Add(this.registerPanel);
             this.Font = new System.Drawing.Font("Trebuchet MS", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MaximizeBox = false;
@@ -672,5 +708,8 @@
         private System.Windows.Forms.Label D2Label;
         private System.Windows.Forms.Label D1Label;
         private System.Windows.Forms.Label D0Label;
+        private System.Windows.Forms.Button stopBtn;
+        private System.Windows.Forms.Button execButton;
+        private System.Windows.Forms.Button nextStepBtn;
     }
 }
