@@ -163,7 +163,7 @@ namespace One_X {
                 else {
                     try {
                         instructions
-                            .Add(address, new Instruction(inst.Name, inst.Bytes, inst.MCycles, inst.TStates, inst.method,(ushort.Parse("00")).ToBytes()));
+                             .Add(address, new Instruction(inst.Name, inst.Bytes, inst.MCycles, inst.TStates, inst.method, ((ushort)0).ToBytes()));
                         address += inst.Bytes;
                     }
                     catch (Exception e) { }
