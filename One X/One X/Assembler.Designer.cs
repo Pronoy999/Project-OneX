@@ -130,6 +130,7 @@
             this.startAddressBox.TabStop = false;
             this.startAddressBox.Text = "0000";
             this.startAddressBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.startAddressBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.startAddressBox_KeyPress);
             // 
             // setAddressButton
             // 

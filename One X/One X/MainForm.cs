@@ -79,6 +79,7 @@ namespace One_X {
             New();
 
             parser = new Parser(0);
+            MPU.ValueChanged += ValueChanged;
         }
 
         // todo define global static / settings
@@ -463,6 +464,91 @@ namespace One_X {
                     ins.Value.WriteToMemory(MPU.memory, ins.Key);
                 }
                 memView.memBox.Invalidate();
+            });
+        }
+
+
+        private void ValueChanged(object sender, MPU.MPUEventArgs e) {
+            executer.dispatcher.Invoke(delegate () {
+                switch (e.VarName) {
+                    case "A":
+                        executer.AReg.Text = ((byte)e.NewValue).ToString("X2");
+                        break;
+                    case "B":
+                        executer.BReg.Text = ((byte)e.NewValue).ToString("X2");
+                        break;
+                    case "C":
+                        executer.CReg.Text = ((byte)e.NewValue).ToString("X2");
+                        break;
+                    case "D":
+                        executer.DReg.Text = ((byte)e.NewValue).ToString("X2");
+                        break;
+                    case "E":
+                        executer.EReg.Text = ((byte)e.NewValue).ToString("X2");
+                        break;
+                    case "H":
+                        executer.HReg.Text = ((byte)e.NewValue).ToString("X2");
+                        break;
+                    case "L":
+                        executer.LReg.Text = ((byte)e.NewValue).ToString("X2");
+                        break;
+                    case "M":
+                        executer.MPoint.Text = ((byte)e.NewValue).ToString("X2");
+                        break;
+                    case "HRp":
+                        var bytes = ((ushort)e.NewValue).ToBytes();
+                        executer.HReg.Text = bytes.HO.ToString("X2");
+                        executer.LReg.Text = bytes.LO.ToString("X2");
+                        break;
+                    case "BRp":
+                        bytes = ((ushort)e.NewValue).ToBytes();
+                        executer.BReg.Text = bytes.HO.ToString("X2");
+                        executer.CReg.Text = bytes.LO.ToString("X2");
+                        break;
+                    case "DRp":
+                        bytes = ((ushort)e.NewValue).ToBytes();
+                        executer.DReg.Text = bytes.HO.ToString("X2");
+                        executer.EReg.Text = bytes.LO.ToString("X2");
+                        break;
+                    case "PC":
+                        executer.PCVal.Text = ((ushort)e.NewValue).ToString("X4");
+                        assembler.dispatcher.Invoke(() => {
+                            foreach (ListViewItem litem in assembler.insts.Items) {
+                                if (litem.SubItems[1].Text == executer.PCVal.Text) {
+                                    litem.Text = "->";
+                                } else {
+                                    litem.Text = string.Empty;
+                                }
+                            }
+                        });
+                        break;
+                    case "SP":
+                        executer.SPVal.Text = ((ushort)e.NewValue).ToString("X4");
+                        break;
+                    case "Sign":
+                    case "S":
+                        executer.SFlag.Text = ((bool)e.NewValue).ToBitInt().ToString();
+                        break;
+                    case "Zero":
+                    case "Z":
+                        executer.ZFlag.Text = ((bool)e.NewValue).ToBitInt().ToString();
+                        break;
+                    case "AuxiliaryCarry":
+                    case "AC":
+                        executer.ACFlag.Text = ((bool)e.NewValue).ToBitInt().ToString();
+                        break;
+                    case "Parity":
+                    case "P":
+                        executer.PFlag.Text = ((bool)e.NewValue).ToBitInt().ToString();
+                        break;
+                    case "Carry":
+                    case "CY":
+                        executer.CYFlag.Text = ((bool)e.NewValue).ToBitInt().ToString();
+                        break;
+                    default:
+                        MessageBox.Show(e.VarName);
+                        break;
+                }
             });
         }
     }

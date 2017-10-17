@@ -607,32 +607,38 @@
             // stopBtn
             // 
             this.stopBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.stopBtn.Location = new System.Drawing.Point(192, 226);
+            this.stopBtn.Font = new System.Drawing.Font("Trebuchet MS", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.stopBtn.Location = new System.Drawing.Point(229, 226);
             this.stopBtn.Name = "stopBtn";
-            this.stopBtn.Size = new System.Drawing.Size(150, 61);
+            this.stopBtn.Size = new System.Drawing.Size(113, 61);
             this.stopBtn.TabIndex = 11;
             this.stopBtn.Text = "Stop";
             this.stopBtn.UseVisualStyleBackColor = true;
+            this.stopBtn.Click += new System.EventHandler(this.stopBtn_Click);
             // 
             // execButton
             // 
             this.execButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.execButton.Font = new System.Drawing.Font("Trebuchet MS", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.execButton.Location = new System.Drawing.Point(12, 226);
             this.execButton.Name = "execButton";
-            this.execButton.Size = new System.Drawing.Size(174, 61);
+            this.execButton.Size = new System.Drawing.Size(211, 61);
             this.execButton.TabIndex = 10;
             this.execButton.Text = "Execute\r\nAll Steps";
             this.execButton.UseVisualStyleBackColor = true;
+            this.execButton.Click += new System.EventHandler(this.execButton_Click);
             // 
             // nextStepBtn
             // 
             this.nextStepBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.nextStepBtn.Font = new System.Drawing.Font("Trebuchet MS", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.nextStepBtn.Location = new System.Drawing.Point(12, 64);
             this.nextStepBtn.Name = "nextStepBtn";
             this.nextStepBtn.Size = new System.Drawing.Size(330, 61);
             this.nextStepBtn.TabIndex = 9;
             this.nextStepBtn.Text = "Next Step";
             this.nextStepBtn.UseVisualStyleBackColor = true;
+            this.nextStepBtn.Click += new System.EventHandler(this.nextStepBtn_Click);
             // 
             // Executer
             // 
@@ -649,6 +655,7 @@
             this.MinimumSize = new System.Drawing.Size(616, 405);
             this.Name = "Executer";
             this.Text = "Executer";
+            this.Load += new System.EventHandler(this.Executer_Load);
             this.registerPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.mpointicon)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.lregicon)).EndInit();
@@ -666,25 +673,25 @@
         #endregion
 
         private System.Windows.Forms.Panel registerPanel;
-        private System.Windows.Forms.Label MPoint;
+        public System.Windows.Forms.Label MPoint;
         private System.Windows.Forms.PictureBox mpointicon;
-        private System.Windows.Forms.Label PCVal;
-        private System.Windows.Forms.Label SPVal;
+        public System.Windows.Forms.Label PCVal;
+        public System.Windows.Forms.Label SPVal;
         private System.Windows.Forms.Label SPLabel;
         private System.Windows.Forms.Label PCLabel;
-        private System.Windows.Forms.Label LReg;
+        public System.Windows.Forms.Label LReg;
         private System.Windows.Forms.PictureBox lregicon;
-        private System.Windows.Forms.Label EReg;
+        public System.Windows.Forms.Label EReg;
         private System.Windows.Forms.PictureBox eregicon;
-        private System.Windows.Forms.Label CReg;
+        public System.Windows.Forms.Label CReg;
         private System.Windows.Forms.PictureBox cregicon;
-        private System.Windows.Forms.Label HReg;
+        public System.Windows.Forms.Label HReg;
         private System.Windows.Forms.PictureBox hregicon;
-        private System.Windows.Forms.Label DReg;
+        public System.Windows.Forms.Label DReg;
         private System.Windows.Forms.PictureBox dregicon;
-        private System.Windows.Forms.Label BReg;
+        public System.Windows.Forms.Label BReg;
         private System.Windows.Forms.PictureBox bregicon;
-        private System.Windows.Forms.Label AReg;
+        public System.Windows.Forms.Label AReg;
         private System.Windows.Forms.PictureBox aregicon;
         private System.Windows.Forms.Label SFLabel;
         private System.Windows.Forms.Label ZFLabel;
@@ -692,14 +699,14 @@
         private System.Windows.Forms.Label PFLabel;
         private System.Windows.Forms.Label CYFLabel;
         private System.Windows.Forms.PictureBox flagIcon;
-        private System.Windows.Forms.Label SFlag;
-        private System.Windows.Forms.Label NU1Flag;
-        private System.Windows.Forms.Label PFlag;
-        private System.Windows.Forms.Label NU3Flag;
-        private System.Windows.Forms.Label ACFlag;
-        private System.Windows.Forms.Label NU5Flag;
-        private System.Windows.Forms.Label ZFlag;
-        private System.Windows.Forms.Label CYFlag;
+        public System.Windows.Forms.Label SFlag;
+        public System.Windows.Forms.Label NU1Flag;
+        public System.Windows.Forms.Label PFlag;
+        public System.Windows.Forms.Label NU3Flag;
+        public System.Windows.Forms.Label ACFlag;
+        public System.Windows.Forms.Label NU5Flag;
+        public System.Windows.Forms.Label ZFlag;
+        public System.Windows.Forms.Label CYFlag;
         private System.Windows.Forms.Label D7Label;
         private System.Windows.Forms.Label D6Label;
         private System.Windows.Forms.Label D5Label;
