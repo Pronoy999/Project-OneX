@@ -52,7 +52,12 @@ namespace One_X {
             }
         }
 
-        private async void nextStepBtn_Click(object sender, EventArgs e) => await Task.Run(() => MPU.NextStep());
+        private async void nextStepBtn_Click(object sender, EventArgs e) {
+            if (MPU.PC < MainForm.startAddress) {
+                MPU.PC = MainForm.startAddress;
+            }
+            await Task.Run(() => MPU.NextStep());
+        }
 
         private async void execButton_Click(object sender, EventArgs e) => await Task.Run(() => MPU.ExecuteAllSteps());
 
@@ -67,7 +72,7 @@ namespace One_X {
 
         private void resetBtn_Click(object sender, EventArgs e) {
             MPU.Stop();
-            MPU.PC = 0x0000;
+            MPU.PC = MainForm.startAddress;
         }
     }
 }
