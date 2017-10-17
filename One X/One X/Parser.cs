@@ -90,22 +90,24 @@ namespace One_X {
                     }
                 }
                 //Getting the instruction.                   
-                if (match.Groups[ONEBYTE_INSTRUCTION].Value != string.Empty) {
-                    instruction_name = match.Groups[ONEBYTE_INSTRUCTION].Value.Trim();
+                if (!string.IsNullOrWhiteSpace(match.Groups[ONEBYTE_INSTRUCTION].Value)) {
+                    instruction_name = match.Groups[ONEBYTE_INSTRUCTION].Value;
                     instruction_type = ONEBYTE_INSTRUCTION;
                 }
-                else if (match.Groups[TWOBYTE_INSTRUCTION].Value != string.Empty) {
-                    instruction_name = match.Groups[TWOBYTE_INSTRUCTION].Value.Trim();
+                else if (!string.IsNullOrWhiteSpace(match.Groups[TWOBYTE_INSTRUCTION].Value)) {
+                    instruction_name = match.Groups[TWOBYTE_INSTRUCTION].Value;
+                    instruction_name = instruction_name.Remove(instruction_name.Length);
                     instruction_type = TWOBYTE_INSTRUCTION;
                 }
-                else if (match.Groups[THREEBYTE_INSTRUCTION].Value != string.Empty) {
-                    instruction_name = match.Groups[THREEBYTE_INSTRUCTION].Value.Trim();
+                else if (!string.IsNullOrWhiteSpace(match.Groups[THREEBYTE_INSTRUCTION].Value)) {
+                    instruction_name = match.Groups[THREEBYTE_INSTRUCTION].Value;
+                    instruction_name = instruction_name.Remove(instruction_name.Length);
                     instruction_type = THREEBYTE_INSTRUCTION;
                 }
 
-                if (instruction_name == string.Empty) {
-                    if (line[i].Length != label.Length) {
-                        errorList.Add((DebugLevel.Error, i, label.Length + 1, (line[i].Length - label.Length))); //Lable with Invalid Characters. 
+                if (string.IsNullOrWhiteSpace(instruction_name)) {
+                    if (line[i].Length != match.Length) {
+                        errorList.Add((DebugLevel.Error, i, match.Length, (line[i].Length - match.Length))); //Lable with Invalid Characters. 
                     }
                     continue; //Blank Label. 
                 }
@@ -133,7 +135,7 @@ namespace One_X {
                 /*if (instruction_type == ONEBYTE_INSTRUCTION && (rightLit_type == LIT_USHORT || rightLit_type == REFERENCE)) {
                     errorList.Add((DebugLevel.Error, i, (label.Length + instruction_name.Length), rightLit.Length));
                 }*/
-                else if (instruction_type == TWOBYTE_INSTRUCTION && (rightLit_type == REFERENCE || rightLit_type == LIT_USHORT)) {
+                if (instruction_type == TWOBYTE_INSTRUCTION && (rightLit_type == REFERENCE || rightLit_type == LIT_USHORT)) {
                     errorList.Add((DebugLevel.Error, i, (label.Length + instruction_name.Length), rightLit.Length));
                 }
                 if (rightLit_type != REFERENCE) {
