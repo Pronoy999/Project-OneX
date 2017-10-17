@@ -70,7 +70,7 @@ namespace One_X {
                 }
             }
 
-            codeBox.AutoIndentCharsPatterns = "^\\s*[\\w]+\\s*(?<range>:)\\s*(?<range>[^\\n]+)$";
+            // codeBox.AutoIndentCharsPatterns = "^\\s*[\\w]+\\s*(?<range>:)\\s*(?<range>[^\\n]+)$";
 
             foreach (var i in notImp) {
                 i.Click += (s, ev) => MessageBox.Show("NOT IMPLEMENTED YET!");
@@ -105,13 +105,13 @@ namespace One_X {
         }
 
         private void codeBox_AutoIndentNeeded(object sender, AutoIndentEventArgs e) {
-            int lpos = e.PrevLineText.IndexOf(":");
-            if (lpos > 0) {
-                e.AbsoluteIndentation = lpos + 2;
-            }
-            if (e.LineText.Contains(":")) {
-                e.AbsoluteIndentation = 0;
-            }
+            //int lpos = e.PrevLineText.IndexOf(":");
+            //if (lpos > 0) {
+            //    e.AbsoluteIndentation = lpos + 2;
+            //}
+            //if (e.LineText.Contains(":")) {
+            //    e.AbsoluteIndentation = 0;
+            //}
         }
 
         private void cutMI_Click(object sender, EventArgs e) {
