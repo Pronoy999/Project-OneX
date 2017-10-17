@@ -537,9 +537,11 @@
             this.ClientSize = new System.Drawing.Size(704, 441);
             this.Controls.Add(this.codeBox);
             this.Controls.Add(this.StatusBar);
+            this.Location = new System.Drawing.Point(50, 50);
             this.Menu = this.MenuBar;
             this.MinimumSize = new System.Drawing.Size(720, 480);
             this.Name = "MainForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "MainForm";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);

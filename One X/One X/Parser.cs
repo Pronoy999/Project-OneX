@@ -158,7 +158,7 @@ namespace One_X {
                 else {
                     try {
                         instructions
-                            .Add(address, new Instruction(inst.Name, inst.Bytes, inst.MCycles, inst.TStates, ""));
+                            .Add(address, new Instruction(inst.Name, inst.Bytes, inst.MCycles, inst.TStates, inst.method, ((ushort)0).ToBytes()));
                     }
                     catch (Exception) { }
                 }
@@ -169,24 +169,29 @@ namespace One_X {
         }
         private void addReferences() {
             foreach(var refer in tempReference) {
-                foreach(var label in labels) {
-                    if (refer.reference == label.Key) {
-                        ushort refAddress = label.Value;
-                        Instruction originalInstruction = null;
-                        foreach(Instruction i in Instruction.list) {
-                            if (instructions[label.Value].Name == i.Name) {
-                                originalInstruction = i;
-                                break;
-                            }
-                        }
-                        instructions[label.Value].Bytes = originalInstruction.Bytes;
-                        instructions[label.Value].MCycles = originalInstruction.MCycles;
-                        instructions[label.Value].TStates = originalInstruction.TStates;
-                        instructions[label.Value].method = originalInstruction.method;
-                        instructions[label.Value].Arguments = refAddress.ToBytes();
-                    }
-                }
+                try {
+                    var lit = labels[refer.reference];
+
+                    instructions[refer.address].Arguments = lit.ToBytes();
+                } catch { }
             }
+            //foreach(var label in labels) {
+            //    if (refer.reference == label.Key) {
+            //        ushort refAddress = label.Value;
+            //        Instruction originalInstruction = null;
+            //        foreach (Instruction i in Instruction.list) {
+            //            if (instructions[label.Value].Name == i.Name) {
+            //                originalInstruction = i;
+            //                break;
+            //            }
+            //        }
+            //        instructions[label.Value].Bytes = originalInstruction.Bytes;
+            //        instructions[label.Value].MCycles = originalInstruction.MCycles;
+            //        instructions[label.Value].TStates = originalInstruction.TStates;
+            //        instructions[label.Value].method = originalInstruction.method;
+            //        instructions[label.Value].Arguments = refAddress.ToBytes();
+            //    }
+            //}
         }
     }
 }

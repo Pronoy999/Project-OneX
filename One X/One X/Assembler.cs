@@ -52,6 +52,24 @@ namespace One_X {
                     fd.Font = new Font(pfc.Families[0], fd.Font.Size);
                 }
             }
+
+            startAddressBox.GotFocus += (sndr, args) => {
+                startAddressBox.Select(startAddressBox.TextLength, 0);
+                HideCaret(startAddressBox.Handle);
+            };
+        }
+
+        private void startAddressBox_KeyPress(object sender, KeyPressEventArgs e) {
+            char c = e.KeyChar;
+            if (!((c >= '0' && c <= '9') || (c >= 'A' && c <= 'F') || (c >= 'a' && c <= 'f'))) {
+                e.Handled = true;
+                return;
+            }
+            var x = sender as TextBox;
+            if (x.TextLength == 4) {
+                x.Text = x.Text.Substring(1);
+                x.SelectionStart = x.TextLength;
+            }
         }
     }
 }
