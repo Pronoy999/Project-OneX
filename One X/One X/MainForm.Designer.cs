@@ -298,6 +298,7 @@
             // 
             this.execMI.Index = 3;
             this.execMI.Text = "Executer";
+            this.execMI.Click += new System.EventHandler(this.execMI_Click);
             // 
             // menuItem19
             // 
@@ -512,6 +513,7 @@
             this.insrepinfo.Name = "insrepinfo";
             this.insrepinfo.Size = new System.Drawing.Size(100, 19);
             this.insrepinfo.Text = "INSERT";
+            this.insrepinfo.Click += new System.EventHandler(this.insrepinfo_Click);
             // 
             // openFile
             // 
@@ -525,7 +527,6 @@
             // 
             // parseTimer
             // 
-            this.parseTimer.Enabled = true;
             this.parseTimer.Interval = 500;
             this.parseTimer.Tick += new System.EventHandler(this.parseTimer_Tick);
             // 
