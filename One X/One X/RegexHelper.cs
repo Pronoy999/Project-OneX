@@ -61,10 +61,10 @@ namespace One_X {
 
             rxRangeOneByte = new Regex("^[ \\t]*(?:" + label + "[ \\t]*:)?[ \\t]*" + oneByte.Replace("<oneByte>", "<range>") + "[ \\t]*\\r?$", rxOptions);
             rxRangeTwoByte = new Regex("^[ \\t]*(?:" + label + "[ \\t]*:)?[ \\t]*" + twoByte.Replace("<twoByte>", "<range>") + "[ \\t]*\\r?$", rxOptions);
-            rxRangeThreeByte = new Regex("^[ \\t]*(?:" + label + "[ \\t]*:)?[ \\t]*" + threeByte.Replace("<threeByte>", "<range>" + "[ \\t]*\\r?$"), rxOptions);
+            rxRangeThreeByte = new Regex("^[ \\t]*(?:" + label + "[ \\t]*:)?[ \\t]*" + threeByte.Replace("<threeByte>", "<range>") + "[ \\t]*\\r?$", rxOptions);
 
             rxRangeLiteralByte = new Regex(twoByte.Replace("<litByte>", "<range>"), rxOptions);
-            rxRangeLiteralUShort = new Regex(tempThreeByte + litUShort, rxOptions);
+            rxRangeLiteralUShort = new Regex(tempThreeByte + litUShort.Replace("<litUShort>", "<range>"), rxOptions);
 
             rxRangeReference = new Regex(tempThreeByte + label.Replace("<label>", "<range>"), rxOptions);
         }
