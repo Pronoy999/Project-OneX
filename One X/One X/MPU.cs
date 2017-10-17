@@ -366,7 +366,7 @@ namespace One_X {
         }
 
         public static ushort Sui(byte data) {
-            int res = A + H.TwosComplement();
+            int res = A + data.TwosComplement();
             Flag.Carry.Set(res <= byte.MaxValue);
             A = (byte)res;
             // TODO: Auxiliary Carry
@@ -1345,7 +1345,7 @@ namespace One_X {
 
         public static ushort Halt() {
             running = false;
-            return (ushort)(PC + 1);
+            return 0;
         }
 
         public static ushort ExPCwHL() {
