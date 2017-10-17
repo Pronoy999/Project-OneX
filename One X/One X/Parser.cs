@@ -45,14 +45,7 @@ namespace One_X {
         public void parse(string code) {
             ushort address = this.address;
             string label = string.Empty; //A Local Variable to store the labels. 
-
-            string instruction_name = string.Empty;//A Local Variable to store the instrctions. 
-            string instruction_type = string.Empty;      
-            
-            string rightLit = string.Empty;//A Local variable to store the right literal.
-            string rightLit_type = string.Empty;
-            ushort right_LIT=0;
-
+           
             instructions.Clear();
             labels.Clear();
             errorList.Clear();
@@ -72,6 +65,12 @@ namespace One_X {
             bool isLabelInserted = false;
             label = string.Empty;
             for (i = 0; i < lineNum; i++) {
+                string instruction_name = string.Empty;//A Local Variable to store the instrctions. 
+                string instruction_type = string.Empty;
+
+                string rightLit = string.Empty;//A Local variable to store the right literal.
+                string rightLit_type = string.Empty;
+                ushort right_LIT = 0;
                 Match match = RegexHelper.rxInstructionLine.Match(line[i]);
                 if (!string.IsNullOrWhiteSpace(match.Groups[LABEL].Value)) {
                     label = match.Groups[LABEL].Value;
