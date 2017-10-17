@@ -43,6 +43,7 @@ namespace One_X {
             this.address = address; //Setting address.
         }
         public void parse(string code) {
+            code = code.ToUpper();
             ushort address = this.address;
             string label = string.Empty; //A Local Variable to store the labels. 
            
