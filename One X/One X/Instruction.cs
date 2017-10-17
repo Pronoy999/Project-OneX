@@ -17,15 +17,13 @@ namespace One_X {
         public (byte HO, byte LO) Arguments;
         public MethodInfo method;
 
-        public Instruction(string Name, byte Bytes, byte MCycles, byte TStates, string method) {
+        public Instruction(string Name, byte Bytes, byte MCycles, byte TStates, MethodInfo method, (byte HO, byte LO) Arguments) {
             this.Name = Name;
             this.Bytes = Bytes;
             this.MCycles = MCycles;
             this.TStates = TStates;
-            
-            if (!string.IsNullOrWhiteSpace(method)) {
-                this.method = typeof(MPU).GetMethod(method);
-            }
+            this.method = method;
+            this.Arguments = Arguments;
         }
 
         public OPCODE GetOPCODE() {
