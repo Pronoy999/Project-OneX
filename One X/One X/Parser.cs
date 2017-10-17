@@ -33,7 +33,7 @@ namespace One_X {
          *</summary>
          */
         string LABEL = "label", REFERENCE = "reference", ONEBYTE_INSTRUCTION = "oneByte", TWOBYTE_INSTRUCTION = "twoByte", THREEBYTE_INSTRUCTION = "threeByte",
-            LIT_BYTE = "litByte", LIT_USHORT = "litUshort";
+            LIT_BYTE = "litByte", LIT_USHORT = "litUShort";
 
         char[] newLine = { '\n' };
 
