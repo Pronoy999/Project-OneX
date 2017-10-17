@@ -60,6 +60,12 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assembler.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Assembler.Designer.cs">
+      <DependentUpon>Assembler.cs</DependentUpon>
+    </Compile>
     <Compile Include="BitHelper.cs" />
     <Compile Include="Fonts.cs" />
     <Compile Include="MainForm.cs">
@@ -92,7 +98,11 @@
     <Compile Include="RichTextBoxEx.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="StickyWindow.cs" />
     <Compile Include="User32.cs" />
+    <EmbeddedResource Include="Assembler.resx">
+      <DependentUpon>Assembler.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>

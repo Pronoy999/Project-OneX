@@ -18,7 +18,7 @@ namespace One_X {
          * </summary>
          */
         List<(DebugLevel debugLevel, int lineInd, int colInd, int length)> errorList = new List<(DebugLevel debugLevel, int lineInd, int colInd, int length)>();
-        Dictionary<ushort, Instruction> instructions = new Dictionary<ushort, Instruction>();
+        public Dictionary<ushort, Instruction> instructions = new Dictionary<ushort, Instruction>();
 
         Dictionary<string, ushort> labels = new Dictionary<string, ushort>();
 

@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Windows.Forms;
 
 namespace One_X {
-    class Instruction : Attribute {
+    public class Instruction : Attribute {
         public static IEnumerable<OPCODE> opcodes = ((OPCODE[])Enum.GetValues(typeof(OPCODE)));
         public static IEnumerable<Instruction> list = opcodes.Select(x => x.GetAttributeOfType<Instruction>()).Where(x => !string.IsNullOrWhiteSpace(x.Name));
 
