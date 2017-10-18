@@ -4,7 +4,7 @@ This is a simulator of the Intel 8085 Microprocessor.
 
 # License
 
-Copyright 2017 Pronoy Mukherjee
+Copyright 2017 Aniruddh Shukla, Pronoy Mukherjee, Writwick Das. 
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
