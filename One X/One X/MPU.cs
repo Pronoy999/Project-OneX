@@ -1399,7 +1399,7 @@ namespace One_X {
         #region CALL
         public static ushort Call(ushort data) {
             SP -= 2;
-            memory.WriteUShort(PC, SP);
+            memory.WriteUShort((ushort)(PC + 3), SP);
             return Jump(data);
         }
         public static ushort CallNZ(ushort address) {

@@ -411,7 +411,9 @@ namespace One_X {
         public static ushort startAddress = 0x0000;
 
         public async void parse() {
-            await Task.Run(() => {
+            if (!codeBox.IsChanged) { return; }
+            codeBox.IsChanged = false;
+            await Task.Run(() => { 
                 assembler.dispatcher.Invoke(() => {
                     assembler.insts.BeginUpdate();
                 });
