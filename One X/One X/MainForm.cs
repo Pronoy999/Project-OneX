@@ -81,8 +81,8 @@ namespace One_X {
             parser = new Parser(0);
             MPU.ValueChanged += ValueChanged;
 
-            memeditMI.PerformClick();
-            execMI.PerformClick();
+            //memeditMI.PerformClick();
+            //execMI.PerformClick();
             assemblerMI.PerformClick();
         }
 
@@ -99,11 +99,12 @@ namespace One_X {
             e.ChangedRange.SetStyle(mnemonicStyle, RegexHelper.rxRangeTwoByte);
             e.ChangedRange.SetStyle(mnemonicStyle, RegexHelper.rxRangeThreeByte);
 
+            e.ChangedRange.SetStyle(literalStyle, RegexHelper.rxRangeLiteralByte);
+            e.ChangedRange.SetStyle(literalStyle, RegexHelper.rxRangeLiteralUShort);
+
             e.ChangedRange.SetStyle(labelStyle, RegexHelper.rxRangeLabelOnly);
             e.ChangedRange.SetStyle(labelStyle, RegexHelper.rxRangeReference);
 
-            e.ChangedRange.SetStyle(literalStyle, RegexHelper.rxRangeLiteralByte);
-            e.ChangedRange.SetStyle(literalStyle, RegexHelper.rxRangeLiteralUShort);
 
             UpdateModifiedInfo();
         }
