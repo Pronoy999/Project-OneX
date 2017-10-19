@@ -52,7 +52,7 @@ namespace One_X {
                 ValueChanged.Invoke(null, new MPUEventArgs(flag.ToString(), set));
             }
         }
-        internal static void Toggle(this Flag flag) => flags.Set((byte)flag, !flag.IsSet());
+        internal static void Toggle(this Flag flag) => flag.Set(!flag.IsSet());
         internal static bool IsSet(this Flag flag) => flags.Get((byte)flag);
 
         #region Properties
