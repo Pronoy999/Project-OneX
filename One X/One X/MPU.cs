@@ -38,9 +38,9 @@ namespace One_X {
         }
 
         public static event EventHandler<MPUEventArgs> ValueChanged;
-
-        // todo events for all registers/flags.
-        internal static byte regA, regB, regC, regD, regE, regH, regL; //and M
+        
+        internal static byte regA, regB, regC, regD, regE, regH, regL;
+        internal static ushort progCntr, stackPtr;
 
         internal static BitArray flags = new BitArray(8, false);
 
@@ -55,16 +55,11 @@ namespace One_X {
         internal static void Toggle(this Flag flag) => flags.Set((byte)flag, !flag.IsSet());
         internal static bool IsSet(this Flag flag) => flags.Get((byte)flag);
 
-        internal static ushort progCntr, stackPtr;
-
         #region Properties
         public static byte A {
             get => regA;
             internal set {
                 regA = value;
-                Flag.Sign.Set(regA.IsNegative());
-                Flag.Zero.Set(regA == 0);
-                Flag.Parity.Set(regA.Parity());
                 if (ValueChanged != null) {
                     ValueChanged.Invoke(null, new MPUEventArgs("A", A));
                 }
@@ -183,7 +178,7 @@ namespace One_X {
         #region MVI
         public static ushort LoadB(byte data) {
             B = data;
-            return (ushort) (PC+2);
+            return (ushort)(PC + 2);
         }
         public static ushort LoadC(byte data) {
             C = data;
@@ -289,8 +284,11 @@ namespace One_X {
 
         public static ushort Adi(byte data) {
             int res = A + data;
+            Flag.Sign.Set(((byte)res).IsNegative());
+            Flag.Zero.Set(((byte)res) == 0);
+            Flag.AuxiliaryCarry.Set(A.ToNibbles().LON + data.ToNibbles().LON > 0x0f);
+            Flag.Parity.Set(((byte)res).Parity());
             Flag.Carry.Set(res > byte.MaxValue);
-            // TODO Set AuxiliaryCarry
             A = (byte)res;
             return (ushort)(PC + 2);
         }
@@ -367,9 +365,13 @@ namespace One_X {
 
         public static ushort Sui(byte data) {
             int res = A + data.TwosComplement();
+            Flag.Sign.Set(((byte)res).IsNegative());
+            Flag.Zero.Set(((byte)res) == 0);
+            // verify
+            Flag.AuxiliaryCarry.Set(A.ToNibbles().LON + data.TwosComplement().ToNibbles().LON > 0x0f);
+            Flag.Parity.Set(((byte)res).Parity());
             Flag.Carry.Set(res <= byte.MaxValue);
             A = (byte)res;
-            // TODO: Auxiliary Carry
             return (ushort)(PC + 2);
         }
         #endregion
@@ -416,8 +418,7 @@ namespace One_X {
         }
 
         public static ushort Aci(byte data) {
-            Adi(data);
-            Adi((byte)Flag.Carry.IsSet().ToBitInt());
+            Adi((byte)(data + Flag.Carry.IsSet().ToBitInt()));
             return (ushort)(PC + 2);
         }
         #endregion
@@ -471,100 +472,152 @@ namespace One_X {
 
         #region INR
         public static ushort InrA() {
-            A++;
+            byte res = (byte)(A + 1);
+            Flag.Sign.Set(res.IsNegative());
+            Flag.Zero.Set(res == 0);
+            Flag.AuxiliaryCarry.Set(A.ToNibbles().LON + 1 > 0x0f);
+            Flag.Parity.Set(res.Parity());
+            A = res;
             return (ushort)(PC + 1);
         }
 
         public static ushort InrB() {
-            B++;
-            Flag.Sign.Set(B.IsNegative());
-            Flag.Zero.Set(B == 0);
-            Flag.Parity.Set(B.Parity());
+            byte res = (byte)(B + 1);
+            Flag.Sign.Set(res.IsNegative());
+            Flag.Zero.Set(res == 0);
+            Flag.AuxiliaryCarry.Set(B.ToNibbles().LON + 1 > 0x0f);
+            Flag.Parity.Set(res.Parity());
+            B = res;
             return (ushort)(PC + 1);
         }
         public static ushort InrC() {
-            C++;
-            Flag.Sign.Set(C.IsNegative());
-            Flag.Zero.Set(C == 0);
-            Flag.Parity.Set(C.Parity());
+            byte res = (byte)(C + 1);
+            Flag.Sign.Set(res.IsNegative());
+            Flag.Zero.Set(res == 0);
+            Flag.AuxiliaryCarry.Set(C.ToNibbles().LON + 1 > 0x0f);
+            Flag.Parity.Set(res.Parity());
+            C = res;
             return (ushort)(PC + 1);
         }
         public static ushort InrD() {
-            D++;
-            Flag.Sign.Set(D.IsNegative());
-            Flag.Zero.Set(D == 0);
-            Flag.Parity.Set(D.Parity());
+            byte res = (byte)(D + 1);
+            Flag.Sign.Set(res.IsNegative());
+            Flag.Zero.Set(res == 0);
+            Flag.AuxiliaryCarry.Set(D.ToNibbles().LON + 1 > 0x0f);
+            Flag.Parity.Set(res.Parity());
+            D = res;
             return (ushort)(PC + 1);
         }
         public static ushort InrE() {
-            E++;
-            Flag.Sign.Set(E.IsNegative());
-            Flag.Zero.Set(E == 0);
-            Flag.Parity.Set(E.Parity());
+            byte res = (byte)(E + 1);
+            Flag.Sign.Set(res.IsNegative());
+            Flag.Zero.Set(res == 0);
+            Flag.AuxiliaryCarry.Set(E.ToNibbles().LON + 1 > 0x0f);
+            Flag.Parity.Set(res.Parity());
+            E = res;
             return (ushort)(PC + 1);
         }
         public static ushort InrH() {
-            H++;
-            Flag.Sign.Set(H.IsNegative());
-            Flag.Zero.Set(H == 0);
-            Flag.Parity.Set(H.Parity());
+            byte res = (byte)(H + 1);
+            Flag.Sign.Set(res.IsNegative());
+            Flag.Zero.Set(res == 0);
+            Flag.AuxiliaryCarry.Set(H.ToNibbles().LON + 1 > 0x0f);
+            Flag.Parity.Set(res.Parity());
+            H = res;
             return (ushort)(PC + 1);
         }
         public static ushort InrL() {
-            L++;
-            Flag.Sign.Set(L.IsNegative());
-            Flag.Zero.Set(L == 0);
-            Flag.Parity.Set(L.Parity());
+            byte res = (byte)(L + 1);
+            Flag.Sign.Set(res.IsNegative());
+            Flag.Zero.Set(res == 0);
+            Flag.AuxiliaryCarry.Set(L.ToNibbles().LON + 1 > 0x0f);
+            Flag.Parity.Set(res.Parity());
+            L = res;
+            return (ushort)(PC + 1);
+        }
+        public static ushort InrM() {
+            byte res = (byte)(M + 1);
+            Flag.Sign.Set(res.IsNegative());
+            Flag.Zero.Set(res == 0);
+            Flag.AuxiliaryCarry.Set(M.ToNibbles().LON + 1 > 0x0f);
+            Flag.Parity.Set(res.Parity());
+            M = res;
             return (ushort)(PC + 1);
         }
         #endregion
 
         #region DCR
         public static ushort DcrA() {
-            A--;
+            byte res = (byte)(A + 0xFF); // twos complement of 1 is 0xFF
+            Flag.Sign.Set(res.IsNegative());
+            Flag.Zero.Set(res == 0);
+            Flag.AuxiliaryCarry.Set(A.ToNibbles().LON + 0xFF > 0x0f);
+            Flag.Parity.Set(res.Parity());
+            A = res;
             return (ushort)(PC + 1);
         }
 
         public static ushort DcrB() {
-            B--;
-            Flag.Sign.Set(B.IsNegative());
-            Flag.Zero.Set(B == 0);
-            Flag.Parity.Set(B.Parity());
+            byte res = (byte)(B + 0xFF); // twos complement of 1 is 0xFF
+            Flag.Sign.Set(res.IsNegative());
+            Flag.Zero.Set(res == 0);
+            Flag.AuxiliaryCarry.Set(B.ToNibbles().LON + 0xFF > 0x0f);
+            Flag.Parity.Set(res.Parity());
+            B = res;
             return (ushort)(PC + 1);
         }
         public static ushort DcrC() {
-            C--;
-            Flag.Sign.Set(C.IsNegative());
-            Flag.Zero.Set(C == 0);
-            Flag.Parity.Set(C.Parity());
+            byte res = (byte)(C + 0xFF); // twos complement of 1 is 0xFF
+            Flag.Sign.Set(res.IsNegative());
+            Flag.Zero.Set(res == 0);
+            Flag.AuxiliaryCarry.Set(C.ToNibbles().LON + 0xFF > 0x0f);
+            Flag.Parity.Set(res.Parity());
+            C = res;
             return (ushort)(PC + 1);
         }
         public static ushort DcrD() {
-            D--;
-            Flag.Sign.Set(D.IsNegative());
-            Flag.Zero.Set(D == 0);
-            Flag.Parity.Set(D.Parity());
+            byte res = (byte)(D + 0xFF); // twos complement of 1 is 0xFF
+            Flag.Sign.Set(res.IsNegative());
+            Flag.Zero.Set(res == 0);
+            Flag.AuxiliaryCarry.Set(D.ToNibbles().LON + 0xFF > 0x0f);
+            Flag.Parity.Set(res.Parity());
+            D = res;
             return (ushort)(PC + 1);
         }
         public static ushort DcrE() {
-            E--;
-            Flag.Sign.Set(E.IsNegative());
-            Flag.Zero.Set(E == 0);
-            Flag.Parity.Set(E.Parity());
+            byte res = (byte)(E + 0xFF); // twos complement of 1 is 0xFF
+            Flag.Sign.Set(res.IsNegative());
+            Flag.Zero.Set(res == 0);
+            Flag.AuxiliaryCarry.Set(E.ToNibbles().LON + 0xFF > 0x0f);
+            Flag.Parity.Set(res.Parity());
+            E = res;
             return (ushort)(PC + 1);
         }
         public static ushort DcrH() {
-            H--;
-            Flag.Sign.Set(H.IsNegative());
-            Flag.Zero.Set(H == 0);
-            Flag.Parity.Set(H.Parity());
+            byte res = (byte)(H + 0xFF); // twos complement of 1 is 0xFF
+            Flag.Sign.Set(res.IsNegative());
+            Flag.Zero.Set(res == 0);
+            Flag.AuxiliaryCarry.Set(H.ToNibbles().LON + 0xFF > 0x0f);
+            Flag.Parity.Set(res.Parity());
+            H = res;
             return (ushort)(PC + 1);
         }
         public static ushort DcrL() {
-            L--;
-            Flag.Sign.Set(L.IsNegative());
-            Flag.Zero.Set(L == 0);
-            Flag.Parity.Set(L.Parity());
+            byte res = (byte)(L + 0xFF); // twos complement of 1 is 0xFF
+            Flag.Sign.Set(res.IsNegative());
+            Flag.Zero.Set(res == 0);
+            Flag.AuxiliaryCarry.Set(L.ToNibbles().LON + 0xFF > 0x0f);
+            Flag.Parity.Set(res.Parity());
+            L = res;
+            return (ushort)(PC + 1);
+        }
+        public static ushort DcrM() {
+            byte res = (byte)(M + 0xFF); // twos complement of 1 is 0xFF
+            Flag.Sign.Set(res.IsNegative());
+            Flag.Zero.Set(res == 0);
+            Flag.AuxiliaryCarry.Set(M.ToNibbles().LON + 0xFF > 0x0f);
+            Flag.Parity.Set(res.Parity());
+            M = res;
             return (ushort)(PC + 1);
         }
         #endregion
@@ -991,8 +1044,12 @@ namespace One_X {
         }
 
         public static ushort Ani(byte data) {
-            //TODO:reset CY and set AC
             A &= data;
+            Flag.Sign.Set(A.IsNegative());
+            Flag.Zero.Set(A == 0);
+            Flag.AuxiliaryCarry.Set();
+            Flag.Parity.Set(A.Parity());
+            Flag.Carry.Reset();
             return (ushort)(PC + 2);
         }
         #endregion
@@ -1039,8 +1096,12 @@ namespace One_X {
         }
 
         public static ushort Ori(byte data) {
-            //TODO:Z,S,P are modified and AC AND CY are reset
             A |= data;
+            Flag.Sign.Set(A.IsNegative());
+            Flag.Zero.Set(A == 0);
+            Flag.AuxiliaryCarry.Reset();
+            Flag.Parity.Set(A.Parity());
+            Flag.Carry.Reset();
             return (ushort)(PC + 2);
         }
         #endregion
@@ -1087,8 +1148,12 @@ namespace One_X {
         }
 
         public static ushort Xri(byte data) {
-            //TODO:Z,S,P are modified and AC AND CY are reset
             A ^= data;
+            Flag.Sign.Set(A.IsNegative());
+            Flag.Zero.Set(A == 0);
+            Flag.AuxiliaryCarry.Reset();
+            Flag.Parity.Set(A.Parity());
+            Flag.Carry.Reset();
             return (ushort)(PC + 2);
         }
 
@@ -1180,16 +1245,9 @@ namespace One_X {
         }
 
         public static ushort Cpi(byte data) {
-            if (data > A) {
-                Flag.Carry.Set();
-                Flag.Zero.Reset();
-            } else if (data == A) {
-                Flag.Carry.Reset();
-                Flag.Zero.Set();
-            } else { // data < A
-                Flag.Carry.Reset();
-                Flag.Zero.Reset();
-            }
+            byte tempA = A;
+            Sui(data);
+            A = tempA;
             return (ushort)(PC + 2);
         }
         #endregion
@@ -1200,49 +1258,49 @@ namespace One_X {
         }
 
         public static ushort JumpNZ(ushort address) {
-            if (!Flag.Z.IsSet()) {
+            if (!Flag.Zero.IsSet()) {
                 return Jump(address);
             }
             return (ushort)(PC + 3);
         }
         public static ushort JumpZ(ushort address) {
-            if (Flag.Z.IsSet()) {
+            if (Flag.Zero.IsSet()) {
                 return Jump(address);
             }
             return (ushort)(PC + 3);
         }
         public static ushort JumpC(ushort address) {
-            if (Flag.CY.IsSet()) {
+            if (Flag.Carry.IsSet()) {
                return Jump(address);
             }
             return (ushort)(PC + 3);
         }
         public static ushort JumpNC(ushort address) {
-            if (!Flag.CY.IsSet()) {
+            if (!Flag.Carry.IsSet()) {
                 return Jump(address);
             }
             return (ushort)(PC + 3);
         }
         public static ushort JumpP(ushort address) {
-            if (!Flag.S.IsSet()) {
+            if (!Flag.Sign.IsSet()) {
                 return Jump(address);
             }
             return (ushort)(PC + 3);
         }
         public static ushort JumpM(ushort address) {
-            if (Flag.S.IsSet()) {
+            if (Flag.Sign.IsSet()) {
                 return Jump(address);
             }
             return (ushort)(PC + 3);
         }
         public static ushort JumpPE(ushort address) {
-            if (Flag.AC.IsSet()) {
+            if (Flag.Parity.IsSet()) {
                 return Jump(address);
             }
             return (ushort)(PC + 3);
         }
         public static ushort JumpPO(ushort address) {
-            if (!Flag.AC.IsSet()) {
+            if (!Flag.Parity.IsSet()) {
                 return Jump(address);
             }
             return (ushort)(PC + 3);
@@ -1325,77 +1383,6 @@ namespace One_X {
         }
         #endregion
 
-        #region MISC
-        public static ushort Exchange() {
-            HRp += BRp;
-            BRp = (ushort)(HRp - BRp);
-            HRp -= BRp;
-            return (ushort)(PC + 1);
-        }
-
-        public static ushort ComplA() {
-            A = (byte)~A;
-            return (ushort)(PC + 1);
-        }
-
-        public static ushort Nop() {
-            System.Threading.Thread.Sleep(1000);
-            return (ushort)(PC + 1);
-        }
-
-        public static ushort Halt() {
-            running = false;
-            return 0;
-        }
-
-        public static ushort ExPCwHL() {
-            ushort hrp = HRp;
-            HRp = memory.ReadUShort(stackPtr);
-            memory.WriteUShort(hrp, stackPtr);
-            return (ushort)(PC + 1);
-        }
-
-        public static ushort stPCtoHL() {
-            return HRp;
-        }
-
-        public static ushort stSPtoHL() {
-            SP = HRp;
-            return (ushort)(PC + 1);
-        }
-
-        public static ushort setCY() {
-            Flag.Carry.Set();
-            return (ushort)(PC + 1);
-        }
-
-        public static ushort compCY() {
-            Flag.Carry.Toggle();
-            return (ushort)(PC + 1);
-        }
-
-        public static ushort Input(byte port) {
-            string error = "";
-            while (true) {
-                try {
-                    string str = Interaction.InputBox(error + "\nInput for port : " + port.ToString("X2") + "\nEnter hex value within range: [00 - FF]", "IN " + port.ToString("X2"), "00");
-                    byte b = byte.Parse(str, System.Globalization.NumberStyles.HexNumber);
-                    A = b;
-                    break;
-                } catch {
-                    error = "Invalid Format!";
-                }
-            }
-            return (ushort)(PC + 2);
-        }
-
-        public static ushort Output(byte port) {
-            MessageBox.Show("Output for port : " + port.ToString("X2") + "\n" + A.ToString("X2"), "OUT " + port.ToString("X2"), MessageBoxButtons.OK, MessageBoxIcon.Information);
-            return (ushort)(PC + 2);
-        }
-
-        #endregion
-
         #region CALL
         public static ushort Call(ushort data) {
             SP -= 2;
@@ -1403,49 +1390,49 @@ namespace One_X {
             return Jump(data);
         }
         public static ushort CallNZ(ushort address) {
-            if (!Flag.Z.IsSet()) {
+            if (!Flag.Zero.IsSet()) {
                 return Call(address);
             }
             return (ushort)(PC + 3);
         }
         public static ushort CallZ(ushort address) {
-            if (Flag.Z.IsSet()) {
+            if (Flag.Zero.IsSet()) {
                 return Call(address);
             }
             return (ushort)(PC + 3);
         }
         public static ushort CallC(ushort address) {
-            if (Flag.CY.IsSet()) {
+            if (Flag.Carry.IsSet()) {
                 return Call(address);
             }
             return (ushort)(PC + 3);
         }
         public static ushort CallNC(ushort address) {
-            if (!Flag.CY.IsSet()) {
+            if (!Flag.Carry.IsSet()) {
                 return Call(address);
             }
             return (ushort)(PC + 3);
         }
         public static ushort CallP(ushort address) {
-            if (!Flag.S.IsSet()) {
+            if (!Flag.Sign.IsSet()) {
                 return Call(address);
             }
             return (ushort)(PC + 3);
         }
         public static ushort CallM(ushort address) {
-            if (Flag.S.IsSet()) {
+            if (Flag.Sign.IsSet()) {
                 return Call(address);
             }
             return (ushort)(PC + 3);
         }
         public static ushort CallPE(ushort address) {
-            if (Flag.AC.IsSet()) {
+            if (Flag.Parity.IsSet()) {
                 return Call(address);
             }
             return (ushort)(PC + 3);
         }
         public static ushort CallPO(ushort address) {
-            if (!Flag.AC.IsSet()) {
+            if (!Flag.Parity.IsSet()) {
                 return Call(address);
             }
             return (ushort)(PC + 3);
@@ -1459,35 +1446,35 @@ namespace One_X {
             return Jump(data);
         }
         public static ushort ReturnNZ() {
-            if (!Flag.Z.IsSet()) return Return();
+            if (!Flag.Zero.IsSet()) return Return();
             return (ushort)(PC + 1);
         }
         public static ushort ReturnZ() {
-            if (Flag.Z.IsSet()) return Return();
+            if (Flag.Zero.IsSet()) return Return();
             return (ushort)(PC + 1);
         }
         public static ushort ReturnC() {
-            if (Flag.CY.IsSet()) return Return();
+            if (Flag.Carry.IsSet()) return Return();
             return (ushort)(PC + 1);
         }
         public static ushort ReturnNC() {
-            if (!Flag.CY.IsSet()) return Return();
+            if (!Flag.Carry.IsSet()) return Return();
             return (ushort)(PC + 1);
         }
         public static ushort ReturnP() {
-            if (!Flag.S.IsSet()) return Return();
+            if (!Flag.Sign.IsSet()) return Return();
             return (ushort)(PC + 1);
         }
         public static ushort ReturnM() {
-            if (Flag.S.IsSet()) return Return();
+            if (Flag.Sign.IsSet()) return Return();
             return (ushort)(PC + 1);
         }
         public static ushort ReturnPE() {
-            if (Flag.AC.IsSet()) return Return();
+            if (Flag.Parity.IsSet()) return Return();
             return (ushort)(PC + 1);
         }
         public static ushort ReturnPO() {
-            if (!Flag.AC.IsSet()) return Return();
+            if (!Flag.Parity.IsSet()) return Return();
             return (ushort)(PC + 1);
         }
         #endregion
@@ -1525,17 +1512,88 @@ namespace One_X {
             Halt();
             return 7 * 0x0008;
         }
+        #endregion
+
+        #region MISC
+        public static ushort Exchange() {
+            ushort temp = HRp;
+            HRp = DRp;
+            DRp = temp;
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort ComplA() {
+            A = (byte)~A;
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort Nop() {
+            System.Threading.Thread.Sleep(1000); // todo
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort Halt() {
+            running = false;
+            return 0;
+        }
+
+        public static ushort ExSTwHL() {
+            ushort hrp = HRp;
+            HRp = memory.ReadUShort(stackPtr);
+            memory.WriteUShort(hrp, stackPtr);
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort PCtoHL() {
+            return HRp;
+        }
+
+        public static ushort SPtoHL() {
+            SP = HRp;
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort SetCarry() {
+            Flag.Carry.Set();
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort ComplCarry() {
+            Flag.Carry.Toggle();
+            return (ushort)(PC + 1);
+        }
+
+        public static ushort Input(byte port) {
+            string error = "";
+            while (true) {
+                try {
+                    string str = Interaction.InputBox(error + "\nInput for port : " + port.ToString("X2") + "\nEnter hex value within range: [00 - FF]", "IN " + port.ToString("X2"), "00");
+                    byte b = byte.Parse(str, System.Globalization.NumberStyles.HexNumber);
+                    A = b;
+                    break;
+                } catch {
+                    error = "Invalid Format!";
+                }
+            }
+            return (ushort)(PC + 2);
+        }
+
+        public static ushort Output(byte port) {
+            MessageBox.Show("Output for port : " + port.ToString("X2") + "\n" + A.ToString("X2"), "OUT " + port.ToString("X2"), MessageBoxButtons.OK, MessageBoxIcon.Information);
+            return (ushort)(PC + 2);
+        }
+
         public static ushort EnInt() {
             interpt = true;
             return (ushort)(PC + 1);
         }
+
         public static ushort DisInt() {
             interpt = false;
             return (ushort)(PC + 1);
         }
         #endregion
-
-        //TODO:RIM,SIM,DAA,DI,EI
+        //TODO:RIM,SIM,DAA
 
         public static void NextStep() {
             Instruction ins = ((Instruction.OPCODE) memory.ReadByte(PC)).GetAttributeOfType<Instruction>();

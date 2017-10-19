@@ -30,6 +30,11 @@ namespace One_X {
             return array[0];
 
         }
+
         internal static BitArray ToBitArray(this byte data) => new BitArray(new byte[] { data });
+
+        internal static (byte HON, byte LON) ToNibbles(this byte data) {
+            return ((byte)((data & 0xf0) >> 4), (byte)(data & 0x0f));
+        }
     }
 }
