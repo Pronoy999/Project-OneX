@@ -104,7 +104,7 @@ namespace One_X {
             [Instruction("INR H", 1, 1, 4, "InrH")] INR_H = 0x24,
             [Instruction("DCR H", 1, 1, 4, "DcrH")] DCR_H = 0x25,
             [Instruction("MVI H", 2, 2, 7, "LoadH")] MVI_H = 0x26, // comma
-            [Instruction("DAA", 1, 1, 4, "")] DAA = 0x27,
+            [Instruction("DAA", 1, 1, 4, "DecAdjA")] DAA = 0x27,
             [Instruction("", 0, 0, 0, "")] UNKN_28 = 0x28,
             [Instruction("DAD H", 1, 3, 10, "DadH")] DAD_H = 0x29,
             [Instruction("LHLD", 3, 5, 16, "LoadHL")] LHLD = 0x2A,//Plese recheck

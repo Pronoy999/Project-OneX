@@ -286,7 +286,7 @@ namespace One_X {
             int res = A + data;
             Flag.Sign.Set(((byte)res).IsNegative());
             Flag.Zero.Set(((byte)res) == 0);
-            Flag.AuxiliaryCarry.Set(A.ToNibbles().LON + data.ToNibbles().LON > 0x0f);
+            Flag.AuxiliaryCarry.Set(A.ToNibbles().LON + data.ToNibbles().LON > 0x0F);
             Flag.Parity.Set(((byte)res).Parity());
             Flag.Carry.Set(res > byte.MaxValue);
             A = (byte)res;
@@ -368,7 +368,7 @@ namespace One_X {
             Flag.Sign.Set(((byte)res).IsNegative());
             Flag.Zero.Set(((byte)res) == 0);
             // verify
-            Flag.AuxiliaryCarry.Set(A.ToNibbles().LON + data.TwosComplement().ToNibbles().LON > 0x0f);
+            Flag.AuxiliaryCarry.Set(A.ToNibbles().LON + data.TwosComplement().ToNibbles().LON > 0x0F);
             Flag.Parity.Set(((byte)res).Parity());
             Flag.Carry.Set(res <= byte.MaxValue);
             A = (byte)res;
@@ -475,7 +475,7 @@ namespace One_X {
             byte res = (byte)(A + 1);
             Flag.Sign.Set(res.IsNegative());
             Flag.Zero.Set(res == 0);
-            Flag.AuxiliaryCarry.Set(A.ToNibbles().LON + 1 > 0x0f);
+            Flag.AuxiliaryCarry.Set(A.ToNibbles().LON + 1 > 0x0F);
             Flag.Parity.Set(res.Parity());
             A = res;
             return (ushort)(PC + 1);
@@ -485,7 +485,7 @@ namespace One_X {
             byte res = (byte)(B + 1);
             Flag.Sign.Set(res.IsNegative());
             Flag.Zero.Set(res == 0);
-            Flag.AuxiliaryCarry.Set(B.ToNibbles().LON + 1 > 0x0f);
+            Flag.AuxiliaryCarry.Set(B.ToNibbles().LON + 1 > 0x0F);
             Flag.Parity.Set(res.Parity());
             B = res;
             return (ushort)(PC + 1);
@@ -494,7 +494,7 @@ namespace One_X {
             byte res = (byte)(C + 1);
             Flag.Sign.Set(res.IsNegative());
             Flag.Zero.Set(res == 0);
-            Flag.AuxiliaryCarry.Set(C.ToNibbles().LON + 1 > 0x0f);
+            Flag.AuxiliaryCarry.Set(C.ToNibbles().LON + 1 > 0x0F);
             Flag.Parity.Set(res.Parity());
             C = res;
             return (ushort)(PC + 1);
@@ -503,7 +503,7 @@ namespace One_X {
             byte res = (byte)(D + 1);
             Flag.Sign.Set(res.IsNegative());
             Flag.Zero.Set(res == 0);
-            Flag.AuxiliaryCarry.Set(D.ToNibbles().LON + 1 > 0x0f);
+            Flag.AuxiliaryCarry.Set(D.ToNibbles().LON + 1 > 0x0F);
             Flag.Parity.Set(res.Parity());
             D = res;
             return (ushort)(PC + 1);
@@ -512,7 +512,7 @@ namespace One_X {
             byte res = (byte)(E + 1);
             Flag.Sign.Set(res.IsNegative());
             Flag.Zero.Set(res == 0);
-            Flag.AuxiliaryCarry.Set(E.ToNibbles().LON + 1 > 0x0f);
+            Flag.AuxiliaryCarry.Set(E.ToNibbles().LON + 1 > 0x0F);
             Flag.Parity.Set(res.Parity());
             E = res;
             return (ushort)(PC + 1);
@@ -521,7 +521,7 @@ namespace One_X {
             byte res = (byte)(H + 1);
             Flag.Sign.Set(res.IsNegative());
             Flag.Zero.Set(res == 0);
-            Flag.AuxiliaryCarry.Set(H.ToNibbles().LON + 1 > 0x0f);
+            Flag.AuxiliaryCarry.Set(H.ToNibbles().LON + 1 > 0x0F);
             Flag.Parity.Set(res.Parity());
             H = res;
             return (ushort)(PC + 1);
@@ -530,7 +530,7 @@ namespace One_X {
             byte res = (byte)(L + 1);
             Flag.Sign.Set(res.IsNegative());
             Flag.Zero.Set(res == 0);
-            Flag.AuxiliaryCarry.Set(L.ToNibbles().LON + 1 > 0x0f);
+            Flag.AuxiliaryCarry.Set(L.ToNibbles().LON + 1 > 0x0F);
             Flag.Parity.Set(res.Parity());
             L = res;
             return (ushort)(PC + 1);
@@ -539,7 +539,7 @@ namespace One_X {
             byte res = (byte)(M + 1);
             Flag.Sign.Set(res.IsNegative());
             Flag.Zero.Set(res == 0);
-            Flag.AuxiliaryCarry.Set(M.ToNibbles().LON + 1 > 0x0f);
+            Flag.AuxiliaryCarry.Set(M.ToNibbles().LON + 1 > 0x0F);
             Flag.Parity.Set(res.Parity());
             M = res;
             return (ushort)(PC + 1);
@@ -551,7 +551,7 @@ namespace One_X {
             byte res = (byte)(A + 0xFF); // twos complement of 1 is 0xFF
             Flag.Sign.Set(res.IsNegative());
             Flag.Zero.Set(res == 0);
-            Flag.AuxiliaryCarry.Set(A.ToNibbles().LON + 0xFF > 0x0f);
+            Flag.AuxiliaryCarry.Set(A.ToNibbles().LON + 0xFF > 0x0F);
             Flag.Parity.Set(res.Parity());
             A = res;
             return (ushort)(PC + 1);
@@ -561,7 +561,7 @@ namespace One_X {
             byte res = (byte)(B + 0xFF); // twos complement of 1 is 0xFF
             Flag.Sign.Set(res.IsNegative());
             Flag.Zero.Set(res == 0);
-            Flag.AuxiliaryCarry.Set(B.ToNibbles().LON + 0xFF > 0x0f);
+            Flag.AuxiliaryCarry.Set(B.ToNibbles().LON + 0xFF > 0x0F);
             Flag.Parity.Set(res.Parity());
             B = res;
             return (ushort)(PC + 1);
@@ -570,7 +570,7 @@ namespace One_X {
             byte res = (byte)(C + 0xFF); // twos complement of 1 is 0xFF
             Flag.Sign.Set(res.IsNegative());
             Flag.Zero.Set(res == 0);
-            Flag.AuxiliaryCarry.Set(C.ToNibbles().LON + 0xFF > 0x0f);
+            Flag.AuxiliaryCarry.Set(C.ToNibbles().LON + 0xFF > 0x0F);
             Flag.Parity.Set(res.Parity());
             C = res;
             return (ushort)(PC + 1);
@@ -579,7 +579,7 @@ namespace One_X {
             byte res = (byte)(D + 0xFF); // twos complement of 1 is 0xFF
             Flag.Sign.Set(res.IsNegative());
             Flag.Zero.Set(res == 0);
-            Flag.AuxiliaryCarry.Set(D.ToNibbles().LON + 0xFF > 0x0f);
+            Flag.AuxiliaryCarry.Set(D.ToNibbles().LON + 0xFF > 0x0F);
             Flag.Parity.Set(res.Parity());
             D = res;
             return (ushort)(PC + 1);
@@ -588,7 +588,7 @@ namespace One_X {
             byte res = (byte)(E + 0xFF); // twos complement of 1 is 0xFF
             Flag.Sign.Set(res.IsNegative());
             Flag.Zero.Set(res == 0);
-            Flag.AuxiliaryCarry.Set(E.ToNibbles().LON + 0xFF > 0x0f);
+            Flag.AuxiliaryCarry.Set(E.ToNibbles().LON + 0xFF > 0x0F);
             Flag.Parity.Set(res.Parity());
             E = res;
             return (ushort)(PC + 1);
@@ -597,7 +597,7 @@ namespace One_X {
             byte res = (byte)(H + 0xFF); // twos complement of 1 is 0xFF
             Flag.Sign.Set(res.IsNegative());
             Flag.Zero.Set(res == 0);
-            Flag.AuxiliaryCarry.Set(H.ToNibbles().LON + 0xFF > 0x0f);
+            Flag.AuxiliaryCarry.Set(H.ToNibbles().LON + 0xFF > 0x0F);
             Flag.Parity.Set(res.Parity());
             H = res;
             return (ushort)(PC + 1);
@@ -606,7 +606,7 @@ namespace One_X {
             byte res = (byte)(L + 0xFF); // twos complement of 1 is 0xFF
             Flag.Sign.Set(res.IsNegative());
             Flag.Zero.Set(res == 0);
-            Flag.AuxiliaryCarry.Set(L.ToNibbles().LON + 0xFF > 0x0f);
+            Flag.AuxiliaryCarry.Set(L.ToNibbles().LON + 0xFF > 0x0F);
             Flag.Parity.Set(res.Parity());
             L = res;
             return (ushort)(PC + 1);
@@ -615,7 +615,7 @@ namespace One_X {
             byte res = (byte)(M + 0xFF); // twos complement of 1 is 0xFF
             Flag.Sign.Set(res.IsNegative());
             Flag.Zero.Set(res == 0);
-            Flag.AuxiliaryCarry.Set(M.ToNibbles().LON + 0xFF > 0x0f);
+            Flag.AuxiliaryCarry.Set(M.ToNibbles().LON + 0xFF > 0x0F);
             Flag.Parity.Set(res.Parity());
             M = res;
             return (ushort)(PC + 1);
@@ -1592,8 +1592,21 @@ namespace One_X {
             interpt = false;
             return (ushort)(PC + 1);
         }
+
+        public static ushort DecAdjA() {
+            var nibs = A.ToNibbles();
+            byte adj = 0x00;
+            if (Flag.AuxiliaryCarry.IsSet() || nibs.LON > 0x09) {
+                adj += 0x06;
+            }
+            if (Flag.Carry.IsSet() || nibs.HON > 0x09) {
+                adj += 0x60;
+            }
+            Adi(adj);
+            return (ushort)(PC + 1);
+        }
         #endregion
-        //TODO:RIM,SIM,DAA
+        //TODO:RIM,SIM
 
         public static void NextStep() {
             Instruction ins = ((Instruction.OPCODE) memory.ReadByte(PC)).GetAttributeOfType<Instruction>();
