@@ -11,6 +11,7 @@ namespace One_X {
          */
         public enum DebugLevel {
             Information,
+            PossibleConflict,
             Error,
             Verbose
         }
@@ -25,7 +26,7 @@ namespace One_X {
 
         List<ushort> memory = new List<ushort>();// To generate the warning. 
 
-        List<(int lineInd, int colInd, int length, ushort address, string reference)> tempReference = 
+        List<(int lineInd, int colInd, int length, ushort address, string reference)> tempReference =
             new List<(int lineInd, int colInd, int length, ushort address, string reference)>();
 
         /**<summary>
@@ -46,7 +47,7 @@ namespace One_X {
             code = code.ToUpper();
             ushort address = this.address;
             string label = string.Empty; //A Local Variable to store the labels. 
-           
+
             instructions.Clear();
             labels.Clear();
             errorList.Clear();
@@ -59,7 +60,7 @@ namespace One_X {
                 Match match = RegexHelper.rxInstructionLine.Match(line[i]);
                 label = match.Groups[LABEL].Value;
                 if (!label.Equals(string.Empty)) {
-                    if(!labels.ContainsKey(label))
+                    if (!labels.ContainsKey(label))
                         labels.Add(label, 00);      // Adding the labels only. 
                     else {
                         errorList.Add((DebugLevel.Error, i, 0, label.Length));  //Same Label Already defined.
@@ -96,12 +97,12 @@ namespace One_X {
                 }
                 else if (!string.IsNullOrWhiteSpace(match.Groups[TWOBYTE_INSTRUCTION].Value)) {
                     instruction_name = match.Groups[TWOBYTE_INSTRUCTION].Value;
-                    instruction_name = instruction_name.Remove(instruction_name.Length-1);
+                    instruction_name = instruction_name.Remove(instruction_name.Length - 1);
                     instruction_type = TWOBYTE_INSTRUCTION;
                 }
                 else if (!string.IsNullOrWhiteSpace(match.Groups[THREEBYTE_INSTRUCTION].Value)) {
                     instruction_name = match.Groups[THREEBYTE_INSTRUCTION].Value;
-                    instruction_name = instruction_name.Remove(instruction_name.Length-1);
+                    instruction_name = instruction_name.Remove(instruction_name.Length - 1);
                     instruction_type = THREEBYTE_INSTRUCTION;
                 }
 
@@ -127,11 +128,14 @@ namespace One_X {
                         rightLit = rightLit.Remove(rightLit.Length - 1);
                     }
                     rightLit_type = LIT_USHORT;
-                    if (!memory.Contains(ushort.Parse(rightLit,System.Globalization.NumberStyles.HexNumber))) {
-                        memory.Add(ushort.Parse(rightLit,System.Globalization.NumberStyles.HexNumber));
+                    if ((!memory.Contains(ushort.Parse(rightLit, System.Globalization.NumberStyles.HexNumber))) && notConflict(rightLit)) {
+                        memory.Add(ushort.Parse(rightLit, System.Globalization.NumberStyles.HexNumber));
                     }
                     else {
-                        errorList.Add((DebugLevel.Information, i, (label.Length + instruction_name.Length), rightLit.Length));
+                        errorList.Add((DebugLevel.PossibleConflict, i, (label.Length + instruction_name.Length), rightLit.Length));
+                        if (!memory.Contains(ushort.Parse(rightLit, System.Globalization.NumberStyles.HexNumber))) {
+                            memory.Add(ushort.Parse(rightLit, System.Globalization.NumberStyles.HexNumber));
+                        }
                     }
                 }
                 else if (!string.IsNullOrWhiteSpace(match.Groups[REFERENCE].Value)) {
@@ -147,7 +151,7 @@ namespace One_X {
                 }
                 if (rightLit_type != REFERENCE) {
                     try {
-                        right_LIT = ushort.Parse(rightLit,System.Globalization.NumberStyles.HexNumber);
+                        right_LIT = ushort.Parse(rightLit, System.Globalization.NumberStyles.HexNumber);
                     }
                     catch (Exception e) { }
                 }
@@ -163,7 +167,7 @@ namespace One_X {
                         address += inst.Bytes;
                     }
                     catch (Exception e) { }
-                 }
+                }
                 else {
                     try {
                         instructions
@@ -173,9 +177,10 @@ namespace One_X {
                     catch (Exception e) { }
                 }
                 inst = null;
-                if (isLabelInserted) { label=string.Empty;}
+                if (isLabelInserted) { label = string.Empty; }
             }
             addReferences();
+            checkForStop();
         }
         private void addReferences() {
             foreach (var refer in tempReference) {
@@ -183,7 +188,7 @@ namespace One_X {
                     var lit = labels[refer.reference];
                     instructions[refer.address].Arguments = lit.ToBytes();
                 }
-                catch(Exception e) { }
+                catch (Exception e) { }
             }
         }
         private Instruction getInstructions(string instructionName) {
@@ -195,6 +200,24 @@ namespace One_X {
                 }
             }
             return inst;
+        }
+        private bool notConflict(string memory) {
+            if (memory.Contains(memory)) {
+                return false;
+            }
+            ushort mem = ushort.Parse(memory);
+            mem += 5;
+            if (memory.Contains(mem.ToString())) {
+                return false;
+            }
+            mem -= 10;
+            if (memory.Contains(mem.ToString())) {
+                return false;
+            }
+            return true;
+        }
+        private void checkForStop() {
+
         }
     }
 }
