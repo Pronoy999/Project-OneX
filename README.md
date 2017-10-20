@@ -1,6 +1,7 @@
 # Project-OneX
 
 This is a simulator of the Intel 8085 Microprocessor using dotNet. 
+If you have any queries, feel free to drop an email: mukherjee_pronoy@yahoo.in
 
 # License
 
