@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 namespace One_X {
     public static class BitHelper {
@@ -22,19 +25,33 @@ namespace One_X {
         }
 
         internal static byte ToByte(this BitArray bitArray) {
+            return bitArray.ToBytes()[0];
+        }
+
+        internal static byte[] ToBytes(this BitArray bitArray) {
             if (bitArray.Length > 8)
                 throw new ArgumentException();
 
             byte[] array = new byte[1];
             bitArray.CopyTo(array, 0);
-            return array[0];
-
+            return array;
         }
 
         internal static BitArray ToBitArray(this byte data) => new BitArray(new byte[] { data });
 
         internal static (byte HON, byte LON) ToNibbles(this byte data) {
             return ((byte)((data & 0xf0) >> 4), (byte)(data & 0x0f));
+        }
+
+        internal static string ToBitString(this BitArray bits) {
+            var sb = new StringBuilder();
+            var x = ((MPU.Flag[])Enum.GetValues(typeof(MPU.Flag)));
+            for (int i = 0; i < bits.Count && x.Contains((MPU.Flag)i); i++) {
+                sb.Append(bits[i] ? '1' : '0');
+                sb.Append(" : ");
+            }
+            string str = sb.ToString();
+            return str.Remove(str.Length - 3);
         }
     }
 }

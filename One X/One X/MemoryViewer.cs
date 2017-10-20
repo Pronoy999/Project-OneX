@@ -43,27 +43,13 @@ namespace One_X {
 
             Marshal.FreeCoTaskMem(data);
 
-            object[] fontObjects = { memBox, offset };
-
+            Control[] fontObjects = { memBox, offset };
+            
             foreach (var f in fontObjects) {
-                if (f is TextBox) {
-                    TextBox fd = f as TextBox;
-                    fd.Font = new Font(pfc.Families[0], fd.Font.Size);
-                }
-                if (f is Label) {
-                    Label fd = f as Label;
-                    fd.Font = new Font(pfc.Families[0], fd.Font.Size);
-                }
-                if (f is HexBox) {
-                    HexBox fd = f as HexBox;
-                    fd.Font = new Font(pfc.Families[0], fd.Font.Size);
-                }
+                f.Font = new Font(pfc.Families[0], f.Font.Size);
             }
-
-            memBox.Font = Fonts.Fonts.Create(Fonts.FontFamily.Hack, 12);
+            
             memBox.ByteProvider = MPU.memory.provider;
-
-            offset.Font = Fonts.Fonts.Create(Fonts.FontFamily.Hack, 12);
 
             offset.GotFocus += (sndr, args) => {
                 offset.Select(offset.TextLength, 0);

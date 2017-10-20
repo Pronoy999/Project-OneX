@@ -67,13 +67,18 @@
       <DependentUpon>Assembler.cs</DependentUpon>
     </Compile>
     <Compile Include="BitHelper.cs" />
+    <Compile Include="DataMonitor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DataMonitor.Designer.cs">
+      <DependentUpon>DataMonitor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Executer.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Executer.Designer.cs">
       <DependentUpon>Executer.cs</DependentUpon>
     </Compile>
-    <Compile Include="Fonts.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -108,6 +113,9 @@
     <Compile Include="User32.cs" />
     <EmbeddedResource Include="Assembler.resx">
       <DependentUpon>Assembler.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataMonitor.resx">
+      <DependentUpon>DataMonitor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Executer.resx">
       <DependentUpon>Executer.cs</DependentUpon>

@@ -19,6 +19,7 @@ namespace One_X {
         private MemoryViewer memView = new MemoryViewer();
         private Assembler assembler = new Assembler();
         private Executer executer = new Executer();
+        private DataMonitor monitor = new DataMonitor();
 
         private string codeFileName = string.Empty;
         private string saveFileName = string.Empty;
@@ -39,8 +40,8 @@ namespace One_X {
         private void MainForm_Load(object sender, EventArgs e) {
             Size = MinimumSize;
 
-            MenuItem[] notImp = { updateMI, aboutMI, datamoniMI, optionsMI };
-            object[] fontObjects = { codeBox };
+            MenuItem[] notImp = { updateMI, aboutMI, optionsMI };
+            Control[] fontObjects = { codeBox };
 
             int fontLength = Properties.Resources.Hack.Length;
             byte[] fontdata = Properties.Resources.Hack;
@@ -56,18 +57,7 @@ namespace One_X {
             Marshal.FreeCoTaskMem(data);
 
             foreach (var f in fontObjects) {
-                if (f is TextBox) {
-                    TextBox fd = f as TextBox;
-                    fd.Font = new Font(pfc.Families[0], fd.Font.Size);
-                }
-                if (f is Label) {
-                    Label fd = f as Label;
-                    fd.Font = new Font(pfc.Families[0], fd.Font.Size);
-                }
-                if (f is FastColoredTextBox) {
-                    FastColoredTextBox fd = f as FastColoredTextBox;
-                    fd.Font = new Font(pfc.Families[0], fd.Font.Size);
-                }
+                f.Font = new Font(pfc.Families[0], f.Font.Size);
             }
 
             // codeBox.AutoIndentCharsPatterns = "^\\s*[\\w]+\\s*(?<range>:)\\s*(?<range>[^\\n]+)$";
@@ -80,10 +70,12 @@ namespace One_X {
 
             parser = new Parser(0);
             MPU.ValueChanged += ValueChanged;
+            MPU.Step += Step;
 
             //memeditMI.PerformClick();
             //execMI.PerformClick();
             assemblerMI.PerformClick();
+            datamoniMI.PerformClick();
         }
 
         // todo define global static / settings
@@ -346,7 +338,7 @@ namespace One_X {
                 memView.Close();
                 memView.Dispose();
             } catch { }
-            try { MPU.CommitMemory(); }  catch (NullReferenceException) { }
+            try { MPU.CommitMemory(); } catch (NullReferenceException) { }
             try { Directory.Delete(dir, true); } catch (IOException) { }
             Directory.CreateDirectory(dir);
             MPU.InitMemory(dir + "\\memory");
@@ -414,7 +406,7 @@ namespace One_X {
         public async void parse() {
             if (!codeBox.IsChanged) { return; }
             codeBox.IsChanged = false;
-            await Task.Run(() => { 
+            await Task.Run(() => {
                 assembler.dispatcher.Invoke(() => {
                     assembler.insts.BeginUpdate();
                 });
@@ -493,7 +485,7 @@ namespace One_X {
             });
         }
 
-        private void ValueChanged(object sender, MPU.MPUEventArgs e) {
+        private async void ValueChanged(object sender, MPU.MPUEventArgs e) {
             executer.dispatcher.Invoke(delegate () {
                 switch (e.VarName) {
                     case "A":
@@ -575,6 +567,50 @@ namespace One_X {
                         break;
                 }
             });
+        }
+
+        private async void Step(object sender, MPU.MPUEventArgs e) {
+            monitor.dispatcher.Invoke(delegate () {
+                ushort step = (ushort)e.NewValue;
+                string ele = "addr: ";
+                switch (e.VarName) {
+                    case "PC":
+                        try {
+                            string mnemonic = assembler.insts.Items.Cast<ListViewItem>().First(x => x.SubItems[1].Text == step.ToString("X4")).SubItems[2].Text;
+                            ele += step.ToString("X4") + " ~ " + mnemonic;
+                        } catch {
+                            ele += step.ToString("X4");
+                        }
+                        break;
+                    default:
+                        ele += step.ToString("X4");
+                        break;
+                }
+                ListViewItem nItem = new ListViewItem(new string[] {
+                        ele,
+                        executer.AReg.Text + "H",
+                        executer.BReg.Text + "H",
+                        executer.CReg.Text + "H",
+                        executer.DReg.Text + "H",
+                        executer.EReg.Text + "H",
+                        executer.HReg.Text + "H",
+                        executer.LReg.Text + "H",
+                        executer.MPoint.Text + "H",
+                        MPU.flags.ToBitString()
+                    });
+                monitor.monitorView.Items.Add(nItem);
+            });
+        }
+
+        private void datamoniMI_Click(object sender, EventArgs e) {
+            if (monitor.Visible) {
+                monitor.Hide();
+            } else {
+                monitor.Show();
+            }
+            if (IsOnScreen(new Point(Location.X - 20, Location.Y + Height + 20))) {
+                monitor.Location = new Point(Location.X, Location.Y + Height);
+            }
         }
     }
 }
