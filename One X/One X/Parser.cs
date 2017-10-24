@@ -180,7 +180,7 @@ namespace One_X {
                 if (isLabelInserted) { label = string.Empty; }
             }
             addReferences();
-            checkForStop();
+            checkForStop(code);
         }
         private void addReferences() {
             foreach (var refer in tempReference) {
@@ -216,8 +216,8 @@ namespace One_X {
             }
             return true;
         }
-        private void checkForStop() {
-
+        private void checkForStop(string code) {
+            string[] lines = code.Split(newLine);
         }
     }
 }
