@@ -16,6 +16,7 @@ using Blue.Windows;
 
 namespace One_X {
     public partial class MainForm : Form {
+        bool highlighted = false;
         private Boolean memViewVisible = false;
 
         private MemoryViewer memView = new MemoryViewer();
@@ -28,7 +29,7 @@ namespace One_X {
 
         private Parser parser;
 
-        private bool saved = false;
+        private bool saved = true;
         public PrivateFontCollection pfc = new PrivateFontCollection();
 
         [DllImport("gdi32.dll")]
@@ -78,6 +79,9 @@ namespace One_X {
             execMI.PerformClick();
             assemblerMI.PerformClick();
             //datamoniMI.PerformClick();
+
+            saved = true;
+            highlighted = true;
         }
 
         // todo define global static / settings
@@ -101,6 +105,9 @@ namespace One_X {
             e.ChangedRange.SetStyle(labelStyle, RegexHelper.rxRangeReference);
             
             UpdateModifiedInfo();
+
+            highlighted = false;
+            saved = false;
         }
 
         private void codeBox_AutoIndentNeeded(object sender, AutoIndentEventArgs e) {
@@ -182,11 +189,10 @@ namespace One_X {
             UpdateModifiedInfo();
         }
 
-        private void exitMI_Click(object sender, EventArgs e) => SaveAndExit();
+        private void exitMI_Click(object sender, EventArgs e) => Close();
 
         private void SaveAndExit() {
-            if (!codeBox.IsChanged) {
-                Application.Exit();
+            if (saved) {
                 return;
             }
             DialogResult dr = MessageBox.Show("Warning: Unsaved changes!\nSave changes to " + (string.IsNullOrWhiteSpace(saveFileName) ? "new source file" : saveFileName) + "?", "Confirm Save", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
@@ -199,21 +205,18 @@ namespace One_X {
                         if (saveFile.ShowDialog() == DialogResult.OK) {
                             SaveFile(saveFile.FileName);
                             saved = true;
-                            Application.Exit();
-                            return;
+                            break;
                         }
                         saved = false;
                     } else {
                         SaveFile(saveFileName);
                         saved = true;
-                        Application.Exit();
                     }
-                    return;
+                    break;
                 default:
                     saved = false;
-                    return;
+                    break;
             }
-            Application.Exit();
         }
 
         private void SaveAndClose() {
@@ -271,7 +274,11 @@ namespace One_X {
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e) {
             if (!saved) {
+                e.Cancel = true;
                 SaveAndExit();
+                if (saved) {
+                    Close();
+                }
             }
         }
 
@@ -400,8 +407,8 @@ namespace One_X {
         public static ushort startAddress = 0x0000;
 
         public async void parse(bool force = false) {
-            if (!codeBox.IsChanged &&  !force) { return; }
-            codeBox.IsChanged = false;
+            if (highlighted &&  !force) { return; }
+            highlighted = true;
             await Task.Run(() => {
                 assembler.dispatcher.Invoke(() => {
                     assembler.insts.BeginUpdate();
