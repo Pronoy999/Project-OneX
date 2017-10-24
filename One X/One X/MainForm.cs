@@ -13,6 +13,8 @@ using System.Runtime.InteropServices;
 using System.Diagnostics;
 using System.IO;
 using Blue.Windows;
+using System.Security.Principal;
+using Microsoft.Win32;
 
 namespace One_X {
     public partial class MainForm : Form {
@@ -43,7 +45,7 @@ namespace One_X {
         private void MainForm_Load(object sender, EventArgs e) {
             Size = MinimumSize;
 
-            MenuItem[] notImp = { updateMI, optionsMI };
+            MenuItem[] notImp = { updateMI };
             Control[] fontObjects = { codeBox };
 
             int fontLength = Properties.Resources.Hack.Length;
@@ -72,7 +74,20 @@ namespace One_X {
             string[] args = Environment.GetCommandLineArgs();
 
             if (args.Length > 1) {
-                OpenFile(args[1]);
+                if (args[1].Trim().ToLower() == "-ue") {
+                   // do nothing todo dissociate
+                } else if (args[1].Trim().ToLower() == "-e") {
+                    WindowsPrincipal pricipal = new WindowsPrincipal(WindowsIdentity.GetCurrent());
+                    bool hasAdministrativeRight = pricipal.IsInRole(WindowsBuiltInRole.Administrator);
+
+                    if (hasAdministrativeRight) {
+                        AssociateFileExtension(".onex", "ONEX File", "Intel 8085 assembly code with ONEX memory implementation.", Application.ExecutablePath);
+                    } else {
+                        MessageBox.Show("Invalid parameter! The program is not running as administrator!", "Invalid parameter!");
+                    }
+                } else {
+                    OpenFile(args[1]);
+                }
             } else {
                 New();
             }
@@ -109,12 +124,37 @@ namespace One_X {
 
             e.ChangedRange.SetStyle(labelStyle, RegexHelper.rxRangeLabelOnly);
             e.ChangedRange.SetStyle(labelStyle, RegexHelper.rxRangeReference);
-            
+
             UpdateModifiedInfo();
 
             highlighted = false;
             saved = false;
         }
+
+        public static void AssociateFileExtension(string fileExtension, string name, string description, string appPath) {
+            //Create a key with specified file extension
+            RegistryKey _extensionKey = Registry.ClassesRoot.CreateSubKey(fileExtension);
+            _extensionKey.SetValue("", name);
+
+            //Create main key for the specified file format
+            RegistryKey _formatNameKey = Registry.ClassesRoot.CreateSubKey(name);
+            _formatNameKey.SetValue("", description);
+            _formatNameKey.CreateSubKey("DefaultIcon").SetValue("", "\"" + appPath + "\",0");
+
+            //Create teh 'Open' action under 'Shell' key
+            RegistryKey _shellActionsKey = _formatNameKey.CreateSubKey("Shell");
+            _shellActionsKey.CreateSubKey("open").CreateSubKey("command").SetValue("", "\"" + appPath + "\" \"%1\"");
+
+            _extensionKey.Close();
+            _formatNameKey.Close();
+            _shellActionsKey.Close();
+
+            // Update Windows Explorer windows for this new file association
+            SHChangeNotify(0x08000000, 0x0000, IntPtr.Zero, IntPtr.Zero);
+        }
+
+        [DllImport("shell32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        private static extern void SHChangeNotify(uint wEventId, uint uFlags, IntPtr dwItem1, IntPtr dwItem2);
 
         private void codeBox_AutoIndentNeeded(object sender, AutoIndentEventArgs e) {
             //int lpos = e.PrevLineText.IndexOf(":");
@@ -423,7 +463,7 @@ namespace One_X {
         public static ushort startAddress = 0x0000;
 
         public async void parse(bool force = false) {
-            if (highlighted &&  !force) { return; }
+            if (highlighted && !force) { return; }
             highlighted = true;
             await Task.Run(() => {
                 assembler.dispatcher.Invoke(() => {
@@ -657,7 +697,8 @@ namespace One_X {
         }
 
         private void optionsMI_Click(object sender, EventArgs e) {
-
+            Options op = new Options();
+            op.ShowDialog();
         }
     }
 }
