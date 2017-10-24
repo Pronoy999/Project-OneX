@@ -155,6 +155,7 @@
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(720, 405);
             this.Name = "Assembler";
+            this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Assembler";

@@ -1,17 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 
 namespace One_X {
     public partial class About : Form {
         public About() {
             InitializeComponent();
+        }
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
+            sourceCode.LinkVisited = true;
+            System.Diagnostics.Process.Start("https://github.com/Pronoy999/Project-OneX");
+        }
+
+        private void reportBug_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
+            reportBug.LinkVisited = true;
+            System.Diagnostics.Process.Start("https://github.com/Pronoy999/Project-OneX/issues");
         }
     }
 }

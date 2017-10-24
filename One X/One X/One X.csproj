@@ -35,6 +35,9 @@
   <PropertyGroup>
     <StartupObject>One_X.Program</StartupObject>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>icon_131533292554036343.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Be.Windows.Forms.HexBox, Version=1.6.0.38064, Culture=neutral, PublicKeyToken=e0e5adf0ebc99863, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -105,6 +108,12 @@
     </Compile>
     <Compile Include="MPU.cs" />
     <Compile Include="OneXFile.cs" />
+    <Compile Include="Options.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Options.Designer.cs">
+      <DependentUpon>Options.cs</DependentUpon>
+    </Compile>
     <Compile Include="Parser.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -131,6 +140,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MemoryViewer.resx">
       <DependentUpon>MemoryViewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Options.resx">
+      <DependentUpon>Options.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -183,6 +195,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="resx\m.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="icon_131533292554036343.ico" />
+    <None Include="resx\icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

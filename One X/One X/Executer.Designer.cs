@@ -669,6 +669,7 @@
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(500, 405);
             this.Name = "Executer";
+            this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.Text = "Executer";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Executer_FormClosing);

@@ -68,15 +68,21 @@ namespace One_X {
             foreach (var i in notImp) {
                 i.Click += (s, ev) => MessageBox.Show("NOT IMPLEMENTED YET!");
             }
-            Debug.WriteLine(Application.UserAppDataPath + "\\currentfile");
-            New();
+
+            string[] args = Environment.GetCommandLineArgs();
+
+            if (args.Length > 1) {
+                OpenFile(args[1]);
+            } else {
+                New();
+            }
 
             parser = new Parser(0);
             MPU.ValueChanged += ValueChanged;
             MPU.Step += Step;
 
-            memeditMI.PerformClick();
-            execMI.PerformClick();
+            //memeditMI.PerformClick();
+            //execMI.PerformClick();
             assemblerMI.PerformClick();
             //datamoniMI.PerformClick();
 
@@ -282,26 +288,36 @@ namespace One_X {
             }
         }
 
+        private void OpenFile(string name) {
+            if (!File.Exists(name)) {
+                MessageBox.Show("The file was not found at the entered location!", "File not found!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                saved = true;
+                Close();
+                return;
+            }
+            if (OneXFile.ExtractOneXFile(name, "currentfile")) {
+                saveFileName = name;
+                string dir = Application.UserAppDataPath + "\\currentfile";
+                codeFileName = dir + "\\code";
+                codeBox.OpenFile(codeFileName, Encoding.UTF8);
+                MPU.InitMemory(dir + "\\memory");
+                memView.InvalidateMemory();
+                codeBox.IsChanged = false;
+                parse(true);
+                modifiedinfo.Text = Path.GetFileName(saveFileName) + " - *No Changes*";
+
+                codeBox.Visible = true;
+                if (memViewVisible) memView.Show();
+            } else {
+                MessageBox.Show("The selected *.onex file is in invalid format!", "Invalid format!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                CloseFile();
+            }
+        }
+
         private void openMI_Click(object sender, EventArgs e) {
             if (openFile.ShowDialog() == DialogResult.OK) {
                 SaveAndClose();
-                if (OneXFile.ExtractOneXFile(openFile.FileName, "currentfile")) {
-                    saveFileName = openFile.FileName;
-                    string dir = Application.UserAppDataPath + "\\currentfile";
-                    codeFileName = dir + "\\code";
-                    codeBox.OpenFile(codeFileName, Encoding.UTF8);
-                    MPU.InitMemory(dir + "\\memory");
-                    memView.InvalidateMemory();
-                    codeBox.IsChanged = false;
-                    parse(true);
-                    modifiedinfo.Text = Path.GetFileName(saveFileName) + " - *No Changes*";
-
-                    codeBox.Visible = true;
-                    if (memViewVisible) memView.Show();
-                } else {
-                    MessageBox.Show("The selected *.onex file is in invalid format!", "Invalid format!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    CloseFile();
-                }
+                OpenFile(openFile.FileName);
             }
         }
 
@@ -638,6 +654,10 @@ namespace One_X {
         private void aboutMI_Click(object sender, EventArgs e) {
             About about = new About();
             about.ShowDialog();
+        }
+
+        private void optionsMI_Click(object sender, EventArgs e) {
+
         }
     }
 }
