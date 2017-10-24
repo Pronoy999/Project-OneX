@@ -128,6 +128,7 @@
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(896, 480);
             this.Name = "DataMonitor";
+            this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.Text = "DataMonitor";
             this.Load += new System.EventHandler(this.DataMonitor_Load);

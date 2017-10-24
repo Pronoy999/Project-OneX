@@ -439,6 +439,7 @@
             // 
             this.optionsMI.Index = 0;
             this.optionsMI.Text = "Options";
+            this.optionsMI.Click += new System.EventHandler(this.optionsMI_Click);
             // 
             // menuItem6
             // 
@@ -450,6 +451,7 @@
             // 
             // updateMI
             // 
+            this.updateMI.Enabled = false;
             this.updateMI.Index = 0;
             this.updateMI.Text = "Update";
             // 
@@ -540,12 +542,13 @@
             this.ClientSize = new System.Drawing.Size(704, 441);
             this.Controls.Add(this.codeBox);
             this.Controls.Add(this.StatusBar);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Location = new System.Drawing.Point(50, 50);
             this.Menu = this.MenuBar;
             this.MinimumSize = new System.Drawing.Size(720, 480);
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-            this.Text = "MainForm";
+            this.Text = "One X Editor";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.Resize += new System.EventHandler(this.MainForm_Resize);

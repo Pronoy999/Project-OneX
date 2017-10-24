@@ -16,6 +16,7 @@ using Blue.Windows;
 
 namespace One_X {
     public partial class MainForm : Form {
+        bool highlighted = false;
         private Boolean memViewVisible = false;
 
         private MemoryViewer memView = new MemoryViewer();
@@ -28,7 +29,7 @@ namespace One_X {
 
         private Parser parser;
 
-        private bool saved = false;
+        private bool saved = true;
         public PrivateFontCollection pfc = new PrivateFontCollection();
 
         [DllImport("gdi32.dll")]
@@ -67,17 +68,26 @@ namespace One_X {
             foreach (var i in notImp) {
                 i.Click += (s, ev) => MessageBox.Show("NOT IMPLEMENTED YET!");
             }
-            Debug.WriteLine(Application.UserAppDataPath + "\\currentfile");
-            New();
+
+            string[] args = Environment.GetCommandLineArgs();
+
+            if (args.Length > 1) {
+                OpenFile(args[1]);
+            } else {
+                New();
+            }
 
             parser = new Parser(0);
             MPU.ValueChanged += ValueChanged;
             MPU.Step += Step;
 
-            memeditMI.PerformClick();
-            execMI.PerformClick();
+            //memeditMI.PerformClick();
+            //execMI.PerformClick();
             assemblerMI.PerformClick();
             //datamoniMI.PerformClick();
+
+            saved = true;
+            highlighted = true;
         }
 
         // todo define global static / settings
@@ -101,6 +111,9 @@ namespace One_X {
             e.ChangedRange.SetStyle(labelStyle, RegexHelper.rxRangeReference);
             
             UpdateModifiedInfo();
+
+            highlighted = false;
+            saved = false;
         }
 
         private void codeBox_AutoIndentNeeded(object sender, AutoIndentEventArgs e) {
@@ -182,11 +195,10 @@ namespace One_X {
             UpdateModifiedInfo();
         }
 
-        private void exitMI_Click(object sender, EventArgs e) => SaveAndExit();
+        private void exitMI_Click(object sender, EventArgs e) => Close();
 
         private void SaveAndExit() {
-            if (!codeBox.IsChanged) {
-                Application.Exit();
+            if (saved) {
                 return;
             }
             DialogResult dr = MessageBox.Show("Warning: Unsaved changes!\nSave changes to " + (string.IsNullOrWhiteSpace(saveFileName) ? "new source file" : saveFileName) + "?", "Confirm Save", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
@@ -199,21 +211,18 @@ namespace One_X {
                         if (saveFile.ShowDialog() == DialogResult.OK) {
                             SaveFile(saveFile.FileName);
                             saved = true;
-                            Application.Exit();
-                            return;
+                            break;
                         }
                         saved = false;
                     } else {
                         SaveFile(saveFileName);
                         saved = true;
-                        Application.Exit();
                     }
-                    return;
+                    break;
                 default:
                     saved = false;
-                    return;
+                    break;
             }
-            Application.Exit();
         }
 
         private void SaveAndClose() {
@@ -271,30 +280,44 @@ namespace One_X {
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e) {
             if (!saved) {
+                e.Cancel = true;
                 SaveAndExit();
+                if (saved) {
+                    Close();
+                }
+            }
+        }
+
+        private void OpenFile(string name) {
+            if (!File.Exists(name)) {
+                MessageBox.Show("The file was not found at the entered location!", "File not found!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                saved = true;
+                Close();
+                return;
+            }
+            if (OneXFile.ExtractOneXFile(name, "currentfile")) {
+                saveFileName = name;
+                string dir = Application.UserAppDataPath + "\\currentfile";
+                codeFileName = dir + "\\code";
+                codeBox.OpenFile(codeFileName, Encoding.UTF8);
+                MPU.InitMemory(dir + "\\memory");
+                memView.InvalidateMemory();
+                codeBox.IsChanged = false;
+                parse(true);
+                modifiedinfo.Text = Path.GetFileName(saveFileName) + " - *No Changes*";
+
+                codeBox.Visible = true;
+                if (memViewVisible) memView.Show();
+            } else {
+                MessageBox.Show("The selected *.onex file is in invalid format!", "Invalid format!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                CloseFile();
             }
         }
 
         private void openMI_Click(object sender, EventArgs e) {
             if (openFile.ShowDialog() == DialogResult.OK) {
                 SaveAndClose();
-                if (OneXFile.ExtractOneXFile(openFile.FileName, "currentfile")) {
-                    saveFileName = openFile.FileName;
-                    string dir = Application.UserAppDataPath + "\\currentfile";
-                    codeFileName = dir + "\\code";
-                    codeBox.OpenFile(codeFileName, Encoding.UTF8);
-                    MPU.InitMemory(dir + "\\memory");
-                    memView.InvalidateMemory();
-                    codeBox.IsChanged = false;
-                    parse(true);
-                    modifiedinfo.Text = Path.GetFileName(saveFileName) + " - *No Changes*";
-
-                    codeBox.Visible = true;
-                    if (memViewVisible) memView.Show();
-                } else {
-                    MessageBox.Show("The selected *.onex file is in invalid format!", "Invalid format!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    CloseFile();
-                }
+                OpenFile(openFile.FileName);
             }
         }
 
@@ -400,8 +423,8 @@ namespace One_X {
         public static ushort startAddress = 0x0000;
 
         public async void parse(bool force = false) {
-            if (!codeBox.IsChanged &&  !force) { return; }
-            codeBox.IsChanged = false;
+            if (highlighted &&  !force) { return; }
+            highlighted = true;
             await Task.Run(() => {
                 assembler.dispatcher.Invoke(() => {
                     assembler.insts.BeginUpdate();
@@ -631,6 +654,10 @@ namespace One_X {
         private void aboutMI_Click(object sender, EventArgs e) {
             About about = new About();
             about.ShowDialog();
+        }
+
+        private void optionsMI_Click(object sender, EventArgs e) {
+
         }
     }
 }
