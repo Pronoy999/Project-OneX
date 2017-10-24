@@ -58,6 +58,10 @@ namespace One_X {
             for (i = 0; i < lineNum; i++) {
                 Match match = RegexHelper.rxInstructionLine.Match(line[i]);
                 label = match.Groups[LABEL].Value;
+                if (match==Match.Empty) {
+                    Match labelMatch = RegexHelper.rxLabelOnly.Match(line[i]);
+                    label = labelMatch.Groups[LABEL].Value;
+                }
                 if (!label.Equals(string.Empty)) {
                     if(!labels.ContainsKey(label))
                         labels.Add(label, 00);      // Adding the labels only. 
@@ -76,9 +80,13 @@ namespace One_X {
                 string rightLit = string.Empty;//A Local variable to store the right literal.
                 string rightLit_type = string.Empty;
                 ushort right_LIT = 0;
-                Match match = RegexHelper.rxInstructionLine.Match(line[i]);
-                if (!string.IsNullOrWhiteSpace(match.Groups[LABEL].Value)) {
+                Match match = RegexHelper.rxInstructionLine.Match(line[i]);                
+                if ((!string.IsNullOrWhiteSpace(match.Groups[LABEL].Value))) {
                     label = match.Groups[LABEL].Value;
+                }
+                if ((match == Match.Empty) && (string.IsNullOrEmpty(label))) {
+                    Match labelMatch = RegexHelper.rxLabelOnly.Match(line[i]);
+                    label = labelMatch.Groups[LABEL].Value;
                 }
                 if (!string.IsNullOrWhiteSpace(label)) {
                     isLabelInserted = true;
@@ -110,6 +118,7 @@ namespace One_X {
                     if (line[i].Length != match.Length) {
                         errorList.Add((DebugLevel.Error, i, match.Length, (line[i].Length - match.Length))); //Lable with Invalid Characters. 
                     }
+                    address += 1;
                     continue; //Blank Label. 
                 }
 
