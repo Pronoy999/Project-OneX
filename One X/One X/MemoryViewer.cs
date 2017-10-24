@@ -50,6 +50,7 @@ namespace One_X {
             }
             
             memBox.ByteProvider = MPU.memory.provider;
+            MPU.memory.ProviderChanged += (s, ev) =>  memBox.ByteProvider = MPU.memory.provider;
 
             offset.GotFocus += (sndr, args) => {
                 offset.Select(offset.TextLength, 0);
@@ -85,6 +86,12 @@ namespace One_X {
         private void gotoBtn_Click(object sender, EventArgs e) {
             memBox.Select(long.Parse(offset.Text, System.Globalization.NumberStyles.HexNumber), 0);
             memBox.Focus();
+        }
+
+        public void InvalidateMemory() {
+            if (memBox.ByteProvider != null) {
+                memBox.Invalidate();
+            }
         }
     }
 }

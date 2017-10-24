@@ -16,6 +16,8 @@ using Blue.Windows;
 
 namespace One_X {
     public partial class MainForm : Form {
+        private Boolean memViewVisible = false;
+
         private MemoryViewer memView = new MemoryViewer();
         private Assembler assembler = new Assembler();
         private Executer executer = new Executer();
@@ -40,7 +42,7 @@ namespace One_X {
         private void MainForm_Load(object sender, EventArgs e) {
             Size = MinimumSize;
 
-            MenuItem[] notImp = { updateMI, aboutMI, optionsMI };
+            MenuItem[] notImp = { updateMI, optionsMI };
             Control[] fontObjects = { codeBox };
 
             int fontLength = Properties.Resources.Hack.Length;
@@ -72,10 +74,10 @@ namespace One_X {
             MPU.ValueChanged += ValueChanged;
             MPU.Step += Step;
 
-            //memeditMI.PerformClick();
+            memeditMI.PerformClick();
             execMI.PerformClick();
             assemblerMI.PerformClick();
-            datamoniMI.PerformClick();
+            //datamoniMI.PerformClick();
         }
 
         // todo define global static / settings
@@ -83,9 +85,10 @@ namespace One_X {
         Style mnemonicStyle = new TextStyle(Brushes.Blue, null, FontStyle.Regular);
         Style labelStyle = new TextStyle(Brushes.Green, null, FontStyle.Regular);
         Style literalStyle = new TextStyle(Brushes.Orange, null, FontStyle.Regular);
+        Style errorStyle = new WavyLineStyle(0xff, Color.Red);
 
         private void codeBox_TextChanged(object sender, TextChangedEventArgs e) {
-            e.ChangedRange.ClearStyle(mnemonicStyle, labelStyle, literalStyle);
+            e.ChangedRange.ClearStyle(mnemonicStyle, labelStyle, literalStyle, errorStyle);
 
             e.ChangedRange.SetStyle(mnemonicStyle, RegexHelper.rxRangeOneByte);
             e.ChangedRange.SetStyle(mnemonicStyle, RegexHelper.rxRangeTwoByte);
@@ -96,8 +99,7 @@ namespace One_X {
 
             e.ChangedRange.SetStyle(labelStyle, RegexHelper.rxRangeLabelOnly);
             e.ChangedRange.SetStyle(labelStyle, RegexHelper.rxRangeReference);
-
-
+            
             UpdateModifiedInfo();
         }
 
@@ -245,12 +247,13 @@ namespace One_X {
             codeBox.Text = "";
             modifiedinfo.Text = "";
             try {
-                memView.Close();
-                memView.Dispose();
-            } catch { }
-            try { MPU.CommitMemory(); Directory.Delete(dir, true); } catch (IOException) { } catch (NullReferenceException) { }
-
+                MPU.CommitMemory();
+                Directory.Delete(dir, true);
+                memView.InvalidateMemory();
+            } catch (IOException) { } catch (NullReferenceException) { }
             codeBox.Visible = false;
+            memView.Close();
+            memView = new MemoryViewer();
         }
         private void closeMI_Click(object sender, EventArgs e) => SaveAndClose();
 
@@ -275,23 +278,19 @@ namespace One_X {
         private void openMI_Click(object sender, EventArgs e) {
             if (openFile.ShowDialog() == DialogResult.OK) {
                 SaveAndClose();
-                try {
-                    memView.Close();
-                    memView.Dispose();
-                } catch { }
-                MPU.CommitMemory();
                 if (OneXFile.ExtractOneXFile(openFile.FileName, "currentfile")) {
                     saveFileName = openFile.FileName;
                     string dir = Application.UserAppDataPath + "\\currentfile";
                     codeFileName = dir + "\\code";
                     codeBox.OpenFile(codeFileName, Encoding.UTF8);
                     MPU.InitMemory(dir + "\\memory");
-                    memView = new MemoryViewer();
+                    memView.InvalidateMemory();
                     codeBox.IsChanged = false;
                     parse(true);
                     modifiedinfo.Text = Path.GetFileName(saveFileName) + " - *No Changes*";
 
                     codeBox.Visible = true;
+                    if (memViewVisible) memView.Show();
                 } else {
                     MessageBox.Show("The selected *.onex file is in invalid format!", "Invalid format!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     CloseFile();
@@ -313,14 +312,10 @@ namespace One_X {
             string dir = Application.UserAppDataPath + "\\currentfile";
             codeFileName = dir + "\\code";
             codeBox.SaveToFile(codeFileName, Encoding.UTF8);
-            try {
-                memView.Close();
-                memView.Dispose();
-            } catch { }
             MPU.CommitMemory();
             OneXFile.RepackOneXFile(name, "currentfile");
             MPU.InitMemory(dir + "\\memory");
-            memView = new MemoryViewer();
+            memView.InvalidateMemory();
             // commit changes (reset all dirty flags)
             codeBox.IsChanged = false;
             parse(true);
@@ -337,15 +332,11 @@ namespace One_X {
             string dir = Application.UserAppDataPath + "\\currentfile";
             codeFileName = dir + "\\code";
             modifiedinfo.Text = "Untitled - *No Changes*";
-            try {
-                memView.Close();
-                memView.Dispose();
-            } catch { }
             try { MPU.CommitMemory(); } catch (NullReferenceException) { }
             try { Directory.Delete(dir, true); } catch (IOException) { }
             Directory.CreateDirectory(dir);
             MPU.InitMemory(dir + "\\memory");
-            memView = new MemoryViewer();
+            memView.InvalidateMemory();
             codeBox.IsChanged = false;
             parse(true);
             codeBox.Visible = true;
@@ -361,8 +352,10 @@ namespace One_X {
 
         private void memeditMI_Click(object sender, EventArgs e) {
             if (memView.Visible) {
+                memViewVisible = false;
                 memView.Hide();
             } else {
+                memViewVisible = true;
                 memView.Show();
             }
             if (IsOnScreen(new Point(Location.X + Width + 20, Location.Y - 20))) {
@@ -422,7 +415,7 @@ namespace One_X {
                         ushort end = ushort.Parse(assembler.insts.Items[assembler.insts.Items.Count - 1].SubItems[1].Text, System.Globalization.NumberStyles.HexNumber);
 
                         MPU.memory.Clear(start, end);
-                    } catch (ArgumentOutOfRangeException ex) { }
+                    } catch (Exception ex) { }
                 });
 
                 assembler.dispatcher.Invoke(() => {
@@ -480,7 +473,15 @@ namespace One_X {
                     }
                     ins.Value.WriteToMemory(MPU.memory, ins.Key);
                 }
-                memView.memBox.Invalidate();
+
+                foreach (var err in parser.errorList) {
+                    if (err.debugLevel == Parser.DebugLevel.Error) {
+                        var range = new Range(codeBox, err.colInd, err.lineInd, err.colInd + err.length, err.lineInd);
+                        range.SetStyle(errorStyle);
+                    }
+                }
+
+                memView.InvalidateMemory();
 
                 assembler.dispatcher.Invoke(() => {
                     assembler.insts.EndUpdate();
@@ -604,6 +605,7 @@ namespace One_X {
                     });
                 monitor.monitorView.Items.Add(nItem);
             });
+            memView.InvalidateMemory();
         }
 
         private void datamoniMI_Click(object sender, EventArgs e) {
@@ -624,6 +626,11 @@ namespace One_X {
                 memView.WindowState = WindowState;
                 executer.WindowState = WindowState;
             }
+        }
+
+        private void aboutMI_Click(object sender, EventArgs e) {
+            About about = new About();
+            about.ShowDialog();
         }
     }
 }

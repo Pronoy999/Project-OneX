@@ -129,7 +129,7 @@
             this.registerPanel.Controls.Add(this.D1Label);
             this.registerPanel.Controls.Add(this.D0Label);
             this.registerPanel.Font = new System.Drawing.Font("Trebuchet MS", 8.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.registerPanel.Location = new System.Drawing.Point(165, 12);
+            this.registerPanel.Location = new System.Drawing.Point(232, 12);
             this.registerPanel.Name = "registerPanel";
             this.registerPanel.Size = new System.Drawing.Size(240, 342);
             this.registerPanel.TabIndex = 3;
@@ -611,7 +611,7 @@
             this.stopBtn.Font = new System.Drawing.Font("Trebuchet MS", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.stopBtn.Location = new System.Drawing.Point(12, 198);
             this.stopBtn.Name = "stopBtn";
-            this.stopBtn.Size = new System.Drawing.Size(147, 61);
+            this.stopBtn.Size = new System.Drawing.Size(214, 61);
             this.stopBtn.TabIndex = 11;
             this.stopBtn.Text = "Stop";
             this.stopBtn.UseVisualStyleBackColor = true;
@@ -621,9 +621,9 @@
             // 
             this.execButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.execButton.Font = new System.Drawing.Font("Trebuchet MS", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.execButton.Location = new System.Drawing.Point(12, 105);
+            this.execButton.Location = new System.Drawing.Point(12, 106);
             this.execButton.Name = "execButton";
-            this.execButton.Size = new System.Drawing.Size(147, 61);
+            this.execButton.Size = new System.Drawing.Size(214, 61);
             this.execButton.TabIndex = 10;
             this.execButton.Text = "Execute\r\nAll Steps";
             this.execButton.UseVisualStyleBackColor = true;
@@ -635,7 +635,7 @@
             this.nextStepBtn.Font = new System.Drawing.Font("Trebuchet MS", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.nextStepBtn.Location = new System.Drawing.Point(12, 12);
             this.nextStepBtn.Name = "nextStepBtn";
-            this.nextStepBtn.Size = new System.Drawing.Size(147, 61);
+            this.nextStepBtn.Size = new System.Drawing.Size(214, 61);
             this.nextStepBtn.TabIndex = 9;
             this.nextStepBtn.Text = "Next Step";
             this.nextStepBtn.UseVisualStyleBackColor = true;
@@ -645,9 +645,9 @@
             // 
             this.resetBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.resetBtn.Font = new System.Drawing.Font("Trebuchet MS", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.resetBtn.Location = new System.Drawing.Point(12, 294);
+            this.resetBtn.Location = new System.Drawing.Point(12, 293);
             this.resetBtn.Name = "resetBtn";
-            this.resetBtn.Size = new System.Drawing.Size(147, 61);
+            this.resetBtn.Size = new System.Drawing.Size(214, 61);
             this.resetBtn.TabIndex = 12;
             this.resetBtn.Text = "Reset";
             this.resetBtn.UseVisualStyleBackColor = true;
@@ -657,16 +657,17 @@
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.ClientSize = new System.Drawing.Size(417, 366);
+            this.ClientSize = new System.Drawing.Size(484, 366);
             this.Controls.Add(this.resetBtn);
             this.Controls.Add(this.stopBtn);
             this.Controls.Add(this.execButton);
             this.Controls.Add(this.nextStepBtn);
             this.Controls.Add(this.registerPanel);
             this.Font = new System.Drawing.Font("Trebuchet MS", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(60, 405);
+            this.MinimumSize = new System.Drawing.Size(500, 405);
             this.Name = "Executer";
             this.ShowInTaskbar = false;
             this.Text = "Executer";

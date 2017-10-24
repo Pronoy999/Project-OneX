@@ -42,7 +42,7 @@
             this.memBox.Name = "memBox";
             this.memBox.ShadowSelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(60)))), ((int)(((byte)(188)))), ((int)(((byte)(255)))));
             this.memBox.ShadowSelectionVisible = false;
-            this.memBox.Size = new System.Drawing.Size(600, 409);
+            this.memBox.Size = new System.Drawing.Size(484, 409);
             this.memBox.TabIndex = 0;
             this.memBox.UseFixedBytesPerLine = true;
             this.memBox.VScrollBarVisible = true;
@@ -56,13 +56,14 @@
             this.statusPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.statusPanel.Location = new System.Drawing.Point(0, 409);
             this.statusPanel.Name = "statusPanel";
-            this.statusPanel.Size = new System.Drawing.Size(600, 32);
+            this.statusPanel.Size = new System.Drawing.Size(484, 32);
             this.statusPanel.TabIndex = 1;
             // 
             // gotoBtn
             // 
+            this.gotoBtn.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.gotoBtn.Font = new System.Drawing.Font("Trebuchet MS", 10F);
-            this.gotoBtn.Location = new System.Drawing.Point(537, 3);
+            this.gotoBtn.Location = new System.Drawing.Point(421, 3);
             this.gotoBtn.Name = "gotoBtn";
             this.gotoBtn.Size = new System.Drawing.Size(60, 26);
             this.gotoBtn.TabIndex = 2;
@@ -72,9 +73,10 @@
             // 
             // offset
             // 
+            this.offset.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.offset.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
             this.offset.Font = new System.Drawing.Font("Hack", 12F);
-            this.offset.Location = new System.Drawing.Point(488, 3);
+            this.offset.Location = new System.Drawing.Point(372, 3);
             this.offset.Name = "offset";
             this.offset.Size = new System.Drawing.Size(46, 26);
             this.offset.TabIndex = 1;
@@ -84,8 +86,9 @@
             // 
             // offsetLabel
             // 
+            this.offsetLabel.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.offsetLabel.AutoSize = true;
-            this.offsetLabel.Location = new System.Drawing.Point(431, 6);
+            this.offsetLabel.Location = new System.Drawing.Point(315, 6);
             this.offsetLabel.Name = "offsetLabel";
             this.offsetLabel.Size = new System.Drawing.Size(46, 18);
             this.offsetLabel.TabIndex = 0;
@@ -95,16 +98,16 @@
             // MemoryViewer
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(600, 441);
+            this.ClientSize = new System.Drawing.Size(484, 441);
             this.Controls.Add(this.memBox);
             this.Controls.Add(this.statusPanel);
             this.Font = new System.Drawing.Font("Trebuchet MS", 9F);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(616, 480);
+            this.MinimumSize = new System.Drawing.Size(500, 480);
             this.Name = "MemoryViewer";
             this.ShowInTaskbar = false;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "MemoryViewer";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MemoryViewer_FormClosing);
             this.Load += new System.EventHandler(this.MemoryViewer_Load);

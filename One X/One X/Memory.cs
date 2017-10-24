@@ -12,6 +12,8 @@ namespace One_X {
             fileStream.SetLength(0x10000);
 
             provider = new DynamicFileByteProvider(fileStream);
+
+            ProviderChanged?.Invoke(null, null);
         }
         public byte ReadByte(ushort loc) => provider.ReadByte(loc);
         public ushort ReadUShort(ushort loc) => (provider.ReadByte(loc + 1), provider.ReadByte(loc)).ToUShort();
@@ -38,5 +40,7 @@ namespace One_X {
             fileStream.Close();
             provider.Dispose();
         }
+
+        public EventHandler ProviderChanged;
     }
 }
