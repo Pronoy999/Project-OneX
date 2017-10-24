@@ -10,7 +10,7 @@ namespace One_X {
         private const string label = "(?<label>[A-Z_]\\w*)";
         private const string litByte = "(?<litByte>[0-9A-F]{1,2}H?)";
         private const string litUShort = "(?<litUShort>[0-9A-F]{1,4}H?)";
-        private const RegexOptions rxOptions = RegexOptions.Compiled | RegexOptions.IgnoreCase;
+        private const RegexOptions rxOptions = RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Multiline;
         
         public static readonly Regex rxRangeLabelOnly;
 
@@ -55,7 +55,7 @@ namespace One_X {
 
             // compile all the regex and store
             rxInstructionLine = new Regex("^[ \\t]*(?:" + label + "[ \\t]*:)?[ \\t]*" + instruction + "[ \\t]*\\r?$", rxOptions);
-            rxLabelOnly = new Regex("^[ \\t]*(?:" + label + "[ \\t]*:)?[ \\t]*$", rxOptions);
+            rxLabelOnly = new Regex("^[ \\t]*(?:" + label + "[ \\t]*:)?[ \\t]*\\r?$", rxOptions);
             // compile the range regex and store
             rxRangeLabelOnly = new Regex("^[ \\t]*" + label.Replace("<label>", "<range>") + "[ \\t]*:", rxOptions);
 
@@ -63,10 +63,10 @@ namespace One_X {
             rxRangeTwoByte = new Regex("^[ \\t]*(?:" + label + "[ \\t]*:)?[ \\t]*" + twoByte.Replace("<twoByte>", "<range>") + "[ \\t]*\\r?$", rxOptions);
             rxRangeThreeByte = new Regex("^[ \\t]*(?:" + label + "[ \\t]*:)?[ \\t]*" + threeByte.Replace("<threeByte>", "<range>") + "[ \\t]*\\r?$", rxOptions);
 
-            rxRangeLiteralByte = new Regex(twoByte.Replace("<litByte>", "<range>"), rxOptions);
-            rxRangeLiteralUShort = new Regex(tempThreeByte + litUShort.Replace("<litUShort>", "<range>"), rxOptions);
+            rxRangeLiteralByte = new Regex(twoByte.Replace("<litByte>", "<range>") + "[ \\t]*\\r?$", rxOptions);
+            rxRangeLiteralUShort = new Regex(tempThreeByte + litUShort.Replace("<litUShort>", "<range>") + "[ \\t]*\\r?$", rxOptions);
 
-            rxRangeReference = new Regex(tempThreeByte + label.Replace("<label>", "<range>"), rxOptions);
+            rxRangeReference = new Regex(tempThreeByte + label.Replace("<label>", "<range>") + "[ \\t]*\\r?$", rxOptions);
         }
     }
 }

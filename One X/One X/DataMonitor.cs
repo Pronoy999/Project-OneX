@@ -13,7 +13,7 @@ using System.Windows.Forms;
 using System.Windows.Threading;
 
 namespace One_X {
-    public partial class Executer : Form {
+    public partial class DataMonitor : Form {
         private StickyWindow window;
 
         public Dispatcher dispatcher = Dispatcher.CurrentDispatcher;
@@ -22,14 +22,14 @@ namespace One_X {
 
         [DllImport("gdi32.dll")]
         private static extern IntPtr AddFontMemResourceEx(IntPtr pbFont, uint cbFont, IntPtr pdv, [In] ref uint pcFonts);
-
-        public Executer() {
+        
+        public DataMonitor() {
             InitializeComponent();
             window = new StickyWindow(this);
         }
 
-        private void Executer_Load(object sender, EventArgs e) {
-            Control[] fontObjects = { AReg, BReg, CReg, DReg, EReg, HReg, LReg, MPoint, PCVal, SPVal, NU1Flag, NU3Flag, NU5Flag, SFlag, ZFlag, ACFlag, PFlag, CYFlag };
+        private void DataMonitor_Load(object sender, EventArgs e) {
+            Control[] fontObjects = { monitorView };
 
             int fontLength = Properties.Resources.Hack.Length;
             byte[] fontdata = Properties.Resources.Hack;
@@ -47,29 +47,6 @@ namespace One_X {
             foreach (var f in fontObjects) {
                 f.Font = new Font(pfc.Families[0], f.Font.Size);
             }
-        }
-
-        private async void nextStepBtn_Click(object sender, EventArgs e) {
-            if (MPU.PC < MainForm.startAddress) {
-                MPU.PC = MainForm.startAddress;
-            }
-            await Task.Run(() => MPU.NextStep());
-        }
-
-        private async void execButton_Click(object sender, EventArgs e) => await Task.Run(() => MPU.ExecuteAllSteps());
-
-        private void stopBtn_Click(object sender, EventArgs e) {
-            MPU.Stop();
-        }
-
-        private void Executer_FormClosing(object sender, FormClosingEventArgs e) {
-            e.Cancel = true;
-            Hide();
-        }
-
-        private void resetBtn_Click(object sender, EventArgs e) {
-            MPU.Stop();
-            MPU.PC = MainForm.startAddress;
         }
     }
 }

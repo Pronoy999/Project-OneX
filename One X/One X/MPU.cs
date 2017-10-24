@@ -27,7 +27,7 @@ namespace One_X {
             CY = Carry
         }
 
-        public class MPUEventArgs: EventArgs {
+        public class MPUEventArgs : EventArgs {
             public string VarName;
             public object NewValue;
 
@@ -38,7 +38,8 @@ namespace One_X {
         }
 
         public static event EventHandler<MPUEventArgs> ValueChanged;
-        
+        public static event EventHandler<MPUEventArgs> Step;
+
         internal static byte regA, regB, regC, regD, regE, regH, regL;
         internal static ushort progCntr, stackPtr;
 
@@ -48,9 +49,7 @@ namespace One_X {
         internal static void Reset(this Flag flag) => flag.Set(false);
         internal static void Set(this Flag flag, bool set) {
             flags.Set((byte)flag, set);
-            if (ValueChanged != null) {
-                ValueChanged.Invoke(null, new MPUEventArgs(flag.ToString(), set));
-            }
+            ValueChanged?.Invoke(null, new MPUEventArgs(flag.ToString(), set));
         }
         internal static void Toggle(this Flag flag) => flag.Set(!flag.IsSet());
         internal static bool IsSet(this Flag flag) => flags.Get((byte)flag);
@@ -60,117 +59,91 @@ namespace One_X {
             get => regA;
             internal set {
                 regA = value;
-                if (ValueChanged != null) {
-                    ValueChanged.Invoke(null, new MPUEventArgs("A", A));
-                }
+                ValueChanged?.Invoke(null, new MPUEventArgs("A", A));
             }
         }
         public static byte B {
             get => regB;
             internal set {
                 regB = value;
-                if (ValueChanged != null) {
-                    ValueChanged.Invoke(null, new MPUEventArgs("B", B));
-                }
+                ValueChanged?.Invoke(null, new MPUEventArgs("B", B));
             }
         }
         public static byte C {
             get => regC;
             internal set {
                 regC = value;
-                if (ValueChanged != null) {
-                    ValueChanged.Invoke(null, new MPUEventArgs("C", C));
-                }
+                ValueChanged?.Invoke(null, new MPUEventArgs("C", C));
             }
         }
         public static byte D {
             get => regD;
             internal set {
                 regD = value;
-                if (ValueChanged != null) {
-                    ValueChanged.Invoke(null, new MPUEventArgs("D", D));
-                }
+                ValueChanged?.Invoke(null, new MPUEventArgs("D", D));
             }
         }
         public static byte E {
             get => regE;
             internal set {
                 regE = value;
-                if (ValueChanged != null) {
-                    ValueChanged.Invoke(null, new MPUEventArgs("E", E));
-                }
+                ValueChanged?.Invoke(null, new MPUEventArgs("E", E));
             }
         }
         public static byte H {
             get => regH;
             internal set {
                 regH = value;
-                if (ValueChanged != null) {
-                    ValueChanged.Invoke(null, new MPUEventArgs("H", H));
-                }
+                ValueChanged?.Invoke(null, new MPUEventArgs("H", H));
             }
         }
         public static byte L {
             get => regL;
             internal set {
                 regL = value;
-                if (ValueChanged != null) {
-                    ValueChanged.Invoke(null, new MPUEventArgs("L", L));
-                }
+                ValueChanged?.Invoke(null, new MPUEventArgs("L", L));
             }
         }
         public static byte M {
             get => memory.ReadByte(HRp);
             set {
                 memory.WriteByte(value, HRp);
-                if (ValueChanged != null) {
-                    ValueChanged.Invoke(null, new MPUEventArgs("M", M));
-                }
+                ValueChanged?.Invoke(null, new MPUEventArgs("M", M));
             }
         }
         public static ushort HRp {
             get => (H, L).ToUShort();
             internal set {
                 LoadHRp(value);
-                if (ValueChanged != null) {
-                    ValueChanged.Invoke(null, new MPUEventArgs("HRp", HRp));
-                }
+                ValueChanged?.Invoke(null, new MPUEventArgs("HRp", HRp));
             }
         }
         public static ushort BRp {
             get => (B, C).ToUShort();
             internal set {
                 LoadBRp(value);
-                if (ValueChanged != null) {
-                    ValueChanged.Invoke(null, new MPUEventArgs("BRp", BRp));
-                }
+                ValueChanged?.Invoke(null, new MPUEventArgs("BRp", BRp));
             }
         }
         public static ushort DRp {
             get => (D, E).ToUShort();
             internal set {
                 LoadDRp(value);
-                if (ValueChanged != null) {
-                    ValueChanged.Invoke(null, new MPUEventArgs("DRp", DRp));
-                }
+                ValueChanged?.Invoke(null, new MPUEventArgs("DRp", DRp));
             }
         }
         public static ushort PC {
             get => progCntr;
             internal set {
                 progCntr = value;
-                if (ValueChanged != null) {
-                    ValueChanged.Invoke(null, new MPUEventArgs("PC", PC));
-                }
+                ValueChanged?.Invoke(null, new MPUEventArgs("PC", PC));
             }
         }
         public static ushort SP {
             get => stackPtr;
             internal set {
                 stackPtr = value;
-                if (ValueChanged != null) {
-                    ValueChanged.Invoke(null, new MPUEventArgs("SP", SP));
-                }
+                ValueChanged?.Invoke(null, new MPUEventArgs("SP", SP));
             }
         }
         #endregion
@@ -249,7 +222,7 @@ namespace One_X {
 
         public static ushort AddC() {
             Adi(C);
-            return(ushort)(PC + 1);
+            return (ushort)(PC + 1);
         }
 
         public static ushort AddD() {
@@ -1271,7 +1244,7 @@ namespace One_X {
         }
         public static ushort JumpC(ushort address) {
             if (Flag.Carry.IsSet()) {
-               return Jump(address);
+                return Jump(address);
             }
             return (ushort)(PC + 3);
         }
@@ -1609,7 +1582,8 @@ namespace One_X {
         //TODO:RIM,SIM
 
         public static void NextStep() {
-            Instruction ins = ((Instruction.OPCODE) memory.ReadByte(PC)).GetAttributeOfType<Instruction>();
+            ushort pc = PC;
+            Instruction ins = ((Instruction.OPCODE)memory.ReadByte(PC)).GetAttributeOfType<Instruction>();
             if (ins.Bytes > 1) {
                 ins.Arguments.LO = memory.ReadByte((ushort)(PC + 1));
                 ins.Arguments.HO = 0x00;
@@ -1618,13 +1592,15 @@ namespace One_X {
                 ins.Arguments.HO = memory.ReadByte((ushort)(PC + 2));
             }
             PC = ins.Execute();
+
+            Step?.Invoke(null, new MPUEventArgs("PC", pc));
         }
 
         public static void ExecuteAllSteps() {
             running = true;
             while (running) NextStep();
         }
-        
+
         public static void Stop() {
             running = false;
         }

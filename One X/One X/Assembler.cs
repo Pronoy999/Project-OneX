@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Blue.Windows;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -13,6 +14,8 @@ using System.Windows.Threading;
 
 namespace One_X {
     public partial class Assembler : Form {
+        private StickyWindow window;
+
         public Dispatcher dispatcher = Dispatcher.CurrentDispatcher;
 
         public PrivateFontCollection pfc = new PrivateFontCollection();
@@ -22,12 +25,14 @@ namespace One_X {
 
         [DllImport("user32.dll")]
         static extern bool HideCaret(IntPtr hWnd);
+
         public Assembler() {
             InitializeComponent();
+            window = new StickyWindow(this);
         }
 
         private void Assembler_Load(object sender, EventArgs e) {
-            object[] fontObjects = { startAddressBox };
+            Control[] fontObjects = { startAddressBox };
 
             int fontLength = Properties.Resources.Hack.Length;
             byte[] fontdata = Properties.Resources.Hack;
@@ -43,14 +48,7 @@ namespace One_X {
             Marshal.FreeCoTaskMem(data);
 
             foreach (var f in fontObjects) {
-                if (f is TextBox) {
-                    TextBox fd = f as TextBox;
-                    fd.Font = new Font(pfc.Families[0], fd.Font.Size);
-                }
-                if (f is Label) {
-                    Label fd = f as Label;
-                    fd.Font = new Font(pfc.Families[0], fd.Font.Size);
-                }
+                f.Font = new Font(pfc.Families[0], f.Font.Size);
             }
 
             startAddressBox.GotFocus += (sndr, args) => {

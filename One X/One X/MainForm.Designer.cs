@@ -99,7 +99,7 @@
         '\"',
         '\'',
         '\''};
-            this.codeBox.AutoScrollMinSize = new System.Drawing.Size(2, 24);
+            this.codeBox.AutoScrollMinSize = new System.Drawing.Size(47, 24);
             this.codeBox.BackBrush = null;
             this.codeBox.CharHeight = 16;
             this.codeBox.CharWidth = 9;
@@ -293,6 +293,7 @@
             // 
             this.datamoniMI.Index = 2;
             this.datamoniMI.Text = "Data Monitor";
+            this.datamoniMI.Click += new System.EventHandler(this.datamoniMI_Click);
             // 
             // execMI
             // 
@@ -546,6 +547,7 @@
             this.Text = "MainForm";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);
+            this.Resize += new System.EventHandler(this.MainForm_Resize);
             ((System.ComponentModel.ISupportInitialize)(this.codeBox)).EndInit();
             this.StatusBar.ResumeLayout(false);
             this.StatusBar.PerformLayout();
