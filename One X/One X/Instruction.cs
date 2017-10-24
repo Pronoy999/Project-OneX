@@ -291,7 +291,7 @@ namespace One_X {
             [Instruction("RST 3", 1, 3, 12, "Reset3")] RST_3 = 0xDF,
             [Instruction("RPO", 1, 3, 10, "ReturnPO")] RPO = 0xE0,
             [Instruction("POP H", 1, 3, 10, "PopHRp")] POP_H = 0xE1,
-            [Instruction("JPO", 1, 3, 10, "JumpPO")] JPO = 0xE2,
+            [Instruction("JPO", 3, 3, 10, "JumpPO")] JPO = 0xE2,
             [Instruction("XTHL", 1, 5, 16, "ExSTwHL")] XTHL = 0xE3,
             [Instruction("CPO", 3, 5, 18, "CallPO")] CPO = 0xE4,
             [Instruction("PUSH H", 1, 3, 12, "PushHRp")] PUSH_H = 0xE5,
