@@ -45,13 +45,13 @@ namespace One_X {
 
         internal static string ToBitString(this BitArray bits) {
             var sb = new StringBuilder();
-            var x = ((MPU.Flag[])Enum.GetValues(typeof(MPU.Flag)));
-            for (int i = 0; i < bits.Count && x.Contains((MPU.Flag)i); i++) {
-                sb.Append(bits[i] ? '1' : '0');
-                sb.Append(" : ");
+            var x = (MPU.Flag[])Enum.GetValues(typeof(MPU.Flag));
+            for (byte i = 0; i < bits.Count; i++) {
+                if (x.Contains((MPU.Flag)i)) {
+                    sb.Append(bits[i] ? '1' : '0').Append(" : ");
+                }
             }
-            string str = sb.ToString();
-            return str.Remove(str.Length - 3);
+            return sb.ToString().Remove(sb.ToString().Length - 3);
         }
     }
 }

@@ -73,7 +73,7 @@ namespace One_X {
             MPU.Step += Step;
 
             //memeditMI.PerformClick();
-            //execMI.PerformClick();
+            execMI.PerformClick();
             assemblerMI.PerformClick();
             datamoniMI.PerformClick();
         }
@@ -242,6 +242,7 @@ namespace One_X {
             string dir = Application.UserAppDataPath + "\\currentfile";
             codeFileName = dir + "\\code";
             codeBox.IsChanged = false;
+            codeBox.Text = "";
             modifiedinfo.Text = "";
             try {
                 memView.Close();
@@ -287,6 +288,7 @@ namespace One_X {
                     MPU.InitMemory(dir + "\\memory");
                     memView = new MemoryViewer();
                     codeBox.IsChanged = false;
+                    parse(true);
                     modifiedinfo.Text = Path.GetFileName(saveFileName) + " - *No Changes*";
 
                     codeBox.Visible = true;
@@ -321,6 +323,7 @@ namespace One_X {
             memView = new MemoryViewer();
             // commit changes (reset all dirty flags)
             codeBox.IsChanged = false;
+            parse(true);
             modifiedinfo.Text = Path.GetFileName(saveFileName) + " - *Changes Saved*";
         }
 
@@ -344,7 +347,7 @@ namespace One_X {
             MPU.InitMemory(dir + "\\memory");
             memView = new MemoryViewer();
             codeBox.IsChanged = false;
-
+            parse(true);
             codeBox.Visible = true;
         }
 
@@ -403,8 +406,8 @@ namespace One_X {
 
         public static ushort startAddress = 0x0000;
 
-        public async void parse() {
-            if (!codeBox.IsChanged) { return; }
+        public async void parse(bool force = false) {
+            if (!codeBox.IsChanged &&  !force) { return; }
             codeBox.IsChanged = false;
             await Task.Run(() => {
                 assembler.dispatcher.Invoke(() => {
@@ -586,6 +589,7 @@ namespace One_X {
                         ele += step.ToString("X4");
                         break;
                 }
+                string bitstr = MPU.flags.ToBitString();
                 ListViewItem nItem = new ListViewItem(new string[] {
                         ele,
                         executer.AReg.Text + "H",
@@ -596,7 +600,7 @@ namespace One_X {
                         executer.HReg.Text + "H",
                         executer.LReg.Text + "H",
                         executer.MPoint.Text + "H",
-                        MPU.flags.ToBitString()
+                        bitstr
                     });
                 monitor.monitorView.Items.Add(nItem);
             });
@@ -608,8 +612,17 @@ namespace One_X {
             } else {
                 monitor.Show();
             }
-            if (IsOnScreen(new Point(Location.X - 20, Location.Y + Height + 20))) {
-                monitor.Location = new Point(Location.X, Location.Y + Height);
+            if (IsOnScreen(new Point(Location.X + Width + 20, Location.Y - 20))) {
+                monitor.Location = new Point(Location.X + Width, Location.Y);
+            }
+        }
+
+        private void MainForm_Resize(object sender, EventArgs e) {
+            if (WindowState != FormWindowState.Maximized) {
+                monitor.WindowState = WindowState;
+                assembler.WindowState = WindowState;
+                memView.WindowState = WindowState;
+                executer.WindowState = WindowState;
             }
         }
     }

@@ -103,6 +103,7 @@
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(616, 480);
             this.Name = "MemoryViewer";
+            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "MemoryViewer";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MemoryViewer_FormClosing);

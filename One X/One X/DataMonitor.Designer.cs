@@ -24,6 +24,7 @@
         /// </summary>
         private void InitializeComponent() {
             this.monitorView = new System.Windows.Forms.ListView();
+            this.stepCol = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.aCol = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.bCol = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.cCol = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -33,7 +34,6 @@
             this.lCol = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.mCol = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.flCol = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.stepCol = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.SuspendLayout();
             // 
             // monitorView
@@ -53,10 +53,15 @@
             this.monitorView.Location = new System.Drawing.Point(0, 0);
             this.monitorView.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.monitorView.Name = "monitorView";
-            this.monitorView.Size = new System.Drawing.Size(624, 441);
+            this.monitorView.Size = new System.Drawing.Size(880, 441);
             this.monitorView.TabIndex = 0;
             this.monitorView.UseCompatibleStateImageBehavior = false;
             this.monitorView.View = System.Windows.Forms.View.Details;
+            // 
+            // stepCol
+            // 
+            this.stepCol.Text = "STEP";
+            this.stepCol.Width = 320;
             // 
             // aCol
             // 
@@ -108,23 +113,22 @@
             // 
             // flCol
             // 
-            this.flCol.Text = "S : Z : AC : P : CY";
+            this.flCol.Text = "S : Z :AC : P :CY";
             this.flCol.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.flCol.Width = 172;
-            // 
-            // stepCol
-            // 
-            this.stepCol.Text = "STEP";
-            this.stepCol.Width = 64;
             // 
             // DataMonitor
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(624, 441);
+            this.ClientSize = new System.Drawing.Size(880, 441);
             this.Controls.Add(this.monitorView);
             this.Font = new System.Drawing.Font("Trebuchet MS", 10F);
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(896, 480);
             this.Name = "DataMonitor";
+            this.ShowInTaskbar = false;
             this.Text = "DataMonitor";
             this.Load += new System.EventHandler(this.DataMonitor_Load);
             this.ResumeLayout(false);
