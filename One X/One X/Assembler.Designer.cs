@@ -54,7 +54,7 @@
             this.insts.Location = new System.Drawing.Point(0, 0);
             this.insts.MultiSelect = false;
             this.insts.Name = "insts";
-            this.insts.Size = new System.Drawing.Size(532, 441);
+            this.insts.Size = new System.Drawing.Size(532, 366);
             this.insts.TabIndex = 4;
             this.insts.UseCompatibleStateImageBehavior = false;
             this.insts.View = System.Windows.Forms.View.Details;
@@ -105,7 +105,7 @@
             this.rightPanel.Location = new System.Drawing.Point(532, 0);
             this.rightPanel.MinimumSize = new System.Drawing.Size(172, 281);
             this.rightPanel.Name = "rightPanel";
-            this.rightPanel.Size = new System.Drawing.Size(172, 441);
+            this.rightPanel.Size = new System.Drawing.Size(172, 366);
             this.rightPanel.TabIndex = 6;
             // 
             // startAddressGB
@@ -146,14 +146,14 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(704, 441);
+            this.ClientSize = new System.Drawing.Size(704, 366);
             this.Controls.Add(this.insts);
             this.Controls.Add(this.rightPanel);
             this.Font = new System.Drawing.Font("Trebuchet MS", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(720, 480);
+            this.MinimumSize = new System.Drawing.Size(720, 405);
             this.Name = "Assembler";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

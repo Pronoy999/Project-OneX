@@ -457,6 +457,7 @@
             // 
             this.aboutMI.Index = 1;
             this.aboutMI.Text = "About";
+            this.aboutMI.Click += new System.EventHandler(this.aboutMI_Click);
             // 
             // StatusBar
             // 

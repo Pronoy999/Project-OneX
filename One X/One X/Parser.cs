@@ -18,7 +18,7 @@ namespace One_X {
          * This is the list of Tuple for Error List. 
          * </summary>
          */
-        List<(DebugLevel debugLevel, int lineInd, int colInd, int length)> errorList = new List<(DebugLevel debugLevel, int lineInd, int colInd, int length)>();
+        public List<(DebugLevel debugLevel, int lineInd, int colInd, int length)> errorList = new List<(DebugLevel debugLevel, int lineInd, int colInd, int length)>();
         public Dictionary<ushort, Instruction> instructions = new Dictionary<ushort, Instruction>();
 
         Dictionary<string, ushort> labels = new Dictionary<string, ushort>();
