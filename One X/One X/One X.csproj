@@ -85,12 +85,6 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="OldMainForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="OldMainForm.Designer.cs">
-      <DependentUpon>OldMainForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Instruction.cs" />
     <Compile Include="InstructionHelper.cs" />
     <Compile Include="Memory.cs" />
@@ -122,9 +116,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="OldMainForm.resx">
-      <DependentUpon>OldMainForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MemoryViewer.resx">
       <DependentUpon>MemoryViewer.cs</DependentUpon>
