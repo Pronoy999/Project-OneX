@@ -85,6 +85,7 @@ namespace One_X {
                     } else {
                         MessageBox.Show("Invalid parameter! The program is not running as administrator!", "Invalid parameter!");
                     }
+                    Environment.Exit(0);
                 } else {
                     OpenFile(args[1]);
                 }
@@ -363,7 +364,10 @@ namespace One_X {
 
         private void saveasMI_Click(object sender, EventArgs e) {
             if (saveFile.ShowDialog() == DialogResult.OK) {
+                highlighted = true;
                 SaveFile(saveFile.FileName);
+            } else {
+                highlighted = false;
             }
         }
 
@@ -371,6 +375,8 @@ namespace One_X {
             if (string.IsNullOrWhiteSpace(name)) {
                 saveasMI.PerformClick(); return;
             }
+            highlighted = true;
+            saved = true;
             saveFileName = name;
             string dir = Application.UserAppDataPath + "\\currentfile";
             codeFileName = dir + "\\code";

@@ -30,12 +30,11 @@ namespace One_X {
             }
         }
         private void assoicateBtn_Click(object sender, EventArgs e) {
-            DialogResult dr = MessageBox.Show("The Application needs to start with Administrator rights in order to associate the extension!\n\nMake sure to place the application in a accessible location (e.g. C:\\OneX\\One X.exe) before proceeding since the location needs to be parmanent.\n\nWarning: ALL UNSAVED CHANGES WILL BE LOST!", "Run as Administrator", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+            DialogResult dr = MessageBox.Show("The Application needs to start with Administrator rights in order to associate the extension!\n\n" +
+                "Make sure to place the application in a accessible location (e.g. C:\\OneX\\One X.exe) before proceeding since the location needs to be parmanent.\n\n", "Run as Administrator", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
             
             if (dr == DialogResult.OK) {
-                if (RunElevated()) {
-                    Environment.Exit(0);
-                }
+                RunElevated();
             }
             
             // AssociateFileExtension(".onex", "ONEX File", "Intel 8085 assembly code with ONEX memory implementation.", Application.ExecutablePath);
