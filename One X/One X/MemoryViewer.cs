@@ -93,5 +93,70 @@ namespace One_X {
                 memBox.Invalidate();
             }
         }
+
+        private void memList_MouseDown(object sender, MouseEventArgs e) {
+            if (e.Clicks == 2) {
+                if (memList.SelectedIndices.Count == 1) {
+                    editItem(sender, e);
+                } else {
+                    addItem(sender, e);
+                } 
+            }
+        }
+
+        private void memEditMenu_Opening(object sender, CancelEventArgs e) {
+            if (memList.SelectedIndices.Count > 0) {
+                editToolStripMenuItem.Enabled = true;
+                deleteToolStripMenuItem.Enabled = true;
+            } else {
+                editToolStripMenuItem.Enabled = false;
+                deleteToolStripMenuItem.Enabled = false;
+            }
+        }
+
+        private void addItem(object sender, EventArgs e) {
+            MemoryInsertForm minform = new MemoryInsertForm();
+
+            if (minform.ShowDialog() == DialogResult.OK) {
+                ListViewItem litem = new ListViewItem(new string[] { minform.addr_box.Text, minform.val_box.Text });
+                litem.Checked = minform.pinMemBox.Checked;
+                memList.Items.Add(litem);
+            }
+
+            // todo set value
+        }
+
+        private void editItem(object sender, EventArgs e) {
+            ListViewItem litem = memList.SelectedItems[0];
+
+            MemoryInsertForm minform = new MemoryInsertForm();
+            minform.Text = "Edit Memory";
+            minform.addr_box.Text = litem.Text;
+            minform.val_box.Text = litem.SubItems[1].Text;
+            minform.pinMemBox.Checked = litem.Checked;
+
+            if (minform.ShowDialog() == DialogResult.OK) {
+                litem.Text = minform.addr_box.Text;
+                litem.SubItems[1].Text = minform.val_box.Text;
+                litem.Checked = minform.pinMemBox.Checked;
+            }
+
+            // todo set value
+        }
+
+        private void deleteItem(object sender, EventArgs e) {
+            if (MessageBox.Show("Are you sure you want to delete the selected memory?", "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Error) == DialogResult.Yes) {
+                ListViewItem litem = memList.SelectedItems[0];
+                memList.Items.Remove(litem);
+            }
+
+            // todo set value
+        }
+
+        private void memList_KeyDown(object sender, KeyEventArgs e) {
+            if (e.KeyCode == Keys.Delete && memList.SelectedIndices.Count > 0) {
+                deleteItem(sender, e);
+            }
+        }
     }
 }

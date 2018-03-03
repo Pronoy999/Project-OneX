@@ -100,6 +100,12 @@
     <Compile Include="Instruction.cs" />
     <Compile Include="InstructionHelper.cs" />
     <Compile Include="Memory.cs" />
+    <Compile Include="MemoryInsertForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MemoryInsertForm.Designer.cs">
+      <DependentUpon>MemoryInsertForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="MemoryViewer.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -137,6 +143,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MemoryInsertForm.resx">
+      <DependentUpon>MemoryInsertForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MemoryViewer.resx">
       <DependentUpon>MemoryViewer.cs</DependentUpon>
