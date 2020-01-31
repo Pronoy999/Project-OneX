@@ -19,3 +19,7 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
+
+# Note
+This project is no longer supported. But you can try out the RC1 build. 
+If you want you can also report issues. Feel free to submit Pull requests. 
